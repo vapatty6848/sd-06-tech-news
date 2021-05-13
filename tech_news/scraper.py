@@ -1,6 +1,23 @@
+import requests
+import time
+from requests.exceptions import ReadTimeout
+from requests.models import HTTPError
+
+
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    time.sleep(1)
+    try:
+        response = requests.get(url, timeout=3)
+        response.raise_for_status()
+
+    except (ReadTimeout, HTTPError):
+        return None
+
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
 
 
 # Requisito 2
@@ -21,3 +38,7 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+
+# print(fetch("http://httpbin.org/status/404"))
+# print(fetch("http://httpbin.org/delay/1"))
