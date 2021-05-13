@@ -25,7 +25,7 @@ def scrape_noticia(html_content):
     title = selector.css(".tec--article__header__title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
     writer = selector.css(".tec--author__info__link::text").get()
-    shares_count = selector.css(".tec--toolbar__item::text").get()
+    shares_count = selector.css(".tec--toolbar__item::text").re_first(r'\d') or "0"
     comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
     summary = selector.css(".tec--article__body p::text").get()
     sources = selector.css(".z--mb-16 a::text").getall()
