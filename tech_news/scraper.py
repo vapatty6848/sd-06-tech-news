@@ -20,37 +20,37 @@ def fetch(url):
 # Requisito 2
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
-    GET_URL = selector.css("head link[rel=canonical]::attr(href)").get()
-    GET_TITLE = selector.css("#js-article-title::text").get()
-    GET_TIMESTAMP = selector.css("#js-article-date::attr(datetime)").get()
-    GET_WRITER = (
+    get_url = selector.css("head link[rel=canonical]::attr(href)").get()
+    get_title = selector.css("#js-article-title::text").get()
+    get_timestamp = selector.css("#js-article-date::attr(datetime)").get()
+    get_writer = (
         selector.css("#js-author-bar > div > p > a::text").get().strip()
     )
-    GET_SHARES_COUNT = selector.css(
+    get_shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
-    SHARES = int(GET_SHARES_COUNT) if GET_SHARES_COUNT else 0
-    GET_COMMENTS_COUNT = int(
+    shares = int(get_shares_count) if get_shares_count else 0
+    get_comments_count = int(
         selector.css("#js-comments-btn::text").re_first(r"\d+")
     )
-    SUMMARY = selector.css(
+    summary = selector.css(
         ".tec--article__body > p:nth-child(1) *::text"
     ).getall()
-    GET_SUMMARY = "".join(SUMMARY)
-    GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
-    SOURCES = [source.strip() for source in GET_SOURCES]
-    GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
-    CATEGORIES = [category.strip() for category in GET_CATEGORIES]
+    get_summary = "".join(summary)
+    get_sources = selector.css(".z--mb-16 .tec--badge::text").getall()
+    sources = [source.strip() for source in get_sources]
+    get_categories = selector.css("#js-categories > a *::text").getall()
+    categories = [category.strip() for category in get_categories]
     dic_news = {
-        "url": GET_URL,
-        "title": GET_TITLE,
-        "timestamp": GET_TIMESTAMP,
-        "writer": GET_WRITER,
-        "shares_count": SHARES,
-        "comments_count": GET_COMMENTS_COUNT,
-        "summary": GET_SUMMARY,
-        "sources": SOURCES,
-        "categories": CATEGORIES,
+        "url": get_url,
+        "title": get_title,
+        "timestamp": get_timestamp,
+        "writer": get_writer,
+        "shares_count": shares,
+        "comments_count": get_comments_count,
+        "summary": get_summary,
+        "sources": sources,
+        "categories": categories,
     }
     return dic_news
 
