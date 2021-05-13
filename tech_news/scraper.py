@@ -1,14 +1,9 @@
 import time
 import requests
-from requests.exceptions import ReadTimeout
 
-"""
-A função utiliza o método get() da biblioteca requests
-A função executada com uma URL correta retorna o conteúdo html
-A função, sofrendo timeout, retorna None
-A função retorna None quando recebe uma resposta com código diferente de 200
-A função respeita o rate limit
-"""
+# import pandas as pd
+from requests.exceptions import ReadTimeout
+from parsel import Selector
 
 
 # Requisito 1
@@ -24,7 +19,34 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    GET_URL = selector.css("head link[rel=canonical]::attr(href)").get()
+    GET_TITLE = selector.css("#js-article-title::text").get()
+    GET_TIMESTAMP = selector.css("#js-article-date::attr(datetime)").get()
+    GET_WRITER = selector.css("#js-author-bar > div > p > a::text").get()
+    GET_SHARES_COUNT = selector.css(
+        "#js-author-bar > nav > div:nth-child(1)::text"
+    ).re_first(r"\d+")
+    SHARES = int(GET_SHARES_COUNT) if GET_SHARES_COUNT else 0
+    GET_COMMENTS_COUNT = int(
+        selector.css("#js-comments-btn::text").re_first(r"\d+")
+    )
+    SUMMARY = selector.css(".tec--article__body > p *::text").getall()
+    GET_SUMMARY = "".join(SUMMARY)
+    GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
+    GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
+    dic_news = {
+        "url": GET_URL,
+        "title": GET_TITLE,
+        "timestamp": GET_TIMESTAMP,
+        "writer": GET_WRITER,
+        "shares_count": SHARES,
+        "comments_count": GET_COMMENTS_COUNT,
+        "summary": GET_SUMMARY,
+        "sources": GET_SOURCES,
+        "categories": GET_CATEGORIES,
+    }
+    return dic_news
 
 
 # Requisito 3
@@ -40,3 +62,12 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+
+"""
+    if __name__ == "__main__":
+    URL = ""
+    response = fetch(URL)
+    news = scrape_noticia(response)
+    print(news)
+"""
