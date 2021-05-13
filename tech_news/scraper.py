@@ -1,8 +1,9 @@
 import requests
 from time import sleep
 
-
 # Requisito 1
+
+
 def fetch(url):
     try:
         response = requests.get(url, timeout=3)
