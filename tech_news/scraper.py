@@ -23,7 +23,9 @@ def scrape_noticia(html_content):
     GET_URL = selector.css("head link[rel=canonical]::attr(href)").get()
     GET_TITLE = selector.css("#js-article-title::text").get()
     GET_TIMESTAMP = selector.css("#js-article-date::attr(datetime)").get()
-    GET_WRITER = selector.css("#js-author-bar > div > p > a::text").get()
+    GET_WRITER = (
+        selector.css("#js-author-bar > div > p > a::text").get().strip()
+    )
     GET_SHARES_COUNT = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
@@ -31,10 +33,14 @@ def scrape_noticia(html_content):
     GET_COMMENTS_COUNT = int(
         selector.css("#js-comments-btn::text").re_first(r"\d+")
     )
-    SUMMARY = selector.css(".tec--article__body > p *::text").getall()
+    SUMMARY = selector.css(
+        ".tec--article__body > p:nth-child(1) *::text"
+    ).getall()
     GET_SUMMARY = "".join(SUMMARY)
     GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
+    SOURCES = [source.strip() for source in GET_SOURCES]
     GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
+    CATEGORIES = [category.strip() for category in GET_CATEGORIES]
     dic_news = {
         "url": GET_URL,
         "title": GET_TITLE,
@@ -43,8 +49,8 @@ def scrape_noticia(html_content):
         "shares_count": SHARES,
         "comments_count": GET_COMMENTS_COUNT,
         "summary": GET_SUMMARY,
-        "sources": GET_SOURCES,
-        "categories": GET_CATEGORIES,
+        "sources": SOURCES,
+        "categories": CATEGORIES,
     }
     return dic_news
 
