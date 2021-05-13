@@ -34,11 +34,9 @@ def scrape_noticia(html_content):
     timestamp = selector.css('div.tec--timestamp__item time::attr(datetime)').get().strip()
 
     get_writer = selector.css('a.tec--author__info__link::text').get()
-    # print('get_writer', get_writer)
     writer = get_writer.strip() if (get_writer) else None
 
     get_shares_count = selector.css('div.tec--toolbar__item::text').get()
-    # print('get_shares_count', get_shares_count)
     shares_count = get_shares_count.strip().split()[0] if (get_shares_count) else 0
 
     # comments_count = selector.css('button.tec--btn *::text').get().strip().split()[0]
