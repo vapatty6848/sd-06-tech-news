@@ -1,6 +1,7 @@
 import requests
 import time
 
+
 # Requisito 1
 def fetch(url):
     """Seu código deve vir aqui"""
