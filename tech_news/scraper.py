@@ -1,11 +1,20 @@
-# Requisito 1
+import requests
+import time
+
+
 def fetch(url):
-    """Seu código deve vir aqui"""
+    try:
+        response = requests.get(url, timeout=3)
+        time.sleep(1)
+    except Exception:
+        return None
+    else:
+        return response.text
 
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    return html_content
 
 
 # Requisito 3
