@@ -517,7 +517,6 @@ local: `tech_news/analyzer/ratings.py`
 
 Esta função irá listar as cinco notícias mais populares; nosso critério de popularidade será a soma dos compartilhamentos e comentários.
 
-- A função deve receber como parâmetro o nome da categoria completo.
 - A função deve buscar as notícias do banco de dados e calcular a sua "popularidade" somando seu número de compartilhamentos e comentários.
 - A função deve ordenar as notícias por ordem de popularidade.
 - Em caso de empate, o desempate deve ser por ordem alfabética de título.
@@ -533,7 +532,7 @@ Esta função irá listar as cinco notícias mais populares; nosso critério de 
 
 - Será validado que é possível buscar as cinco top notícias e retornar vazio caso não tenha nenhuma notícia
 
-- Caso houver menos de 5 categorias, serão retornadas quantas houverem
+- Caso houver menos de 5 notícias, serão retornadas quantas houverem
 
 
 ### 11 - Crie a função `top_5_categories`
