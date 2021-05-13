@@ -1,23 +1,18 @@
-# Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    print("Hello Friend")
 
 
-# Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    pass
 
 
-# Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    pass
 
 
-# Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    pass
 
 
-# Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    pass
