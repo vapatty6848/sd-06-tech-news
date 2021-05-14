@@ -69,49 +69,49 @@ def test_scrape_noticia():
     assert scrape_noticia(html_content) == expected
 
 
-# # Req.3
-# def test_scrape_novidades():
-#     with open("tests/assets/tecmundo_pages/novidades.html") as f:
-#         html_content = f.read()
-#     expected = urls_from_novidades
-#     # retorna os dados esperados quando chamada com os parâmetros corretos
-#     assert scrape_novidades(html_content) == expected
-#     # retorna uma lista vazia quando chamada com parâmetros incorretos
-#     assert scrape_novidades("") == []
+# Req.3
+def test_scrape_novidades():
+    with open("tests/assets/tecmundo_pages/novidades.html") as f:
+        html_content = f.read()
+    expected = urls_from_novidades
+    # retorna os dados esperados quando chamada com os parâmetros corretos
+    assert scrape_novidades(html_content) == expected
+    # retorna uma lista vazia quando chamada com parâmetros incorretos
+    assert scrape_novidades("") == []
 
 
-# # Req.4
-# def test_scrape_next_page_link():
-#     with open("tests/assets/tecmundo_pages/novidades.html") as f:
-#         html_content = f.read()
-#     expected = "https://www.tecmundo.com.br/novidades?page=2"
-#     # retorna os dados esperados quando chamada com os parâmetros corretos
-#     assert scrape_next_page_link(html_content) == expected
-#     # retorna None quando chamada com os parâmetros incorretos
-#     assert scrape_next_page_link("") is None
+# Req.4
+def test_scrape_next_page_link():
+    with open("tests/assets/tecmundo_pages/novidades.html") as f:
+        html_content = f.read()
+    expected = "https://www.tecmundo.com.br/novidades?page=2"
+    # retorna os dados esperados quando chamada com os parâmetros corretos
+    assert scrape_next_page_link(html_content) == expected
+    # retorna None quando chamada com os parâmetros incorretos
+    assert scrape_next_page_link("") is None
 
 
-# def mocked_fetch(url):
-#     """Fake-fetches html from local file caches"""
-#     skip = len("https://www.tecmundo.com.br/")
-#     file_id = url[skip:].replace("/", "|")
-#     path = f"tests/assets/tecmundo_pages/{file_id}.html"
-#     with open(path) as cached_html:
-#         return cached_html.read()
+def mocked_fetch(url):
+    """Fake-fetches html from local file caches"""
+    skip = len("https://www.tecmundo.com.br/")
+    file_id = url[skip:].replace("/", "|")
+    path = f"tests/assets/tecmundo_pages/{file_id}.html"
+    with open(path) as cached_html:
+        return cached_html.read()
 
 
-# # Req.5
-# @pytest.mark.parametrize("amount", [20, 30, 40])
-# def test_get_tech_news(amount, mocker):
-#     # Arrange
-#     db.news.drop()
-#     mocker.patch("tech_news.scraper.fetch", new=mocked_fetch)
-#     mocked_create_news = mocker.patch("tech_news.scraper.create_news")
+# Req.5
+@pytest.mark.parametrize("amount", [20, 30, 40])
+def test_get_tech_news(amount, mocker):
+    # Arrange
+    db.news.drop()
+    mocker.patch("tech_news.scraper.fetch", new=mocked_fetch)
+    mocked_create_news = mocker.patch("tech_news.scraper.create_news")
 
-#     # Act
-#     result = get_tech_news(amount)
-#     mocked_create_news.assert_called_once_with(result)
+    # Act
+    result = get_tech_news(amount)
+    mocked_create_news.assert_called_once_with(result)
 
-#     # Assert
-#     # A função retorna a quantidade correta de notícias
-#     assert result == all_news[:amount]
+    # Assert
+    # A função retorna a quantidade correta de notícias
+    assert result == all_news[:amount]
