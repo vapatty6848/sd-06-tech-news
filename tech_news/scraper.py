@@ -79,7 +79,7 @@ def scrape_next_page_link(html_content):
     ).get()
     if (url_next_page == ""):
         return None
-    else: 
+    else:
         return url_next_page
 
 
