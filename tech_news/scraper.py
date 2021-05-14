@@ -32,9 +32,8 @@ def scrape_noticia(html_content):
     writer = selector.css("a.tec--author__info__link::text").get()
     get_writer = writer.strip() if writer else None
 
-    shares_count = int(
-        (selector.css("div.tec--toolbar__item::text").get().split()[0] or 0)
-    )
+    shares_count = selector.css("div.tec--toolbar__item::text").get()
+    get_shares_count = int(shares_count.split()[0]) if shares_count else 0
 
     comments_count = int(
         selector.css(
@@ -59,7 +58,7 @@ def scrape_noticia(html_content):
         "title": title,
         "timestamp": timestamp,
         "writer": get_writer,
-        "shares_count": shares_count,
+        "shares_count": get_shares_count,
         "comments_count": comments_count,
         "summary": treated_summary,
         "sources": sources,
