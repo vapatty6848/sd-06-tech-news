@@ -72,6 +72,7 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    URL = "https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm"
+    URL = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/"
+    "155000-musk-tesla-carros-totalmente-autonomos.htm"
     response = fetch(URL)
     tech_news = scrape_noticia(response)
