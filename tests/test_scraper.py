@@ -58,7 +58,7 @@ def test_scrape_noticia():
         "assets/"
         "tecmundo_pages/"
         "dispositivos-moveis|"
-        "215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm."
+        git add."
         "html"
     )
     with open(path) as f:

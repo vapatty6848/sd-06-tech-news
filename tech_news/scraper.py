@@ -22,37 +22,42 @@ def scrape_noticia(html_content):
     selector = Selector(text=html_content)
     url = selector.css("head link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title ::text").get()
-    timestamp = selector.css("#js-article-date ::text").get()
-    writer = selector.css("a.tec--author__info__link ::text").get()
-    shares_count = selector.css(
+    timestamp = selector.css("#js-article-date::attr(datetime)").get()
+    writer = selector.css("a.tec--author__info__link ::text").get().strip()
+    shares_count = int(selector.css(
         ".tec--toolbar__item::text"
-    ).get().split(' ')[1].strip()
-    comments_count = selector.css("button #js-comments-btn").get()
+    ).get().split(' ')[1].strip())
+    comments_count = int(selector.css(
+        "#js-comments-btn::attr(data-count)"
+    ).get())
     summary = selector.css(
-        "div .tec--article__body :first-child").get()
-    sources = selector.css("a.tec--badge ::text").getall()
-    categories = selector.css("div a:empty ::text").getall()
+        "div.tec--article__body :first-child *::text").getall()
+    all_summary = "".join(summary)
+    source_list = selector.css("a.tec--badge ::text").getall()
+    source = [word.strip() for word in source_list]
+    categories_list = selector.css("div#js-categories a::text").getall()
+    categories = [category.strip() for category in categories_list]
     page_dict = {
-        url,
-        title,
-        timestamp,
-        writer,
-        shares_count,
-        comments_count,
-        summary,
-        sources,
-        categories
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "shares_count": shares_count,
+        "comments_count": comments_count,
+        "summary": all_summary,
+        "sources": source,
+        "categories": categories
     }
     return page_dict
 
 
 # Requisito 3
 def scrape_novidades(html_content):
-    if html_content == "": 
+    if html_content == "":
         return []
     else:
         selector = Selector(text=html_content)
-        url_list = selector.css("div figure a::attr(href)").getall()
+        url_list = selector.css("div article figure a::attr(href)").getall()
         return url_list
 
 
@@ -64,3 +69,9 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+
+if __name__ == "__main__":
+    URL = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
+    response = fetch(URL)
+    tech_news = scrape_noticia(response)
