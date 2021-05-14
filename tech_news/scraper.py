@@ -12,7 +12,7 @@ def fetch(url):
             return None
         return response.text
     except requests.Timeout:
-        return none
+        return None
 
 
 # Requisito 2
