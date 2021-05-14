@@ -1,5 +1,7 @@
 import requests
 import time
+from parsel import Selector
+from tech_news.database import create_news
 from tech_news.scraper_utils import (
     get_categories,
     get_sources,
@@ -10,7 +12,6 @@ from tech_news.scraper_utils import (
     get_timestamp,
     get_summary,
 )
-from parsel import Selector
 
 
 # Requisito 1
@@ -70,4 +71,27 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    """Recebe como parâmetro um número inteiro _amount_ e busca a quantidade
+        correspondente de notícias mais recentes do site."""
+
+    url = 'https://www.tecmundo.com.br/novidades'
+    noticiasUrls = []
+
+    while len(noticiasUrls) < amount:
+        noticias = fetch(url)
+        noticiasUrls.extend(scrape_novidades(noticias))
+        url = scrape_next_page_link(noticias)
+
+    noticiasSplice = noticiasUrls[:amount]
+    noticiasList = []
+    for noticia in noticiasSplice:
+        html_content = fetch(noticia)
+        noticiasList.append(scrape_noticia(html_content))
+
+    try:
+        create_news(noticiasList)
+    except Exception as err:
+        print(err)
+
+    print(len(noticiasList), amount)
+    return noticiasList

@@ -13,10 +13,14 @@ def get_writer(selector):
 
 
 def get_shares_count(selector):
+    shares_count = 0
     shares = selector.css('nav.tec--toolbar *::text').get()
     if shares is not None:
-        shares_count = shares.split()[0].strip()
-    return int(shares_count)
+        shares_count = shares.split()
+        if len(shares_count) > 1:
+            shares_quant = shares_count[0].strip()
+            return int(shares_quant)
+    return 0
 
 
 def get_comments_count(selector):
@@ -38,8 +42,10 @@ def get_timestamp(selector):
 
 
 def get_summary(selector):
-    summary_raw = selector.css('.tec--article__body p').getall()[0]
-    return BeautifulSoup(summary_raw, 'html').text
+    summary_raw = selector.css('.tec--article__body p').get()
+    if summary_raw is not None:
+        return BeautifulSoup(summary_raw, 'lxml').text
+    return None
 
 
 def get_sources(selector):
