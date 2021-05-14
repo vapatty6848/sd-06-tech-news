@@ -1,8 +1,6 @@
 import requests
 import time
 
-url = "https://www.betrybe.com/"
-
 
 # Requisito 1
 def fetch(url):
@@ -17,6 +15,7 @@ def fetch(url):
         return response.text
     except requests.ReadTimeout:
         requests.ReadTimeout
+
 
 # Requisito 2
 def scrape_noticia(html_content):
