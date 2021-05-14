@@ -49,7 +49,12 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    """Faz o scrape do HTML para obter as URLs de cada notícia."""
+    selector = Selector(text=html_content)
+
+    noticias = selector.css('.tec--list div h3 a::attr(href)').getall()
+
+    return noticias
 
 
 # Requisito 4
