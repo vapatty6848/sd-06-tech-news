@@ -29,12 +29,14 @@ def scrape_noticia(html_content):
     url = selector.css("head > link[rel=canonical]::attr(href)").get()
     title = selector.css("h1#js-article-title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = (
-        selector.css("a.tec--author__info__link::text").get().strip() or None
-    )
+    writer = selector.css("a.tec--author__info__link::text").get()
+    if writer is not None:
+        treated_writer = writer.strip()
+
     shares_count = int(
         (selector.css("div.tec--toolbar__item::text").get().split()[0] or 0)
     )
+
     comments_count = int(
         selector.css(
             "div.tec--toolbar__item #js-comments-btn::attr(data-count)"
@@ -44,7 +46,6 @@ def scrape_noticia(html_content):
     summary = selector.css(
         ".tec--article__body p:first-child *::text"
     ).getall()
-    print(summary)
     treated_summary = "".join(summary)
 
     sources = remove_spaces_from_items(
@@ -58,7 +59,7 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer,
+        "writer": treated_writer or writer,
         "shares_count": shares_count,
         "comments_count": comments_count,
         "summary": treated_summary,
@@ -91,27 +92,29 @@ def get_tech_news(amount):
     pass
 
 
-# def get_tech_news(amount):
-#     news_page = fetch("https://www.tecmundo.com.br/novidades")
-#     news_to_scrape = scrape_novidades(news_page)
-#     next_page = ""
+def get_tech_news_two(amount):
+    news_page = fetch("https://www.tecmundo.com.br/novidades")
+    news_to_scrape = scrape_novidades(news_page)
+    # print(len(news_to_scrape))
+    next_page = ""
 
-#     while len(news_to_scrape) < amount:
-#         next_page_link = scrape_next_page_link(next_page or news_page)
-#         next_page_content = fetch(next_page_link)
-#         more_news_to_scrape = scrape_novidades(next_page_content)
-#         news_to_scrape.extend(more_news_to_scrape)
+    while len(news_to_scrape) < amount:
+        next_page_link = scrape_next_page_link(next_page or news_page)
+        print(next_page_link)
+        next_page_content = fetch(next_page_link)
+        more_news_to_scrape = scrape_novidades(next_page_content)
+        news_to_scrape.extend(more_news_to_scrape)
 
-#     print(news_to_scrape)
-#     scraped_news = []
-#     for new_index in range(1, amount + 1):
-#         print(new_index)
-#         news_page = fetch(news_to_scrape[new_index])
-#         new = scrape_noticia(news_page)
-#         print(news_page)
-#     #     scraped_news.append(new)
+    # print(news_to_scrape)
+    scraped_news = []
+    for new_index in range(1, amount + 1):
+        print(new_index)
+        news_page = fetch(news_to_scrape[new_index])
+        new = scrape_noticia(news_page)
+        print(news_page)
+        scraped_news.append(new)
 
-#     print(scraped_news)
+    # print(scraped_news)
 
 
-# get_tech_news(5)
+get_tech_news_two(5)
