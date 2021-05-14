@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
 
 def get_writer(selector):
@@ -41,11 +41,18 @@ def get_timestamp(selector):
     return selector.css('main article time::attr(datetime)').get()
 
 
+# def get_summary(selector):
+#     summary_raw = selector.css('.tec--article__body p').get()
+#     if summary_raw is not None:
+#         return BeautifulSoup(summary_raw, 'lxml').text
+#     return None
+
+
 def get_summary(selector):
-    summary_raw = selector.css('.tec--article__body p').get()
-    if summary_raw is not None:
-        return BeautifulSoup(summary_raw, 'lxml').text
-    return None
+    summary_raw = selector.css(
+        ".tec--article__body > p:nth-child(1) *::text"
+    ).getall()
+    return "".join(summary_raw)
 
 
 def get_sources(selector):

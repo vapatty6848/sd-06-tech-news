@@ -93,5 +93,4 @@ def get_tech_news(amount):
     except Exception as err:
         print(err)
 
-    print(len(noticiasList), amount)
     return noticiasList
