@@ -46,19 +46,17 @@ def scrape_noticia(html_content):
     GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
     CATEGORIES = [category.strip() for category in GET_CATEGORIES]
     result_dict = {
-        'url': URL
-        'title': TITLE
-        'timestamp': TIMESTAMP
-        'writer': WRITER
-        'shares_count': SHARES_COUNT
-        'comments_count': COMMENTS_COUNT
-        'summary_formatted': SUMMARY_FORMATTED
-        'sources': SOURCES
+        'url': URL,
+        'title': TITLE,
+        'timestamp': TIMESTAMP,
+        'writer': WRITER,
+        'shares_count': SHARES_COUNT,
+        'comments_count': COMMENTS_COUNT,
+        'summary_formatted': SUMMARY_FORMATTED,
+        'sources': SOURCES,
         'categories': CATEGORIES
     }
     return result_dict
-
-
 
 
 # Requisito 3
