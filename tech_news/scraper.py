@@ -52,13 +52,13 @@ def scrape_noticia(html_content):
 
 
 # Requisito 3
-def scrape_novidades(html_content):
-    if html_content == "":
-        return []
-    else:
-        selector = Selector(text=html_content)
-        url_list = selector.css("div article figure a::attr(href)").getall()
-        return url_list
+# def scrape_novidades(html_content):
+#     if html_content == "":
+#         return []
+#     else:
+#         selector = Selector(text=html_content)
+#         url_list = selector.css("div article figure a::attr(href)").getall()
+#         return url_list
 
 
 # Requisito 4
@@ -72,6 +72,7 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    URL = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
+    URL = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities"
+    "/155000-musk-tesla-carros-totalmente-autonomos.htm"
     response = fetch(URL)
     tech_news = scrape_noticia(response)
