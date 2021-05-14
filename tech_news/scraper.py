@@ -2,6 +2,7 @@ import requests
 import parsel
 import time
 from requests.exceptions import Timeout
+from tech_news.database import create_news
 
 
 # Requisito 1
@@ -27,18 +28,21 @@ def scrape_noticia(html_content):
         ".tec--timestamp__item"
     ).xpath(
         "./time/@datetime"
-    ).get().strip()
-    WRITER = selector.css(".z--font-bold a::text").get().strip()
-    SHARES_COUNT_UNFORMATTED = selector.css(
+    ).get()
+    WRITER_UNFORMATED = selector.css(
+        "#js-author-bar .z--font-bold a::text"
+    ).get()
+    WRITER = WRITER_UNFORMATED.strip() if WRITER_UNFORMATED else None
+    SHARES_CNT_UNF = selector.css(
         ".tec--toolbar__item::text"
-    ).get().split(' ')[1].strip()
-    SHARES_COUNT = int(SHARES_COUNT_UNFORMATTED)
-    COMMENTS_COUNT_UNFORMATTED = selector.css(
+    ).re_first(r"\d+")
+    SHARES_CNT = int(SHARES_CNT_UNF) if SHARES_CNT_UNF else 0
+    COMMENTS_COUNT_UNF = selector.css(
         "#js-comments-btn::attr(data-count)"
     ).get()
-    COMMENTS_COUNT = int(COMMENTS_COUNT_UNFORMATTED)
+    COMMENTS_COUNT = int(COMMENTS_COUNT_UNF) if COMMENTS_COUNT_UNF else 0
     SUMMARY_UNFORMATTED = selector.css(
-        ".tec--article__body > p:nth-child(1) *::text"
+        ".tec--article__body p:nth-child(1) *::text"
     ).getall()
     SUMMARY = ''.join(SUMMARY_UNFORMATTED)
     GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
@@ -50,7 +54,7 @@ def scrape_noticia(html_content):
         'title': TITLE,
         'timestamp': TIMESTAMP,
         'writer': WRITER,
-        'shares_count': SHARES_COUNT,
+        'shares_count': SHARES_CNT if SHARES_CNT else 0,
         'comments_count': COMMENTS_COUNT,
         'summary': SUMMARY,
         'sources': SOURCES,
@@ -85,4 +89,18 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    next_page_url = "https://www.tecmundo.com.br/novidades"
+    result = []
+    while next_page_url:
+        response = fetch(next_page_url)
+        news_list = scrape_novidades(response)
+        for news in news_list:
+            response_news = fetch(news)
+            new = scrape_noticia(response_news)
+            result.append(new)
+
+            if amount == len(result):
+                create_news(result)
+                return result
+
+        next_page_url = scrape_next_page_link(response)
