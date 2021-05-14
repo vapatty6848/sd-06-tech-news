@@ -1,6 +1,6 @@
 import requests
 import time
-import utils
+from scraper_utils import get_writer
 from parsel import Selector
 from bs4 import BeautifulSoup
 
@@ -34,10 +34,7 @@ def scrape_noticia(html_content):
     noticia['timestamp'] = selector.css(
         'main article time::attr(datetime)').get()
 
-    noticia['writer'] = selector.css(
-        'main article .tec--author__info__link::text').get()
-    if noticia['writer'] is not None:
-        noticia['writer'].strip()
+    noticia['writer'] = get_writer(selector)
 
     shares = selector.css(
         'nav.tec--toolbar *::text').get()
