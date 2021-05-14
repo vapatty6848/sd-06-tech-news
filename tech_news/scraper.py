@@ -48,12 +48,12 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    selector = Selector(text=html_content)
-    url_list = []
-    parent_div = selector.css("div.tec--list.tec--list--lg")
-    for div in parent_div:
-        url_list = div.css("div figure a::attr(href)")
-    return url_list
+    if html_content == "": 
+        return []
+    else:
+        selector = Selector(text=html_content)
+        url_list = selector.css("div figure a::attr(href)").getall()
+        return url_list
     
 # Requisito 4
 def scrape_next_page_link(html_content):
