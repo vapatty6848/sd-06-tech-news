@@ -75,7 +75,7 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-     url = "https://www.tecmundo.com.br/novidades"
+    url = "https://www.tecmundo.com.br/novidades"
     news_inserted = []
     while True:
         response = fetch(url)
