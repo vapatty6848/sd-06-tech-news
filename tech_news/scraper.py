@@ -69,7 +69,7 @@ def scrape_novidades(html_content):
 def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
     url = selector.css(".tec--btn:attr(href)").get()
-    url_treated = url IF url else None
+    url_treated = url if url else None
     return url_treated
 
 
