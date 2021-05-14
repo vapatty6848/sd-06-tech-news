@@ -37,10 +37,10 @@ def scrape_noticia(html_content):
         "#js-comments-btn::attr(data-count)"
     ).get()
     COMMENTS_COUNT = int(COMMENTS)
-    SUMMARY = selector.css(
+    SUMMARY_UNFORMATTED = selector.css(
         ".tec--article__body > p:nth-child(1) *::text"
     ).getall()
-    SUMMARY_FORMATTED = ''.join(SUMMARY)
+    SUMMARY = ''.join(SUMMARY_UNFORMATTED)
     GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
     SOURCES = [source.strip() for source in GET_SOURCES]
     GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
@@ -52,7 +52,7 @@ def scrape_noticia(html_content):
         'writer': WRITER,
         'shares_count': SHARES_COUNT,
         'comments_count': COMMENTS_COUNT,
-        'summary_formatted': SUMMARY_FORMATTED,
+        'summary': SUMMARY,
         'sources': SOURCES,
         'categories': CATEGORIES
     }
