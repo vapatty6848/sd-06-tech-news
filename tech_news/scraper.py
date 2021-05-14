@@ -25,7 +25,7 @@ def scrape_noticia(html_content):
     timestamp = selector.css("#js-article-date ::text").get()
     writer = selector.css("a.tec--author__info__link ::text").get()
     shares_count = selector.css(
-        ".tec--toolbar__item a::text"
+        ".tec--toolbar__item::text"
     ).get().split(' ')[1].strip()
     comments_count = selector.css("button #js-comments-btn").get()
     summary = selector.css(
@@ -48,8 +48,7 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
-
+    
 
 # Requisito 4
 def scrape_next_page_link(html_content):
