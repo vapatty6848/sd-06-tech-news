@@ -52,13 +52,13 @@ def scrape_noticia(html_content):
 
 
 # Requisito 3
-# def scrape_novidades(html_content):
-#     if html_content == "":
-#         return []
-#     else:
-#         selector = Selector(text=html_content)
-#         url_list = selector.css("div article figure a::attr(href)").getall()
-#         return url_list
+def scrape_novidades(html_content):
+    if html_content == "":
+        return []
+    else:
+        selector = Selector(text=html_content)
+        url_list = selector.css("div article figure a::attr(href)").getall()
+        return url_list
 
 
 # Requisito 4
