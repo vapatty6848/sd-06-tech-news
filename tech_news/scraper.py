@@ -15,7 +15,7 @@ def fetch(url):
         response.raise_for_status()
     except (requests.ReadTimeout, requests.HTTPError):
         return None
-      
+
 
 # Requisito 2
 def scrape_noticia(html_content):
@@ -24,16 +24,25 @@ def scrape_noticia(html_content):
     title = selector.css("#js-article-title ::text").get()
     timestamp = selector.css("#js-article-date ::text").get()
     writer = selector.css("a.tec--author__info__link ::text").get()
-    shares_count = selector.css(".tec--toolbar__item a::text").get().split(' ')[1].strip()
+    shares_count = selector.css(".tec--toolbar__item a::text")
+        .get().split(' ')[1].strip()
     comments_count = selector.css("button #js-comments-btn").get()
-    summary = selector.css("div .tec--article__body :first-child").get()
+    summary = selector.css(
+        "div .tec--article__body :first-child").get()
     sources = selector.css("a.tec--badge ::text").getall()
     categories = selector.css("div a:empty ::text").getall()
     page_dict = {
-        url, title, timestamp, writer, shares_count, comments_count, summary, sources, categorie
+        url,
+        title,
+        timestamp,
+        writer,
+        shares_count,
+        comments_count,
+        summary,
+        sources,
+        categories
     }
     return page_dict
-
 
 
 # Requisito 3
