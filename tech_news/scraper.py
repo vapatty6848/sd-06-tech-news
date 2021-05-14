@@ -1,6 +1,7 @@
 import requests
 import time
 from parsel import Selector
+from tech_news.database import create_news
 
 
 def fetch(url):
@@ -68,13 +69,27 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    url_news = "https://www.tecmundo.com.br/novidades"
+    tech_news = []
+    while len(tech_news) < amount:
+        html_content = fetch(url_news)
+        url_tech_news = scrape_novidades(html_content)
+        tech_news.extend(url_tech_news)
+        url_news = scrape_next_page_link(html_content)
+    tech_news[0:amount]
+    tech_list = [
+        scrape_noticia(fetch(new)) for new in tech_news
+    ]
+    create_news({[]})
+    return tech_list
 
 
 if __name__ == "__main__":
     req2 = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
     req3 = "https://www.tecmundo.com.br/novidades"
-    news = scrape_noticia(fetch(req2))
-    links = scrape_novidades(fetch(req3))
-    next_page = scrape_next_page_link(fetch(req3))
-    print(news, links, next_page)
+    req5 = "https://www.tecmundo.com.br/cultura-geek/217292-codigos-netflix-usa-los-encontrar-filmes-escondidos.htm"
+    # new = fetch(req5)
+    # length = len(tech_news)
+    # data = scrape_noticia(new)
+    # tech_news_data = get_data_from_news()
+    print()
