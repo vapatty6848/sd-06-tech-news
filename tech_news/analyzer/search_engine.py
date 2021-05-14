@@ -45,7 +45,18 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    """Faz buscas nas notícias por fonte no DB"""
+    try:
+        search = source.lower()
+    except AttributeError:
+        print('Please use a valid string.')
+        return None
+
+    regex = re.compile(rf'{search}', re.IGNORECASE)
+    query = {'sources': {'$in': [regex]}}
+    results_raw = search_news(query)
+    results = [(result['title'], result['url']) for result in results_raw]
+    return results
 
 
 # Requisito 9
