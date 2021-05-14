@@ -21,7 +21,7 @@ def scrape_noticia(html_content):
     """Seu código deve vir aqui!"""
     selector = parsel.Selector(html_content)
 
-    URl = selector.css("head link[rel=canonical]::attr(href)").get()
+    URL = selector.css("head link[rel=canonical]::attr(href)").get()
     TITLE = selector.css("h1::text").get()
     TIMESTAMP = selector.css(
         ".tec--timestamp__item"
