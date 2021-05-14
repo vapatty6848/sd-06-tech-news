@@ -86,32 +86,16 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    pass
-
-
-# def get_tech_news_two(amount):
-#     news_page = fetch("https://www.tecmundo.com.br/novidades")
-#     news_to_scrape = scrape_novidades(news_page)
-#     print(len(news_to_scrape))
-#     next_page = ""
-
-#     while len(news_to_scrape) < amount:
-#         next_page_link = scrape_next_page_link(next_page or news_page)
-#         print(next_page_link)
-#         next_page_content = fetch(next_page_link)
-#         more_news_to_scrape = scrape_novidades(next_page_content)
-#         news_to_scrape.extend(more_news_to_scrape)
-
-#     # print(news_to_scrape)
-#     scraped_news = []
-#     for new_index in range(1, amount + 1):
-#         print(new_index)
-#         news_page = fetch(news_to_scrape[new_index])
-#         new = scrape_noticia(news_page)
-#         print(news_page)
-#         scraped_news.append(new)
-
-#     print(scraped_news)
-
-
-# get_tech_news_two(5)
+    url = "https://www.tecmundo.com.br/novidades"
+    news_inserted = []
+    while True:
+        response = fetch(url)
+        news_current_page = scrape_novidades(response)
+        for new in news_current_page:
+            news_next_page = fetch(new)
+            next_news = scrape_noticia(news_next_page)
+            news_inserted.append(next_news)
+            if len(news_inserted) == amount:
+                create_news(news_inserted)
+                return news_inserted
+        url = scrape_next_page_link(response)
