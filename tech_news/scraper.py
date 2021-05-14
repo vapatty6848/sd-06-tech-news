@@ -2,6 +2,7 @@ import requests
 import time
 from requests.exceptions import ReadTimeout
 from requests.models import HTTPError
+from parsel import Selector
 
 
 # Requisito 1
@@ -22,7 +23,40 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url = selector.css("head link[rel=canonical]::attr(href)").get()
+    title = selector.css("#js-article-title::text").get()
+    timestamp = selector.css("#js-article-date::attr(datetime)").get()
+    writer = selector.css(".tec--author__info__link::text").get()
+    shares_count = selector.css(".tec--toolbar__item::text").get()
+    comments_count = selector.css("#js-comments-btn::text").getall()
+    summary = selector.css(
+        "div.tec--article__body > p:nth-child(1) *::text"
+    ).getall()
+    sources = [
+        source[1:-1]
+        for source
+        in selector.css("div.z--mb-16.z--px-16 > div > a::text")
+        .getall()
+    ]
+    categories = [
+        category[1:-1]
+        for category
+        in selector.css("#js-categories > a::text")
+        .getall()
+    ]
+
+    return {
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer[1:-1],
+        "shares_count": int(shares_count.split(' ')[1]),
+        "comments_count": int(comments_count[1].split(' ')[1]),
+        "summary": ''.join(summary),
+        "sources": sources,
+        "categories": categories
+    }
 
 
 # Requisito 3
