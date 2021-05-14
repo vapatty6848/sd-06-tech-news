@@ -29,18 +29,18 @@ def scrape_noticia(html_content):
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
     writer = selector.css(".tec--author__info__link::text").get()
     shares_count = selector.css(".tec--toolbar__item::text").get()
-    comments_count = selector.css("#js-comments-btn::text").getall()
+    comments_count = selector.css("#js-comments-btn::text").getall()[1]
     summary = selector.css(
         "div.tec--article__body > p:nth-child(1) *::text"
     ).getall()
     sources = [
-        source[1:-1]
+        source.strip()
         for source
         in selector.css("div.z--mb-16.z--px-16 > div > a::text")
         .getall()
     ]
     categories = [
-        category[1:-1]
+        category.strip()
         for category
         in selector.css("#js-categories > a::text")
         .getall()
@@ -50,9 +50,9 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer[1:-1],
+        "writer": writer.strip(),
         "shares_count": int(shares_count.split(' ')[1]),
-        "comments_count": int(comments_count[1].split(' ')[1]),
+        "comments_count": int(comments_count.split(' ')[1]),
         "summary": ''.join(summary),
         "sources": sources,
         "categories": categories
@@ -72,3 +72,8 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+if __name__ == "__main__":
+    url = "https://www.tecmundo.com.br/cultura-geek/217311-enola-holmes-2-netflix-confirma-sequencia-retorno-atores.htm"
+    content = fetch(url)
+    print(scrape_noticia(content))
