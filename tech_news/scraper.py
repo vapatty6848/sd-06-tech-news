@@ -35,11 +35,10 @@ def scrape_noticia(html_content):
     shares_count = selector.css("div.tec--toolbar__item::text").get()
     get_shares_count = int(shares_count.split()[0]) if shares_count else 0
 
-    comments_count = int(
-        selector.css(
-            "div.tec--toolbar__item #js-comments-btn::attr(data-count)"
-        ).get()
-    )
+    comments_count = selector.css(
+        "div.tec--toolbar__item #js-comments-btn::attr(data-count)"
+    ).get()
+    get_comments_count = int(comments_count) if comments_count else None
 
     summary = selector.css(
         ".tec--article__body p:first-child *::text"
@@ -59,7 +58,7 @@ def scrape_noticia(html_content):
         "timestamp": timestamp,
         "writer": get_writer,
         "shares_count": get_shares_count,
-        "comments_count": comments_count,
+        "comments_count": get_comments_count,
         "summary": treated_summary,
         "sources": sources,
         "categories": categories,
@@ -93,7 +92,7 @@ def get_tech_news(amount):
 # def get_tech_news_two(amount):
 #     news_page = fetch("https://www.tecmundo.com.br/novidades")
 #     news_to_scrape = scrape_novidades(news_page)
-#     # print(len(news_to_scrape))
+#     print(len(news_to_scrape))
 #     next_page = ""
 
 #     while len(news_to_scrape) < amount:
@@ -112,7 +111,7 @@ def get_tech_news(amount):
 #         print(news_page)
 #         scraped_news.append(new)
 
-#     # print(scraped_news)
+#     print(scraped_news)
 
 
 # get_tech_news_two(5)
