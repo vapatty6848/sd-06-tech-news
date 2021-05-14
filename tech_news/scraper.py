@@ -67,7 +67,10 @@ def scrape_novidades(html_content):
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url = selector.css(".tec--btn:attr(href)").get()
+    url_treated = url IF url else None
+    return url_treated
 
 
 # Requisito 5
