@@ -1,6 +1,7 @@
 import requests
 from parsel import Selector
 import time
+from tech_news.database import create_news
 
 tech_mundo_url = "https://www.tecmundo.com.br/novidades"
 
@@ -87,4 +88,30 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    pass
+
+
+# def get_tech_news(amount):
+#     news_page = fetch("https://www.tecmundo.com.br/novidades")
+#     news_to_scrape = scrape_novidades(news_page)
+#     next_page = ""
+
+#     while len(news_to_scrape) < amount:
+#         next_page_link = scrape_next_page_link(next_page or news_page)
+#         next_page_content = fetch(next_page_link)
+#         more_news_to_scrape = scrape_novidades(next_page_content)
+#         news_to_scrape.extend(more_news_to_scrape)
+
+#     print(news_to_scrape)
+#     scraped_news = []
+#     for new_index in range(1, amount + 1):
+#         print(new_index)
+#         news_page = fetch(news_to_scrape[new_index])
+#         new = scrape_noticia(news_page)
+#         print(news_page)
+#     #     scraped_news.append(new)
+
+#     print(scraped_news)
+
+
+# get_tech_news(5)
