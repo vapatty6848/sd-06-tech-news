@@ -21,7 +21,8 @@ def scrape_noticia(html_content):
     url = selector.css("head link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = selector.css("#js-author-bar > div > p > a::text").get().strip()
+    get_writer = selector.css(".tec--author__info__link::text").get()
+    writer = get_writer.strip() if get_writer else None
     get_shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
@@ -30,7 +31,7 @@ def scrape_noticia(html_content):
         selector.css("#js-comments-btn::text").re_first(r"\d+")
     )
     summary_list = selector.css(
-        ".tec--article__body > p:nth-child(1) *::text"
+        ".tec--article__body p:nth-child(1) *::text"
     ).getall()
     summary = "".join(summary_list)
     get_sources = selector.css(".z--mb-16 .tec--badge::text").getall()
@@ -76,20 +77,13 @@ def get_tech_news(amount):
         url_tech_news = scrape_novidades(html_content)
         tech_news.extend(url_tech_news)
         url_news = scrape_next_page_link(html_content)
-    tech_news[0:amount]
+    tech_news = tech_news[0:amount]
     tech_list = [
         scrape_noticia(fetch(new)) for new in tech_news
     ]
-    create_news({[]})
+    create_news(tech_list)
     return tech_list
 
 
 if __name__ == "__main__":
-    req2 = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
-    req3 = "https://www.tecmundo.com.br/novidades"
-    req5 = "https://www.tecmundo.com.br/cultura-geek/217292-codigos-netflix-usa-los-encontrar-filmes-escondidos.htm"
-    # new = fetch(req5)
-    # length = len(tech_news)
-    # data = scrape_noticia(new)
-    # tech_news_data = get_data_from_news()
     print()

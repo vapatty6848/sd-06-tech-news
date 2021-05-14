@@ -1,3 +1,6 @@
+# from tech_news.database import create_news
+
+
 # Requisito 6
 def search_by_title(title):
     """Seu código deve vir aqui"""
