@@ -101,7 +101,7 @@ def mocked_fetch(url):
 
 
 # Req.5
-@pytest.mark.parametrize("amount", [20, 30, 40])
+@pytest.mark.parametrize("amount", [19, 30, 40])
 def test_get_tech_news(amount, mocker):
     # Arrange
     db.news.drop()

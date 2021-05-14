@@ -1,9 +1,8 @@
 import time
 import requests
-
-# import pandas as pd
 from requests.exceptions import ReadTimeout
 from parsel import Selector
+from tech_news.database import create_news
 
 
 # Requisito 1
@@ -23,16 +22,14 @@ def scrape_noticia(html_content):
     get_url = selector.css("head link[rel=canonical]::attr(href)").get()
     get_title = selector.css("#js-article-title::text").get()
     get_timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    get_writer = (
-        selector.css("#js-author-bar > div > p > a::text").get().strip()
-    )
+    writer = selector.css("#js-author-bar > div > p > a::text").get()
+    get_writer = writer.strip() if writer else None
     get_shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
     shares = int(get_shares_count) if get_shares_count else 0
-    get_comments_count = int(
-        selector.css("#js-comments-btn::text").re_first(r"\d+")
-    )
+    comments = selector.css("#js-comments-btn::text").re_first(r"\d+")
+    get_comments_count = int(comments) if comments else None
     summary = selector.css(
         ".tec--article__body > p:nth-child(1) *::text"
     ).getall()
@@ -57,11 +54,11 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    if html_content == '':
+    if html_content == "":
         return []
     else:
         selector = Selector(text=html_content)
-        news = selector.css('.tec--card__info h3 a::attr(href)').getall()
+        news = selector.css(".tec--card__info h3 a::attr(href)").getall()
         return news
 
 
@@ -76,11 +73,22 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    url = "https://www.tecmundo.com.br/novidades"
+    news_inserted = []
+    while True:
+        response = fetch(url)
+        news_current_page = scrape_novidades(response)
+        for new in news_current_page:
+            news_next_page = fetch(new)
+            next_news = scrape_noticia(news_next_page)
+            news_inserted.append(next_news)
+            if len(news_inserted) == amount:
+                create_news(news_inserted)
+                return news_inserted
+        url = scrape_next_page_link(response)
 
 
 if __name__ == "__main__":
-    URL = "https://www.tecmundo.com.br/novidades"
-    response = fetch(URL)
-    news = scrape_next_page_link(response)
-    print(news)
+    # URL = "https://www.tecmundo.com.br/novidades"
+    # response = fetch(URL)
+    get_tech_news(24)

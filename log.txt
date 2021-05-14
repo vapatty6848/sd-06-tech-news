@@ -1,0 +1,554 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.5, pytest-6.1.2, py-1.10.0, pluggy-0.13.1 -- /home/isabella/sd-06-projects/sd-06-tech-news/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/isabella/sd-06-projects/sd-06-tech-news, configfile: pyproject.toml
+plugins: json-0.4.0, mock-3.5.1
+collecting ... collected 7 items
+
+tests/test_scraper.py::test_fetch PASSED
+tests/test_scraper.py::test_scrape_noticia PASSED
+tests/test_scraper.py::test_scrape_novidades PASSED
+tests/test_scraper.py::test_scrape_next_page_link PASSED
+tests/test_scraper.py::test_get_tech_news[4] PASSED
+tests/test_scraper.py::test_get_tech_news[30] FAILED
+
+=================================== FAILURES ===================================
+____________________________ test_get_tech_news[30] ____________________________
+
+amount = 30
+mocker = <pytest_mock.plugin.MockerFixture object at 0x7fb5d2c7fa90>
+
+    @pytest.mark.parametrize("amount", [4, 30, 40])
+    def test_get_tech_news(amount, mocker):
+        # Arrange
+        db.news.drop()
+        mocker.patch("tech_news.scraper.fetch", new=mocked_fetch)
+        mocked_create_news = mocker.patch("tech_news.scraper.create_news")
+    
+        # Act
+        result = get_tech_news(amount)
+        mocked_create_news.assert_called_once_with(result)
+    
+        # Assert
+        # A função retorna a quantidade correta de notícias
+>       assert result == all_news[:amount]
+E       assert [{'categories': ['Minha Série', 'Séries', 'Seriados', 'Listas'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Insider'],\n  'summary': 'Nesta sexta-feira (9), um personagem importante dentro do '\n             'contexto de The Crown faleceu na vida real. Trata-se do Príncipe '\n             'Philip que, ainda sem causa anunciada oficialmente, morreu aos '\n             '99 anos de idade. Mesmo assim, os fãs da produção da Netflix já '\n             'estão ansiosos com a 5ª temporada da série, que deverá ser '\n             'lançada em 2022.',\n  'timestamp': '2021-04-10T19:00:01',\n  'title': '8 séries parecidas com The Crown para fãs da realeza',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215330-8-series-parecidas-the-crown-fas-realeza.htm',\n  'writer': None},\n {'categories': ['Minha Série', 'Anime', 'Listas', 'Séries', 'Seriados'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['CBR'],\n  'summary': 'Você sabe quais são os vilões de animes mais inteligentes?',\n  'timestamp': '2021-04-10T18:00:01',\n  'title': '10 vilões de animes extremamente inteligentes',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215168-10-viloes-animes-extremamente-inteligentes.htm',\n  'writer': None},\n {'categories': ['Voxel', 'Jogos', 'Tag', 'Mercado'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Depois de conferir a lista com 10 jogos que completam 30 e 35 '\n             'anos em 2021, é hora de conferir os títulos que, este ano, '\n             'comemoram 20 e 25 anos de existência. Em nossa lista, há games '\n             'que marcaram o início de franquias importantes, como Diablo, '\n             'Resident Evil\xa0e Pokémon, e também outros que consagraram de '\n             'vez séries já existentes, como Final Fantasy\xa0e\xa0GTA.',\n  'timestamp': '2021-04-10T18:00:01',\n  'title': '10 jogos que completam 20 e 25 anos em 2021',\n  'url': 'https://www.tecmundo.com.br/voxel/215349-10-jogos-completam-20-25-anos-2021.htm',\n  'writer': 'Diego Borges'},\n {'categories': ['Cultura Geek', 'Quadrinhos', 'DC Comics'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Screen Rant'],\n  'summary': 'Na última terça-feira (6), um comprador anônimo adquiriu uma '\n             'cópia do Action Comics #1 por US$ 3,25 milhões (R$ 18,1 '\n             'milhões). O lance foi dado durante um leilão realizado pelo site '\n             'ComicConnect.com. A HQ é famosa por ter apresentado pela '\n             'primeira vez o Superman. \xa0O lance também foi o maior já feito '\n             'em uma revista em quadrinhos, superando por pouco o atingido por '\n             'uma outra cópia da mesma HQ, em 2014, de US$ 3,2 milhões.',\n  'timestamp': '2021-04-10T17:00:01',\n  'title': 'Primeira HQ do Superman é vendida por US$ 3,25 milhões',\n  'url': 'https://www.tecmundo.com.br/cultura-geek/215298-primeira-hq-superman-vendida-us-3-25-milhoes.htm',\n  'writer': 'Robinson Samulak Alves'},\n {'categories': ['Ciência', 'NASA', 'Exploração espacial'],\n  'comments_count': 0,\n  'shares_count': 5,\n  'sources': ['NASA'],\n  'summary': 'Depois de muita espera, o helicóptero Ingenuity finalmente '\n             'levantará voo em Marte neste domingo (11). O primeiro teste será '\n             'realizado em uma região chamada Van Zyl Overlook, que '\n             'possibilitará uma boa visão do aeródromo que foi escolhido pela '\n             'equipe da Missão Mars.',\n  'timestamp': '2021-04-10T16:00:01',\n  'title': 'NASA: como acompnhar o 1º voo do Ingenuity em Marte',\n  'url': 'https://www.tecmundo.com.br/ciencia/215205-nasa-assistir-primeiro-voo-ingenuity-marte.htm',\n  'writer': 'Carlos Palmeira'},\n {'categories': ['Voxel', 'Jogos', 'Cartel Tycoon', 'Plataformas', 'PC'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Uma das organizações criminosas mais ricas e temidas do mundo '\n             'são os cartéis. Pode ser aquele grupo de empresas que se unem '\n             'para controlar um mercado, prejudicando consumidores pela falta '\n             'de concorrência no preço. Pode ser também aquela facção que se '\n             'reúne para vender drogas.',\n  'timestamp': '2021-04-10T16:00:01',\n  'title': 'Cartel Tycoon não te ensina a ser um grande mafioso',\n  'url': 'https://www.tecmundo.com.br/voxel/215347-cartel-tycoon-nao-te-ensina-grande-mafioso.htm',\n  'writer': 'Thiago Simões'},\n {'categories': ['Dispositivos Móveis', 'Xiaomi', 'Computação em nuvem'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Xiaomi'],\n  'summary': 'A Mi Cloud é o serviço de nuvem da Xiaomi, que funciona de forma '\n             'semelhante ao iCloud da Apple, e possui um processo simples de '\n             'remoção de conta. Isso é necessário quando o usuário decide '\n             'vender o dispositivo Xiaomi, repassá-lo ou mesmo usar outro '\n             'perfil no celular.',\n  'timestamp': '2021-04-10T15:00:01',\n  'title': 'Como remover uma conta Mi Cloud do seu dispositivo Xiaomi',\n  'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215245-remover-conta-mi-cloud-dispositivo-xiaomi.htm',\n  'writer': 'Kris Gaiato'},\n {'categories': ['Mercado', 'Internet', 'Apps'],\n  'comments_count': 0,\n  'shares_count': 5,\n  'sources': ['Mercado Pago'],\n  'summary': 'Precisa resolver alguma pendência com o Mercado Pago pelo '\n             'telefone? Você terá de gerar um código de atendimento antes de '\n             'ligar para o serviço “Fale Conosco” da carteira digital '\n             'pertencente ao Mercado Livre.',\n  'timestamp': '2021-04-10T14:00:01',\n  'title': 'Código de atendimento Mercado Pago: como conseguir?',\n  'url': 'https://www.tecmundo.com.br/mercado/215165-codigo-atendimento-mercado-pago-conseguir.htm',\n  'writer': 'André Luiz Dias Gonçalves'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'Age of Empires II: Definitive Edition',\n                 'Plataformas',\n                 'PC'],\n  'comments_count': 12,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'A Microsoft já tinha prometido que 10 de abril seria um dia '\n             'cheio de novidades para os fãs de Age of Empires, e ela estava '\n             'certa! Hoje ela transmitiu um evento focado majoritariamente em '\n             'Age of Empires IV\xa0e finalmente mostrou um pouco mais de seu '\n             'gameplay e recursos.',\n  'timestamp': '2021-04-10T13:29:54',\n  'title': 'Age of Empires 4 revela novas civilizações, campanha e gameplay',\n  'url': 'https://www.tecmundo.com.br/voxel/215353-age-of-empires-4-revela-novas-civilizacoes-campanha-gameplay.htm',\n  'writer': 'Thomas Schulze Costa'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'The Witcher 3: Wild Hunt',\n                 'Tag',\n                 'Cultura Pop',\n                 'Cosplay'],\n  'comments_count': 9,\n  'shares_count': 0,\n  'sources': ['Instagram'],\n  'summary': 'The Witcher é uma das franquias mais famosas do mundo dos games. '\n             'Por conta desse sucesso, os seus personagens são inspirações '\n             'para milhares de cosplayer, como Luxlo, uma artista que '\n             'reproduziu a feiticeira da série: Yennefer. A fidelidade com a '\n             'personagem foi tanta que as suas fotos rodaram o mundo e '\n             'impressionam pela qualidade do trabalho.',\n  'timestamp': '2021-04-10T13:00:01',\n  'title': 'The Witcher: cosplay de Yennefer encanta pelo realismo',\n  'url': 'https://www.tecmundo.com.br/voxel/215264-the-witcher-cosplay-yennefer-encanta-realismo.htm',\n  'writer': 'Diego Borges'},\n {'categories': ['Minha Série', 'Séries', 'Seriados', 'Netflix', 'Listas'],\n  'comments_count': 1,\n  'shares_count': 0,\n  'sources': ['Decider'],\n  'summary': 'Sucesso na Netflix, a série Quem Matou Sara? conquistou o '\n             'público por sua simplicidade, mas também por uma trama ágil e '\n             'repleta de segredos. Com menos de 1 semana de exibição, a '\n             'produção foi renovada para a 2ª temporada. Nela, os espectadores '\n             'continuarão envoltos em grandes mistérios e a busca por vingança '\n             'de Alex Guzman (interpretado por Manolo Cardona).',\n  'timestamp': '2021-04-10T12:00:01',\n  'title': 'Quem Matou Sara?: 7 séries parecidas com a produção da Netflix',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215164-quem-matou-sara-7-series-parecidas-producao-netflix.htm',\n  'writer': None},\n {'categories': ['Segurança', 'Privacidade'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': '*Por Denis Riviello, Head de Cibersegurança da Compugraf',\n  'timestamp': '2021-04-10T11:00:01',\n  'title': 'PMEs são os principais alvos de ataques cibernéticos',\n  'url': 'https://www.tecmundo.com.br/seguranca/215274-pmes-principais-alvos-ataques-ciberneticos.htm',\n  'writer': '@tec_mundo'},\n {'categories': ['Segurança', 'Celular', 'Produtos'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['The Enclosure Company',\n              'Android Authority',\n              'Rainford Solutions'],\n  'summary': 'Entre as mais diversas especificações técnicas de um smartphone, '\n             'existe uma que é muito importante para garantir a durabilidade '\n             'do aparelho e a resistência dele para o caso de contato com '\n             'poeira ou líquidos: a certificação IP.',\n  'timestamp': '2021-04-10T10:00:01',\n  'title': 'IP67 e IP68: conheça os diferentes graus de certificação',\n  'url': 'https://www.tecmundo.com.br/seguranca/215116-ip67-ip68-conheca-diferentes-graus-certificacao.htm',\n  'writer': 'Nilton Kleina'},\n {'categories': ['Software', 'Loja digital', 'Internet'],\n  'comments_count': 1,\n  'shares_count': 6,\n  'sources': ['SHOPIFY'],\n  'summary': 'Quem pretende iniciar um negócio de e-commerce ou quer aumentar '\n             'as vendas de uma loja física pode contar com a plataforma '\n             'Shopify. Os usuários podem acessar por desktop ou aplicativo '\n             'para os sistemas operacionais Android\xa0e IOS\xa0(iPhone).',\n  'timestamp': '2021-04-10T09:00:01',\n  'title': 'Conheça o Shopify, sistema para criar sua loja online',\n  'url': 'https://www.tecmundo.com.br/software/215082-conheca-shopify-sistema-criar-loja-online.htm',\n  'writer': 'Thiago Simões'},\n {'categories': ['Ciência', 'Inteligência artificial', 'Coronavírus'],\n  'comments_count': 1,\n  'shares_count': 5,\n  'sources': [],\n  'summary': 'No mês passado, o Brasil completou um ano da pandemia e, durante '\n             'o período, foram criadas diversas iniciativas para ajudar a '\n             'mitigar o impacto da covid-19 no país. Entre as áreas que mais '\n             'se destacaram na busca de soluções para combater o vírus está o '\n             'setor de tecnologia, que proporcionou ferramentas mais '\n             'eficientes para o diagnóstico e tratamento de pacientes.',\n  'timestamp': '2021-04-10T08:00:01',\n  'title': 'Robô Laura: uma IA está ajudando a combater a covid-19 no Brasil',\n  'url': 'https://www.tecmundo.com.br/ciencia/215038-robo-laura-ia-ajudando-diagnosticos-covid-19.htm',\n  'writer': 'Giovanna Fantinato'},\n {'categories': ['Dispositivos Móveis', 'Google Pixel 5a', 'Google'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['9to5Google', 'The Verge'],\n  'summary': 'O Pixel 5a terá um lançamento limitado por conta da escassez '\n             'global de chips. Em nota, a Google desmentiu os recentes rumores '\n             'de que o smartphone intermediário teria sido cancelado.',\n  'timestamp': '2021-04-10T07:00:01',\n  'title': 'Pixel 5a terá lançamento limitado devido à escassez de chips',\n  'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm',\n  'writer': 'Lupa Charleaux'},\n {'categories': ['Internet',\n                 'Jogos',\n                 'Séries',\n                 'Seriados',\n                 'Tecnologia',\n                 'Ciência',\n                 'Entretenimento'],\n  'comments_count': 0,\n  'shares_count': 7,\n  'sources': [],\n  'summary': 'Bom dia! Para se manter atualizado nesse início de sabadão (10), '\n             'o TecMundo separou tudo o que rolou de mais importante nesta '\n             'semana (05 a 09 de abril). Além de várias notícias sobre '\n             'tecnologia e ciência, o mundo do entretenimento e dos games '\n             'também foi bastante movimentado no período.',\n  'timestamp': '2021-04-10T06:00:01',\n  'title': '10 notícias mais importantes da semana (05/4 a 09/4)',\n  'url': 'https://www.tecmundo.com.br/internet/215348-10-noticias-importantes-semana-05-4-09-4.htm',\n  'writer': 'Carlos Palmeira'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'Recap', 'The CW'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['TVFanatic', 'TVLine'],\n  'summary': 'ATENÇÃO: SPOILERS À FRENTE!',\n  'timestamp': '2021-04-09T23:00:01',\n  'title': 'Legacies 3x9: Hope e Lizzie encaram suas diferenças (recap)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215314-legacies-3-temporada-episodio-9-hope-lizzie-recap.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Astronomia', 'NASA', 'Exploração espacial'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Gizmodo', 'arXiv'],\n  'summary': 'Muito grandes para serem classificadas como planetas e muito '\n             'escuras para serem estrelas, as anãs marrons, ou “estrelas '\n             'fracassadas”, são objetos que queimam deutério, um tipo de '\n             'hidrogênio, porém com fraca emissão de luz. No início do mês '\n             'passado (2), uma pesquisa revelou três anãs marrons com a '\n             'rotação mais rápida já observada até hoje.',\n  'timestamp': '2021-04-09T22:30:01',\n  'title': 'Descobertas três anãs marrons nos seus limites máximos de rotação',\n  'url': 'https://www.tecmundo.com.br/ciencia/215316-descobertas-tres-anas-marrons-limites-maximos-rotacao.htm',\n  'writer': 'Jorge Marin'},\n {'categories': ['Minha Série',\n                 'Marvel',\n                 'Séries',\n                 'Seriados',\n                 'Disney+',\n                 'Elenco'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Slash Film', 'Marvel Fandom'],\n  'summary': 'A criação do elenco para a série She-Hulk, próxima série da '\n             'Marvel a ser produzida para o Disney+, está começando a crescer '\n             'cada vez mais. O novo nome a entrar para a produção do MCU é '\n             'Renée Elise Goldsberry, que foi coprotagonista no musical '\n             'Hamilton.',\n  'timestamp': '2021-04-09T22:00:01',\n  'title': 'She-Hulk: Renée Elise Goldsberry entra para o elenco da série',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215302-she-hulk-renee-elise-goldsberry-entra-elenco-serie.htm',\n  'writer': None},\n {'categories': ['Ciência',\n                 'Astronomia',\n                 'Exploração espacial',\n                 'Meteorologia',\n                 'Física'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['AGU', 'Space'],\n  'summary': 'Apesar de apresentarem composições químicas diferentes, chuvas '\n             'de outros mundos se assemelham – e muito – às que ocorrem aqui '\n             'na Terra, indica Kaitlyn Loftus, estudante do Departamento de '\n             'Ciências da Terra e Planetárias da Universidade de Harvard '\n             '(EUA), em estudo publicado no Journal of Geophysical Research: '\n             'Planets. De acordo com ela, nem mesmo as mais variadas '\n             'atmosferas causam alterações substanciais nas gotas que caem '\n             'sobre diversas superfícies extraterrestres.',\n  'timestamp': '2021-04-09T21:30:01',\n  'title': 'Chuvas de outros planetas são semelhantes às da Terra, diz estudo',\n  'url': 'https://www.tecmundo.com.br/ciencia/215309-chuvas-outros-planetas-semelhantes-terra-diz-estudo.htm',\n  'writer': 'Reinaldo Zaruvni'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'Recap', 'ABC'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['TV Fanatic', 'TV Line'],\n  'summary': 'ATENÇÃO: SPOILERS À FRENTE!',\n  'timestamp': '2021-04-09T21:00:01',\n  'title': 'Grey’s Anatomy 17x11: Amelia e Link pensam em casamento (recap)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215290-greys-anatomy-17-temporada-episodio-11-amelia-link-recap.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Coronavírus', 'Saúde', 'Medicina'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['The Lancet Psychiatry', 'CNN', 'Futurism', 'BBC'],\n  'summary': 'Um terço das pessoas infectadas pelo novo coronavírus '\n             'desenvolveram problemas psicológicos ou neurológicos, como '\n             'ansiedade, depressão, demência e psicose, entre outros, em um '\n             'período de até seis meses após se curarem. É o que indica um '\n             'amplo estudo publicado na revista The Lancet Psychiatry, na '\n             'terça-feira (6).',\n  'timestamp': '2021-04-09T20:30:01',\n  'title': '34% das pessoas curadas de covid-19 tiveram doenças neurológicas',\n  'url': 'https://www.tecmundo.com.br/ciencia/215306-34-pessoas-curadas-covid-19-tiveram-doencas-neurologicas.htm',\n  'writer': 'André Luiz Dias Gonçalves'},\n {'categories': ['Minha Série',\n                 'Seriados',\n                 'Séries',\n                 'Elenco',\n                 'Marvel',\n                 'Disney+'],\n  'comments_count': 3,\n  'shares_count': 0,\n  'sources': ['CBR', 'MCU Exchange'],\n  'summary': 'Atualmente fazendo sucesso na série Falcão e o Soldado Invernal, '\n             'Sebastian Stan tem interpretado Bucky Barnes desde o primeiro '\n             'filme do Capitão América. Stan contou que os fãs da Marvel '\n             'sempre tentam "ativar" o lado assassino do personagem quando '\n             'reconhecem o ator nas ruas.',\n  'timestamp': '2021-04-09T20:00:01',\n  'title': 'Falcão e o Soldado Invernal: fãs têm reação curiosa ao ver '\n           'Sebastian Stan',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215285-falcao-soldado-invernal-fas-reacao-curiosa-sebastian-stan.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Astronomia', 'Química', 'Física'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['LiveScience'],\n  'summary': 'Um novo estudo publicado na revista Nature\xa0sugere que os '\n             'níveis de oxigênio na atmosfera terrestre apresentavam grande '\n             'oscilação há 2,22 bilhões de anos, reduzindo em 100 milhões de '\n             'anos a data inicialmente estimada de 2,32 bilhões de anos '\n             '(período em que quase desapareceu) de início de ascensão e '\n             'estabilização do gás em nosso planeta – além de aumentar a '\n             'duração de um processo chamado de Grande Oxidação, marcado por '\n             'diferenças climáticas extremas, incluindo eras de gelo.',\n  'timestamp': '2021-04-09T19:30:00',\n  'title': 'Terra perdeu quase todo seu oxigênio há 2,3 bilhões anos',\n  'url': 'https://www.tecmundo.com.br/ciencia/215305-terra-perdeu-oxigenio-ha-2-3-bilhoes-anos.htm',\n  'writer': 'Reinaldo Zaruvni'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'Wolfenstein Youngblood',\n                 'Wolfenstein 2: The New Colossus',\n                 'Wolfenstein: The Old Blood',\n                 'Return To Castle Wolfenstein: Enemy Territory',\n                 'Wolfenstein 3D'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Você já parou pra pensar como seria o mercado dos videogames se '\n             'não existissem os FPS? Sem BioShock, sem Black, CoD, '\n             'Battlefield, Medal of Honor… é realmente difícil. Uma coisa que '\n             'dá pra ter certeza é que o gênero só existe hoje em dia por '\n             'causa dessa franquia.',\n  'timestamp': '2021-04-09T19:00:00',\n  'title': 'Wolfenstein: Do pior ao melhor, segundo a crítica',\n  'url': 'https://www.tecmundo.com.br/voxel/215256-wolfenstein-pior-melhor-segundo-critica.htm',\n  'writer': 'Victor Francesco Casagrande Simões'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'NBC', 'Bastidores'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['CBR'],\n  'summary': 'Recentemente, parte do elenco de Brooklyn 99 compartilhou uma '\n             'foto dos bastidores com o público, na qual aparecem comemorando '\n             'o início das filmagens da 8ª temporada. Vale lembrar que a '\n             'produção da NBC deverá chegar ao fim após \xa0a conclusão dessa '\n             'nova leva de episódios.',\n  'timestamp': '2021-04-09T19:00:00',\n  'title': 'Brooklyn 99: Melissa Fumero registra início da 8ª temporada (foto)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215278-brooklyn-99-melissa-fumero-registra-inicio-8-temporada-foto.htm',\n  'writer': None},\n {'categories': ['Minha Série',\n                 'Seriados',\n                 'Séries',\n                 'Filmes',\n                 'Amazon Prime Video'],\n  'comments_count': 3,\n  'shares_count': 0,\n  'sources': ['IMDB'],\n  'summary': 'Não sabe o que assistir no meio de tantas produções e serviços '\n             'de streaming diferentes? Não se preocupe! O Minha Série dá '\n             'início, nesta sexta-feira (09), ao quadro Dicas de Séries e '\n             'Filmes da semana. Como o nome sugere, toda semana indicaremos '\n             'uma produção audiovisual diferente para você curtir no conforto '\n             'do seu lar.',\n  'timestamp': '2021-04-09T18:39:40',\n  'title': 'Dicas de séries e filmes da semana: O Som do Silêncio',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215343-dicas-series-filmes-semana-som-silencio.htm',\n  'writer': None},\n {'categories': ['Cultura Geek', 'Filmes', 'Streaming', 'Cinema'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Tenho mais discos que amigos'],\n  'summary': 'O documentário Chorão - Marginal Alado finalmente está entre '\n             'nós. O longa, que acompanha a vida do vocalista do Charlie Brown '\n             'Jr., já está disponível nos cinemas e em algumas plataformas '\n             'digitais, como NOW, Google Play, Apple TV, Vivo Play, Looke e '\n             'YouTube. Para assistir a partir do serviço de streaming um valor '\n             'a parte é cobrado do usuário.',\n  'timestamp': '2021-04-09T18:30:01',\n  'title': 'Chorão - Marginal Alado: saiba onde assistir ao documentário',\n  'url': 'https://www.tecmundo.com.br/cultura-geek/215313-chorao-marginal-alado-saiba-onde-assistir-documentario.htm',\n  'writer': 'Gabriela Freire Petry'},\n {'categories': ['Voxel', 'Tag', 'Terror', 'Jogos'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Gematsu'],\n  'summary': 'O estúdio independente Acorn Bringer anunciou nesta quarta-feira '\n             '(7) a disponibilização da demo gratuita de Of Love & Eternity, '\n             'título de terror e aventura em terceira pessoa desenvolvido com '\n             'o motor da Unity e que chama a atenção por seu estilo artístico '\n             'diferenciado.',\n  'timestamp': '2021-04-09T18:30:01',\n  'title': 'Of Love & Eternity: estiloso terror para PC ganha demo no itch.io',\n  'url': 'https://www.tecmundo.com.br/voxel/215332-of-love-eternity-estiloso-terror-pc-ganha-demo-itch-io.htm',\n  'writer': 'André Luis Dias Custodio'}] == [{'categories': ['Minha Série', 'Séries', 'Seriados', 'Listas'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Insider'],\n  'summary': 'Nesta sexta-feira (9), um personagem importante dentro do '\n             'contexto de The Crown faleceu na vida real. Trata-se do Príncipe '\n             'Philip que, ainda sem causa anunciada oficialmente, morreu aos '\n             '99 anos de idade. Mesmo assim, os fãs da produção da Netflix já '\n             'estão ansiosos com a 5ª temporada da série, que deverá ser '\n             'lançada em 2022.',\n  'timestamp': '2021-04-10T19:00:01',\n  'title': '8 séries parecidas com The Crown para fãs da realeza',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215330-8-series-parecidas-the-crown-fas-realeza.htm',\n  'writer': None},\n {'categories': ['Minha Série', 'Anime', 'Listas', 'Séries', 'Seriados'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['CBR'],\n  'summary': 'Você sabe quais são os vilões de animes mais inteligentes?',\n  'timestamp': '2021-04-10T18:00:01',\n  'title': '10 vilões de animes extremamente inteligentes',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215168-10-viloes-animes-extremamente-inteligentes.htm',\n  'writer': None},\n {'categories': ['Voxel', 'Jogos', 'Tag', 'Mercado'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Depois de conferir a lista com 10 jogos que completam 30 e 35 '\n             'anos em 2021, é hora de conferir os títulos que, este ano, '\n             'comemoram 20 e 25 anos de existência. Em nossa lista, há games '\n             'que marcaram o início de franquias importantes, como Diablo, '\n             'Resident Evil\xa0e Pokémon, e também outros que consagraram de '\n             'vez séries já existentes, como Final Fantasy\xa0e\xa0GTA.',\n  'timestamp': '2021-04-10T18:00:01',\n  'title': '10 jogos que completam 20 e 25 anos em 2021',\n  'url': 'https://www.tecmundo.com.br/voxel/215349-10-jogos-completam-20-25-anos-2021.htm',\n  'writer': 'Diego Borges'},\n {'categories': ['Cultura Geek', 'Quadrinhos', 'DC Comics'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Screen Rant'],\n  'summary': 'Na última terça-feira (6), um comprador anônimo adquiriu uma '\n             'cópia do Action Comics #1 por US$ 3,25 milhões (R$ 18,1 '\n             'milhões). O lance foi dado durante um leilão realizado pelo site '\n             'ComicConnect.com. A HQ é famosa por ter apresentado pela '\n             'primeira vez o Superman. \xa0O lance também foi o maior já feito '\n             'em uma revista em quadrinhos, superando por pouco o atingido por '\n             'uma outra cópia da mesma HQ, em 2014, de US$ 3,2 milhões.',\n  'timestamp': '2021-04-10T17:00:01',\n  'title': 'Primeira HQ do Superman é vendida por US$ 3,25 milhões',\n  'url': 'https://www.tecmundo.com.br/cultura-geek/215298-primeira-hq-superman-vendida-us-3-25-milhoes.htm',\n  'writer': 'Robinson Samulak Alves'},\n {'categories': ['Ciência', 'NASA', 'Exploração espacial'],\n  'comments_count': 0,\n  'shares_count': 5,\n  'sources': ['NASA'],\n  'summary': 'Depois de muita espera, o helicóptero Ingenuity finalmente '\n             'levantará voo em Marte neste domingo (11). O primeiro teste será '\n             'realizado em uma região chamada Van Zyl Overlook, que '\n             'possibilitará uma boa visão do aeródromo que foi escolhido pela '\n             'equipe da Missão Mars.',\n  'timestamp': '2021-04-10T16:00:01',\n  'title': 'NASA: como acompnhar o 1º voo do Ingenuity em Marte',\n  'url': 'https://www.tecmundo.com.br/ciencia/215205-nasa-assistir-primeiro-voo-ingenuity-marte.htm',\n  'writer': 'Carlos Palmeira'},\n {'categories': ['Voxel', 'Jogos', 'Cartel Tycoon', 'Plataformas', 'PC'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Uma das organizações criminosas mais ricas e temidas do mundo '\n             'são os cartéis. Pode ser aquele grupo de empresas que se unem '\n             'para controlar um mercado, prejudicando consumidores pela falta '\n             'de concorrência no preço. Pode ser também aquela facção que se '\n             'reúne para vender drogas.',\n  'timestamp': '2021-04-10T16:00:01',\n  'title': 'Cartel Tycoon não te ensina a ser um grande mafioso',\n  'url': 'https://www.tecmundo.com.br/voxel/215347-cartel-tycoon-nao-te-ensina-grande-mafioso.htm',\n  'writer': 'Thiago Simões'},\n {'categories': ['Dispositivos Móveis', 'Xiaomi', 'Computação em nuvem'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Xiaomi'],\n  'summary': 'A Mi Cloud é o serviço de nuvem da Xiaomi, que funciona de forma '\n             'semelhante ao iCloud da Apple, e possui um processo simples de '\n             'remoção de conta. Isso é necessário quando o usuário decide '\n             'vender o dispositivo Xiaomi, repassá-lo ou mesmo usar outro '\n             'perfil no celular.',\n  'timestamp': '2021-04-10T15:00:01',\n  'title': 'Como remover uma conta Mi Cloud do seu dispositivo Xiaomi',\n  'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215245-remover-conta-mi-cloud-dispositivo-xiaomi.htm',\n  'writer': 'Kris Gaiato'},\n {'categories': ['Mercado', 'Internet', 'Apps'],\n  'comments_count': 0,\n  'shares_count': 5,\n  'sources': ['Mercado Pago'],\n  'summary': 'Precisa resolver alguma pendência com o Mercado Pago pelo '\n             'telefone? Você terá de gerar um código de atendimento antes de '\n             'ligar para o serviço “Fale Conosco” da carteira digital '\n             'pertencente ao Mercado Livre.',\n  'timestamp': '2021-04-10T14:00:01',\n  'title': 'Código de atendimento Mercado Pago: como conseguir?',\n  'url': 'https://www.tecmundo.com.br/mercado/215165-codigo-atendimento-mercado-pago-conseguir.htm',\n  'writer': 'André Luiz Dias Gonçalves'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'Age of Empires II: Definitive Edition',\n                 'Plataformas',\n                 'PC'],\n  'comments_count': 12,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'A Microsoft já tinha prometido que 10 de abril seria um dia '\n             'cheio de novidades para os fãs de Age of Empires, e ela estava '\n             'certa! Hoje ela transmitiu um evento focado majoritariamente em '\n             'Age of Empires IV\xa0e finalmente mostrou um pouco mais de seu '\n             'gameplay e recursos.',\n  'timestamp': '2021-04-10T13:29:54',\n  'title': 'Age of Empires 4 revela novas civilizações, campanha e gameplay',\n  'url': 'https://www.tecmundo.com.br/voxel/215353-age-of-empires-4-revela-novas-civilizacoes-campanha-gameplay.htm',\n  'writer': 'Thomas Schulze Costa'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'The Witcher 3: Wild Hunt',\n                 'Tag',\n                 'Cultura Pop',\n                 'Cosplay'],\n  'comments_count': 9,\n  'shares_count': 0,\n  'sources': ['Instagram'],\n  'summary': 'The Witcher é uma das franquias mais famosas do mundo dos games. '\n             'Por conta desse sucesso, os seus personagens são inspirações '\n             'para milhares de cosplayer, como Luxlo, uma artista que '\n             'reproduziu a feiticeira da série: Yennefer. A fidelidade com a '\n             'personagem foi tanta que as suas fotos rodaram o mundo e '\n             'impressionam pela qualidade do trabalho.Sorceress of Sass™? (and '\n             'we love her for it ??) pic.twitter.com/dLJpACPt1ASorceress of '\n             'Sass™? (and we love her for it ??) pic.twitter.com/dLJpACPt1A',\n  'timestamp': '2021-04-10T13:00:01',\n  'title': 'The Witcher: cosplay de Yennefer encanta pelo realismo',\n  'url': 'https://www.tecmundo.com.br/voxel/215264-the-witcher-cosplay-yennefer-encanta-realismo.htm',\n  'writer': 'Diego Borges'},\n {'categories': ['Minha Série', 'Séries', 'Seriados', 'Netflix', 'Listas'],\n  'comments_count': 1,\n  'shares_count': 0,\n  'sources': ['Decider'],\n  'summary': 'Sucesso na Netflix, a série Quem Matou Sara? conquistou o '\n             'público por sua simplicidade, mas também por uma trama ágil e '\n             'repleta de segredos. Com menos de 1 semana de exibição, a '\n             'produção foi renovada para a 2ª temporada. Nela, os espectadores '\n             'continuarão envoltos em grandes mistérios e a busca por vingança '\n             'de Alex Guzman (interpretado por Manolo Cardona).',\n  'timestamp': '2021-04-10T12:00:01',\n  'title': 'Quem Matou Sara?: 7 séries parecidas com a produção da Netflix',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215164-quem-matou-sara-7-series-parecidas-producao-netflix.htm',\n  'writer': None},\n {'categories': ['Segurança', 'Privacidade'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': '*Por Denis Riviello, Head de Cibersegurança da Compugraf',\n  'timestamp': '2021-04-10T11:00:01',\n  'title': 'PMEs são os principais alvos de ataques cibernéticos',\n  'url': 'https://www.tecmundo.com.br/seguranca/215274-pmes-principais-alvos-ataques-ciberneticos.htm',\n  'writer': None},\n {'categories': ['Segurança', 'Celular', 'Produtos'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['The Enclosure Company',\n              'Android Authority',\n              'Rainford Solutions'],\n  'summary': 'Entre as mais diversas especificações técnicas de um smartphone, '\n             'existe uma que é muito importante para garantir a durabilidade '\n             'do aparelho e a resistência dele para o caso de contato com '\n             'poeira ou líquidos: a certificação IP.',\n  'timestamp': '2021-04-10T10:00:01',\n  'title': 'IP67 e IP68: conheça os diferentes graus de certificação',\n  'url': 'https://www.tecmundo.com.br/seguranca/215116-ip67-ip68-conheca-diferentes-graus-certificacao.htm',\n  'writer': 'Nilton Kleina'},\n {'categories': ['Software', 'Loja digital', 'Internet'],\n  'comments_count': 1,\n  'shares_count': 6,\n  'sources': ['SHOPIFY'],\n  'summary': 'Quem pretende iniciar um negócio de e-commerce ou quer aumentar '\n             'as vendas de uma loja física pode contar com a plataforma '\n             'Shopify. Os usuários podem acessar por desktop ou aplicativo '\n             'para os sistemas operacionais Android\xa0e IOS\xa0(iPhone).',\n  'timestamp': '2021-04-10T09:00:01',\n  'title': 'Conheça o Shopify, sistema para criar sua loja online',\n  'url': 'https://www.tecmundo.com.br/software/215082-conheca-shopify-sistema-criar-loja-online.htm',\n  'writer': 'Thiago Simões'},\n {'categories': ['Ciência', 'Inteligência artificial', 'Coronavírus'],\n  'comments_count': 1,\n  'shares_count': 5,\n  'sources': [],\n  'summary': 'No mês passado, o Brasil completou um ano da pandemia e, durante '\n             'o período, foram criadas diversas iniciativas para ajudar a '\n             'mitigar o impacto da covid-19 no país. Entre as áreas que mais '\n             'se destacaram na busca de soluções para combater o vírus está o '\n             'setor de tecnologia, que proporcionou ferramentas mais '\n             'eficientes para o diagnóstico e tratamento de pacientes.',\n  'timestamp': '2021-04-10T08:00:01',\n  'title': 'Robô Laura: uma IA está ajudando a combater a covid-19 no Brasil',\n  'url': 'https://www.tecmundo.com.br/ciencia/215038-robo-laura-ia-ajudando-diagnosticos-covid-19.htm',\n  'writer': 'Giovanna Fantinato'},\n {'categories': ['Dispositivos Móveis', 'Google Pixel 5a', 'Google'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['9to5Google', 'The Verge'],\n  'summary': 'O Pixel 5a terá um lançamento limitado por conta da escassez '\n             'global de chips. Em nota, a Google desmentiu os recentes rumores '\n             'de que o smartphone intermediário teria sido cancelado.',\n  'timestamp': '2021-04-10T07:00:01',\n  'title': 'Pixel 5a terá lançamento limitado devido à escassez de chips',\n  'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm',\n  'writer': 'Lupa Charleaux'},\n {'categories': ['Internet',\n                 'Jogos',\n                 'Séries',\n                 'Seriados',\n                 'Tecnologia',\n                 'Ciência',\n                 'Entretenimento'],\n  'comments_count': 0,\n  'shares_count': 7,\n  'sources': [],\n  'summary': 'Bom dia! Para se manter atualizado nesse início de sabadão (10), '\n             'o TecMundo separou tudo o que rolou de mais importante nesta '\n             'semana (05 a 09 de abril). Além de várias notícias sobre '\n             'tecnologia e ciência, o mundo do entretenimento e dos games '\n             'também foi bastante movimentado no período.',\n  'timestamp': '2021-04-10T06:00:01',\n  'title': '10 notícias mais importantes da semana (05/4 a 09/4)',\n  'url': 'https://www.tecmundo.com.br/internet/215348-10-noticias-importantes-semana-05-4-09-4.htm',\n  'writer': 'Carlos Palmeira'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'Recap', 'The CW'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['TVFanatic', 'TVLine'],\n  'summary': 'ATENÇÃO: SPOILERS À FRENTE!',\n  'timestamp': '2021-04-09T23:00:01',\n  'title': 'Legacies 3x9: Hope e Lizzie encaram suas diferenças (recap)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215314-legacies-3-temporada-episodio-9-hope-lizzie-recap.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Astronomia', 'NASA', 'Exploração espacial'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Gizmodo', 'arXiv'],\n  'summary': 'Muito grandes para serem classificadas como planetas e muito '\n             'escuras para serem estrelas, as anãs marrons, ou “estrelas '\n             'fracassadas”, são objetos que queimam deutério, um tipo de '\n             'hidrogênio, porém com fraca emissão de luz. No início do mês '\n             'passado (2), uma pesquisa revelou três anãs marrons com a '\n             'rotação mais rápida já observada até hoje.',\n  'timestamp': '2021-04-09T22:30:01',\n  'title': 'Descobertas três anãs marrons nos seus limites máximos de rotação',\n  'url': 'https://www.tecmundo.com.br/ciencia/215316-descobertas-tres-anas-marrons-limites-maximos-rotacao.htm',\n  'writer': 'Jorge Marin'},\n {'categories': ['Minha Série',\n                 'Marvel',\n                 'Séries',\n                 'Seriados',\n                 'Disney+',\n                 'Elenco'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Slash Film', 'Marvel Fandom'],\n  'summary': 'A criação do elenco para a série She-Hulk, próxima série da '\n             'Marvel a ser produzida para o Disney+, está começando a crescer '\n             'cada vez mais. O novo nome a entrar para a produção do MCU é '\n             'Renée Elise Goldsberry, que foi coprotagonista no musical '\n             'Hamilton.',\n  'timestamp': '2021-04-09T22:00:01',\n  'title': 'She-Hulk: Renée Elise Goldsberry entra para o elenco da série',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215302-she-hulk-renee-elise-goldsberry-entra-elenco-serie.htm',\n  'writer': None},\n {'categories': ['Ciência',\n                 'Astronomia',\n                 'Exploração espacial',\n                 'Meteorologia',\n                 'Física'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['AGU', 'Space'],\n  'summary': 'Apesar de apresentarem composições químicas diferentes, chuvas '\n             'de outros mundos se assemelham – e muito – às que ocorrem aqui '\n             'na Terra, indica Kaitlyn Loftus, estudante do Departamento de '\n             'Ciências da Terra e Planetárias da Universidade de Harvard '\n             '(EUA), em estudo publicado no Journal of Geophysical Research: '\n             'Planets. De acordo com ela, nem mesmo as mais variadas '\n             'atmosferas causam alterações substanciais nas gotas que caem '\n             'sobre diversas superfícies extraterrestres.',\n  'timestamp': '2021-04-09T21:30:01',\n  'title': 'Chuvas de outros planetas são semelhantes às da Terra, diz estudo',\n  'url': 'https://www.tecmundo.com.br/ciencia/215309-chuvas-outros-planetas-semelhantes-terra-diz-estudo.htm',\n  'writer': 'Reinaldo Zaruvni'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'Recap', 'ABC'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['TV Fanatic', 'TV Line'],\n  'summary': 'ATENÇÃO: SPOILERS À FRENTE!',\n  'timestamp': '2021-04-09T21:00:01',\n  'title': 'Grey’s Anatomy 17x11: Amelia e Link pensam em casamento (recap)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215290-greys-anatomy-17-temporada-episodio-11-amelia-link-recap.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Coronavírus', 'Saúde', 'Medicina'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['The Lancet Psychiatry', 'CNN', 'Futurism', 'BBC'],\n  'summary': 'Um terço das pessoas infectadas pelo novo coronavírus '\n             'desenvolveram problemas psicológicos ou neurológicos, como '\n             'ansiedade, depressão, demência e psicose, entre outros, em um '\n             'período de até seis meses após se curarem. É o que indica um '\n             'amplo estudo publicado na revista The Lancet Psychiatry, na '\n             'terça-feira (6).',\n  'timestamp': '2021-04-09T20:30:01',\n  'title': '34% das pessoas curadas de covid-19 tiveram doenças neurológicas',\n  'url': 'https://www.tecmundo.com.br/ciencia/215306-34-pessoas-curadas-covid-19-tiveram-doencas-neurologicas.htm',\n  'writer': 'André Luiz Dias Gonçalves'},\n {'categories': ['Minha Série',\n                 'Seriados',\n                 'Séries',\n                 'Elenco',\n                 'Marvel',\n                 'Disney+'],\n  'comments_count': 3,\n  'shares_count': 0,\n  'sources': ['CBR', 'MCU Exchange'],\n  'summary': 'Atualmente fazendo sucesso na série Falcão e o Soldado Invernal, '\n             'Sebastian Stan tem interpretado Bucky Barnes desde o primeiro '\n             'filme do Capitão América. Stan contou que os fãs da Marvel '\n             'sempre tentam "ativar" o lado assassino do personagem quando '\n             'reconhecem o ator nas ruas.Para assistir Falcão e o Soldado '\n             'Invernal e muito mais do universo Marvel, Star Wars, Pixar e '\n             'National Geographic. Tudo isso por apenas R$ 27,90/mês.',\n  'timestamp': '2021-04-09T20:00:01',\n  'title': 'Falcão e o Soldado Invernal: fãs têm reação curiosa ao ver '\n           'Sebastian Stan',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215285-falcao-soldado-invernal-fas-reacao-curiosa-sebastian-stan.htm',\n  'writer': None},\n {'categories': ['Ciência', 'Astronomia', 'Química', 'Física'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['LiveScience'],\n  'summary': 'Um novo estudo publicado na revista Nature\xa0sugere que os '\n             'níveis de oxigênio na atmosfera terrestre apresentavam grande '\n             'oscilação há 2,22 bilhões de anos, reduzindo em 100 milhões de '\n             'anos a data inicialmente estimada de 2,32 bilhões de anos '\n             '(período em que quase desapareceu) de início de ascensão e '\n             'estabilização do gás em nosso planeta – além de aumentar a '\n             'duração de um processo chamado de Grande Oxidação, marcado por '\n             'diferenças climáticas extremas, incluindo eras de gelo.',\n  'timestamp': '2021-04-09T19:30:00',\n  'title': 'Terra perdeu quase todo seu oxigênio há 2,3 bilhões anos',\n  'url': 'https://www.tecmundo.com.br/ciencia/215305-terra-perdeu-oxigenio-ha-2-3-bilhoes-anos.htm',\n  'writer': 'Reinaldo Zaruvni'},\n {'categories': ['Voxel',\n                 'Jogos',\n                 'Wolfenstein Youngblood',\n                 'Wolfenstein 2: The New Colossus',\n                 'Wolfenstein: The Old Blood',\n                 'Return To Castle Wolfenstein: Enemy Territory',\n                 'Wolfenstein 3D'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': [],\n  'summary': 'Você já parou pra pensar como seria o mercado dos videogames se '\n             'não existissem os FPS? Sem BioShock, sem Black, CoD, '\n             'Battlefield, Medal of Honor… é realmente difícil. Uma coisa que '\n             'dá pra ter certeza é que o gênero só existe hoje em dia por '\n             'causa dessa franquia.',\n  'timestamp': '2021-04-09T19:00:00',\n  'title': 'Wolfenstein: Do pior ao melhor, segundo a crítica',\n  'url': 'https://www.tecmundo.com.br/voxel/215256-wolfenstein-pior-melhor-segundo-critica.htm',\n  'writer': 'Victor Francesco Casagrande Simões'},\n {'categories': ['Minha Série', 'Seriados', 'Séries', 'NBC', 'Bastidores'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['CBR'],\n  'summary': 'Recentemente, parte do elenco de Brooklyn 99 compartilhou uma '\n             'foto dos bastidores com o público, na qual aparecem comemorando '\n             'o início das filmagens da 8ª temporada. Vale lembrar que a '\n             'produção da NBC deverá chegar ao fim após \xa0a conclusão dessa '\n             'nova leva de episódios.',\n  'timestamp': '2021-04-09T19:00:00',\n  'title': 'Brooklyn 99: Melissa Fumero registra início da 8ª temporada (foto)',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215278-brooklyn-99-melissa-fumero-registra-inicio-8-temporada-foto.htm',\n  'writer': None},\n {'categories': ['Minha Série',\n                 'Seriados',\n                 'Séries',\n                 'Filmes',\n                 'Amazon Prime Video'],\n  'comments_count': 3,\n  'shares_count': 0,\n  'sources': ['IMDB'],\n  'summary': 'Não sabe o que assistir no meio de tantas produções e serviços '\n             'de streaming diferentes? Não se preocupe! O Minha Série dá '\n             'início, nesta sexta-feira (09), ao quadro Dicas de Séries e '\n             'Filmes da semana. Como o nome sugere, toda semana indicaremos '\n             'uma produção audiovisual diferente para você curtir no conforto '\n             'do seu lar.',\n  'timestamp': '2021-04-09T18:39:40',\n  'title': 'Dicas de séries e filmes da semana: O Som do Silêncio',\n  'url': 'https://www.tecmundo.com.br/minha-serie/215343-dicas-series-filmes-semana-som-silencio.htm',\n  'writer': None},\n {'categories': ['Cultura Geek', 'Filmes', 'Streaming', 'Cinema'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Tenho mais discos que amigos'],\n  'summary': 'O documentário Chorão - Marginal Alado finalmente está entre '\n             'nós. O longa, que acompanha a vida do vocalista do Charlie Brown '\n             'Jr., já está disponível nos cinemas e em algumas plataformas '\n             'digitais, como NOW, Google Play, Apple TV, Vivo Play, Looke e '\n             'YouTube. Para assistir a partir do serviço de streaming um valor '\n             'a parte é cobrado do usuário.',\n  'timestamp': '2021-04-09T18:30:01',\n  'title': 'Chorão - Marginal Alado: saiba onde assistir ao documentário',\n  'url': 'https://www.tecmundo.com.br/cultura-geek/215313-chorao-marginal-alado-saiba-onde-assistir-documentario.htm',\n  'writer': 'Gabriela Freire Petry'},\n {'categories': ['Voxel', 'Tag', 'Terror', 'Jogos'],\n  'comments_count': 0,\n  'shares_count': 0,\n  'sources': ['Gematsu'],\n  'summary': 'O estúdio independente Acorn Bringer anunciou nesta quarta-feira '\n             '(7) a disponibilização da demo gratuita de Of Love & Eternity, '\n             'título de terror e aventura em terceira pessoa desenvolvido com '\n             'o motor da Unity e que chama a atenção por seu estilo artístico '\n             'diferenciado.',\n  'timestamp': '2021-04-09T18:30:01',\n  'title': 'Of Love & Eternity: estiloso terror para PC ganha demo no itch.io',\n  'url': 'https://www.tecmundo.com.br/voxel/215332-of-love-eternity-estiloso-terror-pc-ganha-demo-itch-io.htm',\n  'writer': 'André Luis Dias Custodio'}]
+E         At index 9 diff: {'url': 'https://www.tecmundo.com.br/voxel/215264-the-witcher-cosplay-yennefer-encanta-realismo.htm', 'title': 'The Witcher: cosplay de Yennefer encanta pelo realismo', 'timestamp': '2021-04-10T13:00:01', 'writer': 'Diego Borges', 'shares_count': 0, 'comments_count': 9, 'summary': 'The Witcher é uma das franquias mais famosas do mundo dos games. Por conta desse sucesso, os seus personagens são inspirações para milhares de cosplayer, como Luxlo, uma artista que reproduziu a feiticeira da série: Yennefer. A fidelidade com a personagem foi tanta que as suas fotos rodaram o mundo e impressionam pela qualidade do trabalho.', 'sources': ['Instagram'], 'categories': ['Voxel', 'Jogos', 'The Witcher 3: Wild Hunt', 'Tag', 'Cultura Pop', 'Cosplay']} != {'url': 'https://www.tecmundo.com.br/voxel/215264-the-witcher-cosplay-yennefer-encanta-realismo.htm', 'title': 'The Witcher: cosplay de Yennefer encanta pelo realismo', 'timestamp': '2021-04-10T13:00:01', 'writer': 'Diego Borges', 'shares_count': 0, 'comments_count': 9, 'summary': 'The Witcher é uma das franquias mais famosas do mundo dos games. Por conta desse sucesso, os seus personagens são inspirações para milhares de cosplayer, como Luxlo, uma artista que reproduziu a feiticeira da série: Yennefer. A fidelidade com a personagem foi tanta que as suas fotos rodaram o mundo e impressionam pela qualidade do trabalho.Sorceress of Sass™? (and we love her for it ??) pic.twitter.com/dLJpACPt1ASorceress of Sass™? (and we love her for it ??) pic.twitter.com/dLJpACPt1A', 'sources': ['Instagram'], 'categories': ['Voxel', 'Jogos', 'The Witcher 3: Wild Hunt', 'Tag', 'Cultura Pop', 'Cosplay']}
+E         Full diff:
+E           [
+E            {'categories': ['Minha Série',
+E                            'Séries',
+E                            'Seriados',
+E                            'Listas'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Insider'],
+E             'summary': 'Nesta sexta-feira (9), um personagem importante dentro do '
+E                        'contexto de The Crown faleceu na vida real. Trata-se do Príncipe '
+E                        'Philip que, ainda sem causa anunciada oficialmente, morreu aos '
+E                        '99 anos de idade. Mesmo assim, os fãs da produção da Netflix já '
+E                        'estão ansiosos com a 5ª temporada da série, que deverá ser '
+E                        'lançada em 2022.',
+E             'timestamp': '2021-04-10T19:00:01',
+E             'title': '8 séries parecidas com The Crown para fãs da realeza',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215330-8-series-parecidas-the-crown-fas-realeza.htm',
+E             'writer': None},
+E            {'categories': ['Minha Série',
+E                            'Anime',
+E                            'Listas',
+E                            'Séries',
+E                            'Seriados'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['CBR'],
+E             'summary': 'Você sabe quais são os vilões de animes mais inteligentes?',
+E             'timestamp': '2021-04-10T18:00:01',
+E             'title': '10 vilões de animes extremamente inteligentes',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215168-10-viloes-animes-extremamente-inteligentes.htm',
+E             'writer': None},
+E            {'categories': ['Voxel',
+E                            'Jogos',
+E                            'Tag',
+E                            'Mercado'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': [],
+E             'summary': 'Depois de conferir a lista com 10 jogos que completam 30 e 35 '
+E                        'anos em 2021, é hora de conferir os títulos que, este ano, '
+E                        'comemoram 20 e 25 anos de existência. Em nossa lista, há games '
+E                        'que marcaram o início de franquias importantes, como Diablo, '
+E                        'Resident Evil\xa0e Pokémon, e também outros que consagraram de '
+E                        'vez séries já existentes, como Final Fantasy\xa0e\xa0GTA.',
+E             'timestamp': '2021-04-10T18:00:01',
+E             'title': '10 jogos que completam 20 e 25 anos em 2021',
+E             'url': 'https://www.tecmundo.com.br/voxel/215349-10-jogos-completam-20-25-anos-2021.htm',
+E             'writer': 'Diego Borges'},
+E            {'categories': ['Cultura Geek',
+E                            'Quadrinhos',
+E                            'DC Comics'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Screen Rant'],
+E             'summary': 'Na última terça-feira (6), um comprador anônimo adquiriu uma '
+E                        'cópia do Action Comics #1 por US$ 3,25 milhões (R$ 18,1 '
+E                        'milhões). O lance foi dado durante um leilão realizado pelo site '
+E                        'ComicConnect.com. A HQ é famosa por ter apresentado pela '
+E                        'primeira vez o Superman. \xa0O lance também foi o maior já feito '
+E                        'em uma revista em quadrinhos, superando por pouco o atingido por '
+E                        'uma outra cópia da mesma HQ, em 2014, de US$ 3,2 milhões.',
+E             'timestamp': '2021-04-10T17:00:01',
+E             'title': 'Primeira HQ do Superman é vendida por US$ 3,25 milhões',
+E             'url': 'https://www.tecmundo.com.br/cultura-geek/215298-primeira-hq-superman-vendida-us-3-25-milhoes.htm',
+E             'writer': 'Robinson Samulak Alves'},
+E            {'categories': ['Ciência',
+E                            'NASA',
+E                            'Exploração espacial'],
+E             'comments_count': 0,
+E             'shares_count': 5,
+E             'sources': ['NASA'],
+E             'summary': 'Depois de muita espera, o helicóptero Ingenuity finalmente '
+E                        'levantará voo em Marte neste domingo (11). O primeiro teste será '
+E                        'realizado em uma região chamada Van Zyl Overlook, que '
+E                        'possibilitará uma boa visão do aeródromo que foi escolhido pela '
+E                        'equipe da Missão Mars.',
+E             'timestamp': '2021-04-10T16:00:01',
+E             'title': 'NASA: como acompnhar o 1º voo do Ingenuity em Marte',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215205-nasa-assistir-primeiro-voo-ingenuity-marte.htm',
+E             'writer': 'Carlos Palmeira'},
+E            {'categories': ['Voxel',
+E                            'Jogos',
+E                            'Cartel Tycoon',
+E                            'Plataformas',
+E                            'PC'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': [],
+E             'summary': 'Uma das organizações criminosas mais ricas e temidas do mundo '
+E                        'são os cartéis. Pode ser aquele grupo de empresas que se unem '
+E                        'para controlar um mercado, prejudicando consumidores pela falta '
+E                        'de concorrência no preço. Pode ser também aquela facção que se '
+E                        'reúne para vender drogas.',
+E             'timestamp': '2021-04-10T16:00:01',
+E             'title': 'Cartel Tycoon não te ensina a ser um grande mafioso',
+E             'url': 'https://www.tecmundo.com.br/voxel/215347-cartel-tycoon-nao-te-ensina-grande-mafioso.htm',
+E             'writer': 'Thiago Simões'},
+E            {'categories': ['Dispositivos Móveis',
+E                            'Xiaomi',
+E                            'Computação em nuvem'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Xiaomi'],
+E             'summary': 'A Mi Cloud é o serviço de nuvem da Xiaomi, que funciona de forma '
+E                        'semelhante ao iCloud da Apple, e possui um processo simples de '
+E                        'remoção de conta. Isso é necessário quando o usuário decide '
+E                        'vender o dispositivo Xiaomi, repassá-lo ou mesmo usar outro '
+E                        'perfil no celular.',
+E             'timestamp': '2021-04-10T15:00:01',
+E             'title': 'Como remover uma conta Mi Cloud do seu dispositivo Xiaomi',
+E             'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215245-remover-conta-mi-cloud-dispositivo-xiaomi.htm',
+E             'writer': 'Kris Gaiato'},
+E            {'categories': ['Mercado',
+E                            'Internet',
+E                            'Apps'],
+E             'comments_count': 0,
+E             'shares_count': 5,
+E             'sources': ['Mercado Pago'],
+E             'summary': 'Precisa resolver alguma pendência com o Mercado Pago pelo '
+E                        'telefone? Você terá de gerar um código de atendimento antes de '
+E                        'ligar para o serviço “Fale Conosco” da carteira digital '
+E                        'pertencente ao Mercado Livre.',
+E             'timestamp': '2021-04-10T14:00:01',
+E             'title': 'Código de atendimento Mercado Pago: como conseguir?',
+E             'url': 'https://www.tecmundo.com.br/mercado/215165-codigo-atendimento-mercado-pago-conseguir.htm',
+E             'writer': 'André Luiz Dias Gonçalves'},
+E            {'categories': ['Voxel',
+E                            'Jogos',
+E                            'Age of Empires II: Definitive Edition',
+E                            'Plataformas',
+E                            'PC'],
+E             'comments_count': 12,
+E             'shares_count': 0,
+E             'sources': [],
+E             'summary': 'A Microsoft já tinha prometido que 10 de abril seria um dia '
+E                        'cheio de novidades para os fãs de Age of Empires, e ela estava '
+E                        'certa! Hoje ela transmitiu um evento focado majoritariamente em '
+E                        'Age of Empires IV\xa0e finalmente mostrou um pouco mais de seu '
+E                        'gameplay e recursos.',
+E             'timestamp': '2021-04-10T13:29:54',
+E             'title': 'Age of Empires 4 revela novas civilizações, campanha e gameplay',
+E             'url': 'https://www.tecmundo.com.br/voxel/215353-age-of-empires-4-revela-novas-civilizacoes-campanha-gameplay.htm',
+E             'writer': 'Thomas Schulze Costa'},
+E            {'categories': ['Voxel',
+E                            'Jogos',
+E                            'The Witcher 3: Wild Hunt',
+E                            'Tag',
+E                            'Cultura Pop',
+E                            'Cosplay'],
+E             'comments_count': 9,
+E             'shares_count': 0,
+E             'sources': ['Instagram'],
+E             'summary': 'The Witcher é uma das franquias mais famosas do mundo dos games. '
+E                        'Por conta desse sucesso, os seus personagens são inspirações '
+E                        'para milhares de cosplayer, como Luxlo, uma artista que '
+E                        'reproduziu a feiticeira da série: Yennefer. A fidelidade com a '
+E                        'personagem foi tanta que as suas fotos rodaram o mundo e '
+E         -              'impressionam pela qualidade do trabalho.Sorceress of Sass™? (and '
+E         ?                                                       -------------------------
+E         +              'impressionam pela qualidade do trabalho.',
+E         ?                                                        +
+E         -              'we love her for it ??) pic.twitter.com/dLJpACPt1ASorceress of '
+E         -              'Sass™? (and we love her for it ??) pic.twitter.com/dLJpACPt1A',
+E             'timestamp': '2021-04-10T13:00:01',
+E             'title': 'The Witcher: cosplay de Yennefer encanta pelo realismo',
+E             'url': 'https://www.tecmundo.com.br/voxel/215264-the-witcher-cosplay-yennefer-encanta-realismo.htm',
+E             'writer': 'Diego Borges'},
+E            {'categories': ['Minha Série',
+E                            'Séries',
+E                            'Seriados',
+E                            'Netflix',
+E                            'Listas'],
+E             'comments_count': 1,
+E             'shares_count': 0,
+E             'sources': ['Decider'],
+E             'summary': 'Sucesso na Netflix, a série Quem Matou Sara? conquistou o '
+E                        'público por sua simplicidade, mas também por uma trama ágil e '
+E                        'repleta de segredos. Com menos de 1 semana de exibição, a '
+E                        'produção foi renovada para a 2ª temporada. Nela, os espectadores '
+E                        'continuarão envoltos em grandes mistérios e a busca por vingança '
+E                        'de Alex Guzman (interpretado por Manolo Cardona).',
+E             'timestamp': '2021-04-10T12:00:01',
+E             'title': 'Quem Matou Sara?: 7 séries parecidas com a produção da Netflix',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215164-quem-matou-sara-7-series-parecidas-producao-netflix.htm',
+E             'writer': None},
+E            {'categories': ['Segurança',
+E                            'Privacidade'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': [],
+E             'summary': '*Por Denis Riviello, Head de Cibersegurança da Compugraf',
+E             'timestamp': '2021-04-10T11:00:01',
+E             'title': 'PMEs são os principais alvos de ataques cibernéticos',
+E             'url': 'https://www.tecmundo.com.br/seguranca/215274-pmes-principais-alvos-ataques-ciberneticos.htm',
+E         -   'writer': None},
+E         +   'writer': '@tec_mundo'},
+E            {'categories': ['Segurança',
+E                            'Celular',
+E                            'Produtos'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['The Enclosure Company',
+E                         'Android Authority',
+E                         'Rainford Solutions'],
+E             'summary': 'Entre as mais diversas especificações técnicas de um smartphone, '
+E                        'existe uma que é muito importante para garantir a durabilidade '
+E                        'do aparelho e a resistência dele para o caso de contato com '
+E                        'poeira ou líquidos: a certificação IP.',
+E             'timestamp': '2021-04-10T10:00:01',
+E             'title': 'IP67 e IP68: conheça os diferentes graus de certificação',
+E             'url': 'https://www.tecmundo.com.br/seguranca/215116-ip67-ip68-conheca-diferentes-graus-certificacao.htm',
+E             'writer': 'Nilton Kleina'},
+E            {'categories': ['Software',
+E                            'Loja digital',
+E                            'Internet'],
+E             'comments_count': 1,
+E             'shares_count': 6,
+E             'sources': ['SHOPIFY'],
+E             'summary': 'Quem pretende iniciar um negócio de e-commerce ou quer aumentar '
+E                        'as vendas de uma loja física pode contar com a plataforma '
+E                        'Shopify. Os usuários podem acessar por desktop ou aplicativo '
+E                        'para os sistemas operacionais Android\xa0e IOS\xa0(iPhone).',
+E             'timestamp': '2021-04-10T09:00:01',
+E             'title': 'Conheça o Shopify, sistema para criar sua loja online',
+E             'url': 'https://www.tecmundo.com.br/software/215082-conheca-shopify-sistema-criar-loja-online.htm',
+E             'writer': 'Thiago Simões'},
+E            {'categories': ['Ciência',
+E                            'Inteligência artificial',
+E                            'Coronavírus'],
+E             'comments_count': 1,
+E             'shares_count': 5,
+E             'sources': [],
+E             'summary': 'No mês passado, o Brasil completou um ano da pandemia e, durante '
+E                        'o período, foram criadas diversas iniciativas para ajudar a '
+E                        'mitigar o impacto da covid-19 no país. Entre as áreas que mais '
+E                        'se destacaram na busca de soluções para combater o vírus está o '
+E                        'setor de tecnologia, que proporcionou ferramentas mais '
+E                        'eficientes para o diagnóstico e tratamento de pacientes.',
+E             'timestamp': '2021-04-10T08:00:01',
+E             'title': 'Robô Laura: uma IA está ajudando a combater a covid-19 no Brasil',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215038-robo-laura-ia-ajudando-diagnosticos-covid-19.htm',
+E             'writer': 'Giovanna Fantinato'},
+E            {'categories': ['Dispositivos Móveis',
+E                            'Google Pixel 5a',
+E                            'Google'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['9to5Google',
+E                         'The Verge'],
+E             'summary': 'O Pixel 5a terá um lançamento limitado por conta da escassez '
+E                        'global de chips. Em nota, a Google desmentiu os recentes rumores '
+E                        'de que o smartphone intermediário teria sido cancelado.',
+E             'timestamp': '2021-04-10T07:00:01',
+E             'title': 'Pixel 5a terá lançamento limitado devido à escassez de chips',
+E             'url': 'https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm',
+E             'writer': 'Lupa Charleaux'},
+E            {'categories': ['Internet',
+E                            'Jogos',
+E                            'Séries',
+E                            'Seriados',
+E                            'Tecnologia',
+E                            'Ciência',
+E                            'Entretenimento'],
+E             'comments_count': 0,
+E             'shares_count': 7,
+E             'sources': [],
+E             'summary': 'Bom dia! Para se manter atualizado nesse início de sabadão (10), '
+E                        'o TecMundo separou tudo o que rolou de mais importante nesta '
+E                        'semana (05 a 09 de abril). Além de várias notícias sobre '
+E                        'tecnologia e ciência, o mundo do entretenimento e dos games '
+E                        'também foi bastante movimentado no período.',
+E             'timestamp': '2021-04-10T06:00:01',
+E             'title': '10 notícias mais importantes da semana (05/4 a 09/4)',
+E             'url': 'https://www.tecmundo.com.br/internet/215348-10-noticias-importantes-semana-05-4-09-4.htm',
+E             'writer': 'Carlos Palmeira'},
+E            {'categories': ['Minha Série',
+E                            'Seriados',
+E                            'Séries',
+E                            'Recap',
+E                            'The CW'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['TVFanatic',
+E                         'TVLine'],
+E             'summary': 'ATENÇÃO: SPOILERS À FRENTE!',
+E             'timestamp': '2021-04-09T23:00:01',
+E             'title': 'Legacies 3x9: Hope e Lizzie encaram suas diferenças (recap)',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215314-legacies-3-temporada-episodio-9-hope-lizzie-recap.htm',
+E             'writer': None},
+E            {'categories': ['Ciência',
+E                            'Astronomia',
+E                            'NASA',
+E                            'Exploração espacial'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Gizmodo',
+E                         'arXiv'],
+E             'summary': 'Muito grandes para serem classificadas como planetas e muito '
+E                        'escuras para serem estrelas, as anãs marrons, ou “estrelas '
+E                        'fracassadas”, são objetos que queimam deutério, um tipo de '
+E                        'hidrogênio, porém com fraca emissão de luz. No início do mês '
+E                        'passado (2), uma pesquisa revelou três anãs marrons com a '
+E                        'rotação mais rápida já observada até hoje.',
+E             'timestamp': '2021-04-09T22:30:01',
+E             'title': 'Descobertas três anãs marrons nos seus limites máximos de rotação',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215316-descobertas-tres-anas-marrons-limites-maximos-rotacao.htm',
+E             'writer': 'Jorge Marin'},
+E            {'categories': ['Minha Série',
+E                            'Marvel',
+E                            'Séries',
+E                            'Seriados',
+E                            'Disney+',
+E                            'Elenco'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Slash Film',
+E                         'Marvel Fandom'],
+E             'summary': 'A criação do elenco para a série She-Hulk, próxima série da '
+E                        'Marvel a ser produzida para o Disney+, está começando a crescer '
+E                        'cada vez mais. O novo nome a entrar para a produção do MCU é '
+E                        'Renée Elise Goldsberry, que foi coprotagonista no musical '
+E                        'Hamilton.',
+E             'timestamp': '2021-04-09T22:00:01',
+E             'title': 'She-Hulk: Renée Elise Goldsberry entra para o elenco da série',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215302-she-hulk-renee-elise-goldsberry-entra-elenco-serie.htm',
+E             'writer': None},
+E            {'categories': ['Ciência',
+E                            'Astronomia',
+E                            'Exploração espacial',
+E                            'Meteorologia',
+E                            'Física'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['AGU',
+E                         'Space'],
+E             'summary': 'Apesar de apresentarem composições químicas diferentes, chuvas '
+E                        'de outros mundos se assemelham – e muito – às que ocorrem aqui '
+E                        'na Terra, indica Kaitlyn Loftus, estudante do Departamento de '
+E                        'Ciências da Terra e Planetárias da Universidade de Harvard '
+E                        '(EUA), em estudo publicado no Journal of Geophysical Research: '
+E                        'Planets. De acordo com ela, nem mesmo as mais variadas '
+E                        'atmosferas causam alterações substanciais nas gotas que caem '
+E                        'sobre diversas superfícies extraterrestres.',
+E             'timestamp': '2021-04-09T21:30:01',
+E             'title': 'Chuvas de outros planetas são semelhantes às da Terra, diz estudo',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215309-chuvas-outros-planetas-semelhantes-terra-diz-estudo.htm',
+E             'writer': 'Reinaldo Zaruvni'},
+E            {'categories': ['Minha Série',
+E                            'Seriados',
+E                            'Séries',
+E                            'Recap',
+E                            'ABC'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['TV Fanatic',
+E                         'TV Line'],
+E             'summary': 'ATENÇÃO: SPOILERS À FRENTE!',
+E             'timestamp': '2021-04-09T21:00:01',
+E             'title': 'Grey’s Anatomy 17x11: Amelia e Link pensam em casamento (recap)',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215290-greys-anatomy-17-temporada-episodio-11-amelia-link-recap.htm',
+E             'writer': None},
+E            {'categories': ['Ciência',
+E                            'Coronavírus',
+E                            'Saúde',
+E                            'Medicina'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['The Lancet Psychiatry',
+E                         'CNN',
+E                         'Futurism',
+E                         'BBC'],
+E             'summary': 'Um terço das pessoas infectadas pelo novo coronavírus '
+E                        'desenvolveram problemas psicológicos ou neurológicos, como '
+E                        'ansiedade, depressão, demência e psicose, entre outros, em um '
+E                        'período de até seis meses após se curarem. É o que indica um '
+E                        'amplo estudo publicado na revista The Lancet Psychiatry, na '
+E                        'terça-feira (6).',
+E             'timestamp': '2021-04-09T20:30:01',
+E             'title': '34% das pessoas curadas de covid-19 tiveram doenças neurológicas',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215306-34-pessoas-curadas-covid-19-tiveram-doencas-neurologicas.htm',
+E             'writer': 'André Luiz Dias Gonçalves'},
+E            {'categories': ['Minha Série',
+E                            'Seriados',
+E                            'Séries',
+E                            'Elenco',
+E                            'Marvel',
+E                            'Disney+'],
+E             'comments_count': 3,
+E             'shares_count': 0,
+E             'sources': ['CBR',
+E                         'MCU Exchange'],
+E             'summary': 'Atualmente fazendo sucesso na série Falcão e o Soldado Invernal, '
+E                        'Sebastian Stan tem interpretado Bucky Barnes desde o primeiro '
+E                        'filme do Capitão América. Stan contou que os fãs da Marvel '
+E                        'sempre tentam "ativar" o lado assassino do personagem quando '
+E         +              'reconhecem o ator nas ruas.',
+E         -              'reconhecem o ator nas ruas.Para assistir Falcão e o Soldado '
+E         -              'Invernal e muito mais do universo Marvel, Star Wars, Pixar e '
+E         -              'National Geographic. Tudo isso por apenas R$ 27,90/mês.',
+E             'timestamp': '2021-04-09T20:00:01',
+E             'title': 'Falcão e o Soldado Invernal: fãs têm reação curiosa ao ver '
+E                      'Sebastian Stan',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215285-falcao-soldado-invernal-fas-reacao-curiosa-sebastian-stan.htm',
+E             'writer': None},
+E            {'categories': ['Ciência',
+E                            'Astronomia',
+E                            'Química',
+E                            'Física'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['LiveScience'],
+E             'summary': 'Um novo estudo publicado na revista Nature\xa0sugere que os '
+E                        'níveis de oxigênio na atmosfera terrestre apresentavam grande '
+E                        'oscilação há 2,22 bilhões de anos, reduzindo em 100 milhões de '
+E                        'anos a data inicialmente estimada de 2,32 bilhões de anos '
+E                        '(período em que quase desapareceu) de início de ascensão e '
+E                        'estabilização do gás em nosso planeta – além de aumentar a '
+E                        'duração de um processo chamado de Grande Oxidação, marcado por '
+E                        'diferenças climáticas extremas, incluindo eras de gelo.',
+E             'timestamp': '2021-04-09T19:30:00',
+E             'title': 'Terra perdeu quase todo seu oxigênio há 2,3 bilhões anos',
+E             'url': 'https://www.tecmundo.com.br/ciencia/215305-terra-perdeu-oxigenio-ha-2-3-bilhoes-anos.htm',
+E             'writer': 'Reinaldo Zaruvni'},
+E            {'categories': ['Voxel',
+E                            'Jogos',
+E                            'Wolfenstein Youngblood',
+E                            'Wolfenstein 2: The New Colossus',
+E                            'Wolfenstein: The Old Blood',
+E                            'Return To Castle Wolfenstein: Enemy Territory',
+E                            'Wolfenstein 3D'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': [],
+E             'summary': 'Você já parou pra pensar como seria o mercado dos videogames se '
+E                        'não existissem os FPS? Sem BioShock, sem Black, CoD, '
+E                        'Battlefield, Medal of Honor… é realmente difícil. Uma coisa que '
+E                        'dá pra ter certeza é que o gênero só existe hoje em dia por '
+E                        'causa dessa franquia.',
+E             'timestamp': '2021-04-09T19:00:00',
+E             'title': 'Wolfenstein: Do pior ao melhor, segundo a crítica',
+E             'url': 'https://www.tecmundo.com.br/voxel/215256-wolfenstein-pior-melhor-segundo-critica.htm',
+E             'writer': 'Victor Francesco Casagrande Simões'},
+E            {'categories': ['Minha Série',
+E                            'Seriados',
+E                            'Séries',
+E                            'NBC',
+E                            'Bastidores'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['CBR'],
+E             'summary': 'Recentemente, parte do elenco de Brooklyn 99 compartilhou uma '
+E                        'foto dos bastidores com o público, na qual aparecem comemorando '
+E                        'o início das filmagens da 8ª temporada. Vale lembrar que a '
+E                        'produção da NBC deverá chegar ao fim após \xa0a conclusão dessa '
+E                        'nova leva de episódios.',
+E             'timestamp': '2021-04-09T19:00:00',
+E             'title': 'Brooklyn 99: Melissa Fumero registra início da 8ª temporada (foto)',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215278-brooklyn-99-melissa-fumero-registra-inicio-8-temporada-foto.htm',
+E             'writer': None},
+E            {'categories': ['Minha Série',
+E                            'Seriados',
+E                            'Séries',
+E                            'Filmes',
+E                            'Amazon Prime Video'],
+E             'comments_count': 3,
+E             'shares_count': 0,
+E             'sources': ['IMDB'],
+E             'summary': 'Não sabe o que assistir no meio de tantas produções e serviços '
+E                        'de streaming diferentes? Não se preocupe! O Minha Série dá '
+E                        'início, nesta sexta-feira (09), ao quadro Dicas de Séries e '
+E                        'Filmes da semana. Como o nome sugere, toda semana indicaremos '
+E                        'uma produção audiovisual diferente para você curtir no conforto '
+E                        'do seu lar.',
+E             'timestamp': '2021-04-09T18:39:40',
+E             'title': 'Dicas de séries e filmes da semana: O Som do Silêncio',
+E             'url': 'https://www.tecmundo.com.br/minha-serie/215343-dicas-series-filmes-semana-som-silencio.htm',
+E             'writer': None},
+E            {'categories': ['Cultura Geek',
+E                            'Filmes',
+E                            'Streaming',
+E                            'Cinema'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Tenho mais discos que amigos'],
+E             'summary': 'O documentário Chorão - Marginal Alado finalmente está entre '
+E                        'nós. O longa, que acompanha a vida do vocalista do Charlie Brown '
+E                        'Jr., já está disponível nos cinemas e em algumas plataformas '
+E                        'digitais, como NOW, Google Play, Apple TV, Vivo Play, Looke e '
+E                        'YouTube. Para assistir a partir do serviço de streaming um valor '
+E                        'a parte é cobrado do usuário.',
+E             'timestamp': '2021-04-09T18:30:01',
+E             'title': 'Chorão - Marginal Alado: saiba onde assistir ao documentário',
+E             'url': 'https://www.tecmundo.com.br/cultura-geek/215313-chorao-marginal-alado-saiba-onde-assistir-documentario.htm',
+E             'writer': 'Gabriela Freire Petry'},
+E            {'categories': ['Voxel',
+E                            'Tag',
+E                            'Terror',
+E                            'Jogos'],
+E             'comments_count': 0,
+E             'shares_count': 0,
+E             'sources': ['Gematsu'],
+E             'summary': 'O estúdio independente Acorn Bringer anunciou nesta quarta-feira '
+E                        '(7) a disponibilização da demo gratuita de Of Love & Eternity, '
+E                        'título de terror e aventura em terceira pessoa desenvolvido com '
+E                        'o motor da Unity e que chama a atenção por seu estilo artístico '
+E                        'diferenciado.',
+E             'timestamp': '2021-04-09T18:30:01',
+E             'title': 'Of Love & Eternity: estiloso terror para PC ganha demo no itch.io',
+E             'url': 'https://www.tecmundo.com.br/voxel/215332-of-love-eternity-estiloso-terror-pc-ganha-demo-itch-io.htm',
+E             'writer': 'André Luis Dias Custodio'},
+E           ]
+
+tests/test_scraper.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scraper.py::test_get_tech_news[30] - assert [{'categories':...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+========================= 1 failed, 5 passed in 7.74s ==========================
