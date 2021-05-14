@@ -20,18 +20,25 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    selector = Selector(text=html_content, base_url=html_content)
-    url = selector.css("head > link:nth-child(26)::attr(href)").get()
-    title = selector.css(".tec--article__header__title::text").get()
+    selector = Selector(text=html_content)
+    url = selector.css("head link[rel=canonical]::attr(href)").get()
+    title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = selector.css(".tec--author__info__link::text").get()
+    writer = selector.css(
+        "#js-author-bar > div > p > a::text"
+    ).get().strip()
     shares_count = selector.css(
-        ".tec--toolbar__item::text"
-        ).re_first(r'\d') or "0"
-    comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
-    summary = selector.css(".tec--article__body p::text").get()
-    sources = selector.css(".z--mb-16 a::text").getall()
-    categories = selector.css("#js-categories a::text").getall()
+        "#js-author-bar > nav > div:nth-child(1)::text"
+    ).re_first(r'\d') or "0"
+    comments_count = selector.css("#js-comments-btn::text").get()
+    summary = selector.css(
+        ".tec--article__body p:first-child *::text"
+    ).getall()
+    summary_new = "".join(summary)
+    sources = selector.css(".z--mb-16 .tec--badge::text").getall()
+    sources_new = [source.strip() for source in sources]
+    categories = selector.css("#js-categories > a::text").getall()
+    categories_new = [category.strip() for category in categories]
 
     return {
         "url": url,
@@ -40,9 +47,9 @@ def scrape_noticia(html_content):
         "writer": writer,
         "shares_count": int(shares_count),
         "comments_count": int(comments_count),
-        "summary": summary,
-        "sources": sources,
-        "categories": categories,
+        "summary": summary_new,
+        "sources": sources_new,
+        "categories": categories_new,
     }
 
 
