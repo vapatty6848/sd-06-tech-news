@@ -3,6 +3,7 @@ import time
 from parsel import Selector
 
 
+# Requisito 1
 def fetch(url):
     time.sleep(1)
     try:
@@ -67,7 +68,11 @@ def scrape_novidades(html_content):
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    next_page_link = selector.xpath(
+        "//a[contains(text(), 'Mostrar mais notícias')]/@href"
+    ).get()
+    return next_page_link if next_page_link else None
 
 
 # Requisito 5
