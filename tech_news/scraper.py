@@ -26,6 +26,7 @@ def scrape_noticia(html_content):
     from parsel import Selector
 
     selector = Selector(html_content)
+
     return {
         "url": selector.css("head link[rel=canonical]::attr(href)").get(),
         "title": selector.css(".tec--article__header__title::text").get(),
@@ -46,7 +47,7 @@ def scrape_noticia(html_content):
             .split()[0]
         ),
         "summary": "".join(
-            selector.css(".tec--article__body *::text").getall()
+            selector.css(".tec--article__body p:nth-child(1) *::text").getall()
         ),
         "sources": [
             source.strip()
