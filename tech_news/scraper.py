@@ -57,12 +57,21 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    if html_content == '':
+        return []
+    else:
+        selector = Selector(text=html_content)
+        news = selector.css('.tec--card__info h3 a::attr(href)').getall()
+        return news
 
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    next_url = selector.css(
+        "#js-main > div > div > .z--w-2-3 > div.tec--list--lg > a::attr(href)"
+    ).get()
+    return next_url
 
 
 # Requisito 5
@@ -70,10 +79,8 @@ def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
 
-"""
-    if __name__ == "__main__":
-    URL = ""
+if __name__ == "__main__":
+    URL = "https://www.tecmundo.com.br/novidades"
     response = fetch(URL)
-    news = scrape_noticia(response)
+    news = scrape_next_page_link(response)
     print(news)
-"""
