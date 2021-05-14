@@ -8,5 +8,9 @@
     "python.formatting.blackArgs": [
         "-l 79"
     ],
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    }
 }
