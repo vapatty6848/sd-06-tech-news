@@ -1,4 +1,5 @@
 import requests
+import parsel
 from time import sleep
 
 
@@ -18,6 +19,46 @@ def fetch(url):
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui!"""
+    selector = parsel.Selector(html_content)
+
+    URl = selector.css("head link[rel=canonical]::attr(href)").get()
+    TITLE = selector.css("h1::text").get()
+    TIMESTAMP = selector.css(
+        ".tec--timestamp__item"
+    ).xpath(
+        "./time/@datetime"
+    ).get().strip()
+    WRITER = selector.css(".z--font-bold a::text").get().strip()
+    SHARES = selector.css(
+        ".tec--toolbar__item::text"
+    ).get().split(' ')[1].strip()
+    SHARES_COUNT = int(SHARES)
+    COMMENTS = selector.css(
+        "#js-comments-btn::attr(data-count)"
+    ).get()
+    COMMENTS_COUNT = int(COMMENTS)
+    SUMMARY = selector.css(
+        ".tec--article__body > p:nth-child(1) *::text"
+    ).getall()
+    SUMMARY_FORMATTED = ''.join(SUMMARY)
+    GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
+    SOURCES = [source.strip() for source in GET_SOURCES]
+    GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
+    CATEGORIES = [category.strip() for category in GET_CATEGORIES]
+    result_dict = {
+        'url': URL
+        'title': TITLE
+        'timestamp': TIMESTAMP
+        'writer': WRITER
+        'shares_count': SHARES_COUNT
+        'comments_count': COMMENTS_COUNT
+        'summary_formatted': SUMMARY_FORMATTED
+        'sources': SOURCES
+        'categories': CATEGORIES
+    }
+    return result_dict
+
+
 
 
 # Requisito 3
