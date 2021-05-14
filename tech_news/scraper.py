@@ -34,19 +34,31 @@ def scrape_noticia(html_content):
         p_tag = tag.get_text()
         break
 
-    return {"url": link["content"], "title": title, "timestamp": timestamp["datetime"], "writer": write, "shares_count": int(shares[0]), "comments_count": int(comments[0]), "summary": p_tag, "sources": [t.get_text().strip() for t in sources_and_categories[0:2]], "categories": [t.get_text().strip() for t in sources_and_categories[2:]]}
+    return {
+        "url": link["content"],
+        "title": title,
+        "timestamp": timestamp["datetime"],
+        "writer": write,
+        "shares_count": int(shares[0]),
+        "comments_count": int(comments[0]),
+        "summary": p_tag,
+        "sources": [t.get_text().strip() for t in sources_and_categories[0:2]],
+        "categories": [
+            t.get_text().strip() for t in sources_and_categories[2:]
+        ],
+    }
 
 
 def scrape_novidades(html_content):
     if html_content == "":
         return []
-    
+
     soup = BeautifulSoup(html_content, "html.parser")
-    scripts = soup.find_all("script", {"type": "application/ld+json"})    
-    
-    urls = json.loads("".join(scripts[1].contents))          
-    return list(map(lambda x: x.get("url"), urls['itemListElement']))
-  
+    scripts = soup.find_all("script", {"type": "application/ld+json"})
+
+    urls = json.loads("".join(scripts[1].contents))
+    return list(map(lambda x: x.get("url"), urls["itemListElement"]))
+
 
 def scrape_next_page_link(html_content):
     pass
@@ -58,7 +70,7 @@ def get_tech_news(amount):
 
 if __name__ == "__main__":
     os.chdir("../")
-    path = ("tests/assets/tecmundo_pages/novidades.html")
+    path = "tests/assets/tecmundo_pages/novidades.html"
     folder = f"{os.getcwd()}/{path}"
     with open(folder) as f:
         html_content = f.read()
