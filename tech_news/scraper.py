@@ -61,7 +61,11 @@ def scrape_novidades(html_content):
 
 
 def scrape_next_page_link(html_content):
-    pass
+    if html_content == "":
+        return None
+
+    soup = BeautifulSoup(html_content, "html.parser")
+    return soup.find("a", class_="tec--btn--lg")["href"]
 
 
 def get_tech_news(amount):
@@ -71,8 +75,8 @@ def get_tech_news(amount):
 if __name__ == "__main__":
     os.chdir("../")
     path = "tests/assets/tecmundo_pages/novidades.html"
-    folder = f"{os.getcwd()}/{path}"
-    with open(folder) as f:
+    file = f"{os.getcwd()}/{path}"
+    with open(file) as f:
         html_content = f.read()
 
-    scrape_novidades(html_content)
+    scrape_next_page_link(html_content)
