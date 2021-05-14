@@ -31,9 +31,9 @@ def scrape_noticia(html_content):
         "#js-comments-btn::attr(data-count)"
     ).get())
     summary = selector.css(
-        "div.tec--article__body :first-child *::text").getall()
+        "div.tec--article__body p:nth-child(1) *::text").getall()
     all_summary = "".join(summary)
-    source_list = selector.css("a.tec--badge ::text").getall()
+    source_list = selector.css("div div.z--mb-16 a.tec--badge ::text").getall()
     source = [word.strip() for word in source_list]
     categories_list = selector.css("div#js-categories a::text").getall()
     categories = [category.strip() for category in categories_list]
@@ -72,7 +72,6 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    URL = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities"
-    "/155000-musk-tesla-carros-totalmente-autonomos.htm"
+    URL = "https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm"
     response = fetch(URL)
     tech_news = scrape_noticia(response)
