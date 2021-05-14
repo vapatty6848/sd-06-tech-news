@@ -1,10 +1,12 @@
 import requests
 import time
+import re
+from parsel import Selector
 
 
 # Requisito 1
 def fetch(url):
-    """Pega as notícias através da URL informada"""
+    """Pega as notícias através da URL informada e retorna como html/txt"""
     try:
         time.sleep(1)
         response = requests.get(url, timeout=3)
@@ -23,7 +25,38 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    """
+    Recebe o conteúdo html/txt de uma página e
+    busca notícias para preencher um dicionário
+    """
+    selector = Selector(text=html_content.text)
+    url = html_content.url
+    title = selector.css(".tec--article__header__title::text").get()
+    timestamp = selector.css("""
+    .tec--timestamp__item time::attr(datetime)
+    """).get()
+    writer = selector.css(".tec--author__info__link::text").get()
+    shares_count_string = selector.css(".tec--toolbar__item::text").get()
+    shares_count = int(re.sub('[^0-9]', '', shares_count_string))
+    comments_count = int(selector.css("""
+    #js-comments-btn::attr(data-count)
+    """).get())
+    summary = "".join(selector.css("""
+    div.tec--article__body > p:nth-child(1) *::text
+    """).getall())
+    sources = selector.css("div.z--mb-16.z--px-16 a.tec--badge::text").getall()
+    categories = selector.css("div#js-categories a::text").getall()
+    return {
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": None if writer == '' else writer,
+        "shares_count": 0 if shares_count == '' else shares_count,
+        "comments_count": comments_count,
+        "summary": summary,
+        "sources": sources,
+        "categories": categories,
+    }
 
 
 # Requisito 3
