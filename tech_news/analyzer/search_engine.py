@@ -1,5 +1,6 @@
 from tech_news.database import search_news
 import re
+from datetime import datetime
 
 
 # Requisito 6
@@ -20,7 +21,26 @@ def search_by_title(title):
 
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    """Faz buscas nas notícias por data no DB"""
+    try:
+        search = date.split('-')
+        ano = int(search[0])
+        mes = int(search[1])
+        dia = int(search[2])
+        start = datetime(ano, mes, dia).isoformat()
+        end = datetime(ano, mes, dia, 23, 59, 59).isoformat()
+    except Exception:
+        raise ValueError('Data inválida')
+
+    query = {
+        'timestamp': {
+            '$gte': start,
+            '$lte': end
+        }
+    }
+    results_raw = search_news(query)
+    results = [(result['title'], result['url']) for result in results_raw]
+    return results
 
 
 # Requisito 8
