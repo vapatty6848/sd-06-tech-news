@@ -58,7 +58,7 @@ def test_scrape_noticia():
         "assets/"
         "tecmundo_pages/"
         "dispositivos-moveis|"
-        git add."
+        "git add."
         "html"
     )
     with open(path) as f:
