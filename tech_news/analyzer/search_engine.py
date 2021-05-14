@@ -61,4 +61,15 @@ def search_by_source(source):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    """Faz buscas nas notícias por categorias no DB"""
+    try:
+        search = category.lower()
+    except AttributeError:
+        print('Please use a valid string.')
+        return None
+
+    regex = re.compile(rf'{search}', re.IGNORECASE)
+    query = {'categories': {'$in': [regex]}}
+    results_raw = search_news(query)
+    results = [(result['title'], result['url']) for result in results_raw]
+    return results
