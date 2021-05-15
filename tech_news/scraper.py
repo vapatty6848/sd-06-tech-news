@@ -116,6 +116,8 @@ def get_tech_news(amount):
 
 if __name__ == "__main__":
     print(get_tech_news(3))
-    # htmlgg = fetch('https://www.tecmundo.com.br/redes-sociais/217386-encontrar-grupos-telegram.htm')
+    # htmlgg = fetch(
+    #   'https://www.tecmundo.com.br/redes-sociais/217386-encontrar-grupos-telegram.htm
+    # ')
     # print(htmlgg)
     # print(scrape_noticia(htmlgg))
