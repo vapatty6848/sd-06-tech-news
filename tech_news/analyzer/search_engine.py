@@ -1,4 +1,5 @@
 from tech_news.database import search_news
+from datetime import datetime
 
 
 # case_sensitive: https://stackoverflow.com/questions/1863399/
@@ -13,9 +14,23 @@ def search_by_title(title):
         return []
 
 
+# https://www.alura.com.br/artigos/lidando-com-datas-e-horarios-no-python?gclid=Cj
+# 0KCQjw4v2EBhCtARIsACan3nzjntrLxL6jVuHqOfd64JvwIuFFyEDyOKru0w9qXk01mPtH0vUCDs0aAk
+# d9EALw_wcB
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        # find_date = search_news({"$contains": {"timestamp": date}})
+        find_date = search_news({"timestamp": {"$regex": date}})
+
+        if find_date:
+            for new in find_date:
+                return [(new["title"], new["url"])]
+        else:
+            return []
+    except ValueError:
+        raise ValueError("Data inválida")
 
 
 # Requisito 8
