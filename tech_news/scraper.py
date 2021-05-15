@@ -57,7 +57,7 @@ def scrape_novidades(html_content):
         return []
     else:
         selector = Selector(text=html_content)
-        url_list = selector.css("div article figure a::attr(href)").getall()
+        url_list = selector.css(".tec--card__info h3 a::attr(href)").getall()
         return url_list
 
 
