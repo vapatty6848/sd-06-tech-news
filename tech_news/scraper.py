@@ -19,25 +19,26 @@ def fetch(url):
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
-    Selector(html_content)
-    title = Selector.css(".tec--article__header__title::text").get().strip()
-    timestamp = (
-        Selector.css(".tec--timestamp tec--timestamp--lg::text").get().strip()
+    page = Selector(text=html_content)
+    url = page.css('[property="og:url"]::attr(content)').get()
+    title = page.css(".tec--article__header__title::text").get()
+    timestamp = page.css("#js-article-date::attr(datetime)").get()
+    write = page.css(".tec--author__info__link::text").get().strip()
+    shares_count = int(
+        page.css(".tec--toolbar__item::text").get().split(" ")[1]
     )
-    writer = Selector.css(".tec--author__info__link::text").get().strip()
-    shares_count = Selector.css(".tec-toolbar__item::text").get()
-    comments_count = Selector.css(".comment-count::text").get()
-    summary = (
-        Selector.css(".tec--article__body z--px-16 p402_premium::text")
-        .get()
-        .split()[0]
-    )
-    sources = Selector.css("tec-badge::text").get()
-    categories = Selector.css("#js-categories *::text").get()
+    comments_count = int(page.css(".tec--btn::attr(data-count)").get())
+    a = page.css(".tec--article__body p:nth-child(1) ::text").getall()
+    summary = "".join(a)
+    sourcesWithSpace = page.css(".z--mb-16 .tec--badge::text").getall()
+    sources = [elemento.strip() for elemento in sourcesWithSpace]
+    categoriesWithSpace = page.css(".tec--badge--primary::text").getall()
+    categories = [elemento.strip() for elemento in categoriesWithSpace]
     return {
+        "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer,
+        "writer": write,
         "shares_count": shares_count,
         "comments_count": comments_count,
         "summary": summary,
@@ -49,6 +50,11 @@ def scrape_noticia(html_content):
 # Requisito 3
 def scrape_novidades(html_content):
     """Seu código deve vir aqui"""
+    page = Selector(text=html_content)
+
+    return page.css(
+        "div.tec--list__item .tec--card__title__link::attr(href)"
+    ).getall()
 
 
 # Requisito 4
