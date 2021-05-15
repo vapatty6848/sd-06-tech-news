@@ -1,5 +1,6 @@
 import requests
 import time
+import database
 from parsel import Selector
 
 
@@ -23,7 +24,8 @@ def scrape_noticia(html_content):
     url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("time::attr(datetime)").get()
-    writer = selector.css(".tec--author__info__link::text").get().strip()
+    selector.xpath('//figure[@class="tec--author__avatar"]').remove()
+    writer = selector.css("a[href*=autor]::text").get().strip()
     shares = selector.css(".tec--toolbar__item::text").re_first(r"^[^A-Z]*")
     shares_count = int(shares) if shares is not None else 0
     comments_count = int(
@@ -76,5 +78,40 @@ def scrape_next_page_link(html_content):
 
 
 # Requisito 5
+def get_remaining_links(amount, current):
+    return amount - current
+
+
+def access_new_page_from(html_content):
+    next_page_url = scrape_next_page_link(html_content)
+    next_html_page = fetch(next_page_url)
+    more_links = scrape_novidades(next_html_page)
+    return (next_html_page, more_links)
+
+
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    news_links = []
+    initial_url = "https://www.tecmundo.com.br/novidades"
+    current_html_page = fetch(initial_url)
+    current_links = scrape_novidades(current_html_page)
+    news_links.extend(current_links)
+    remaining_links = get_remaining_links(amount, len(news_links))
+
+    while remaining_links > 0:
+        remaining_links = get_remaining_links(amount, len(news_links))
+        new_html_page, more_links = access_new_page_from(current_html_page)
+        current_html_page = new_html_page
+        news_links.extend(more_links)
+        remaining_links = get_remaining_links(amount, len(news_links))
+
+    remaining_links = get_remaining_links(amount, len(news_links))
+
+    if remaining_links < 0:
+        links_to_remove_count = abs(remaining_links)
+        del news_links[-links_to_remove_count:]
+
+    print(news_links)
+    for link in news_links:
+        html_page = fetch(link)
+        data = scrape_noticia(html_page)
+        database.insert_or_update(data)
