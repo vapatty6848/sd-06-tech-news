@@ -1,5 +1,6 @@
 import requests
 import time
+from parsel import Selector
 
 
 # Requisito 1
@@ -17,7 +18,37 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    url_get = selector.css("[rel=canonical]::attr(href)").get()
+    title_get = selector.css('.tec--article__header__title::text').get()
+    timestamp_get = selector.css('#js-article-date::attr(datetime)').get()
+    writer_get = selector.css('.tec--author__info__link::text').get()
+    writer = writer_get.strip()
+    shares_count_get = selector.css('.tec--toolbar__item::text').get()
+    shares_count = int(shares_count_get.split()[0])
+    comments_count_get = selector.css(
+        '.tec--toolbar__item #js-comments-btn::attr(data-count)').get()
+    comments_count = int(comments_count_get) if comments_count_get else 0
+    summary_getall = selector.css(
+        '.tec--article__body p:first-child *::text').getall()
+    summary = ''.join(summary_getall)
+    sources_get = selector.css('.z--mb-16 .tec--badge::text').getall()
+    sources = [source.strip() for source in sources_get]
+    categories_getall = selector.css('#js-categories a::text').getall()
+    categories = [categories.strip() for categories in categories_getall]
+
+    dictionary_attributes = {
+        'url': url_get,
+        'title': title_get,
+        'timestamp': timestamp_get,
+        'writer': writer,
+        'shares_count':  shares_count,
+        'comments_count': comments_count,
+        'summary': summary,
+        'sources': sources,
+        'categories': categories
+    }
+    return dictionary_attributes
 
 
 # Requisito 3
