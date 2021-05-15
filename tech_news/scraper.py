@@ -2,6 +2,7 @@ import requests
 import time
 import re
 from parsel import Selector
+from tech_news.database import create_news
 
 
 # Requisito 1
@@ -35,17 +36,14 @@ def scrape_noticia(html_content):
         ".tec--timestamp__item time::attr(datetime)"
     ).get()
     writer = selector.css(".tec--author__info__link::text").get()
-    shares_count_string = selector.css(".tec--toolbar__item::text").get()
-    shares_count = int(re.sub("[^0-9]", "", shares_count_string))
-    comments_count = int(
-        selector.css("#js-comments-btn::attr(data-count)").get()
-    )
+    shares_count = selector.css(".tec--toolbar__item::text").get()
+    if shares_count != None:
+        shares_count = re.sub("[^0-9]", "", shares_count)
+    comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
     summary = "".join(
-        selector.css(
-            "div.tec--article__body > p:nth-child(1) *::text"
-        ).getall()
+        selector.css("div.tec--article__body p:nth-child(1) *::text").getall()
     )
-    sources = selector.css("div.z--mb-16.z--px-16 a.tec--badge::text").getall()
+    sources = selector.css("div.z--mb-16 a.tec--badge::text").getall()
     sources = [source.strip() for source in sources]
     categories = selector.css("div#js-categories a::text").getall()
     categories = [categorie.strip() for categorie in categories]
@@ -53,9 +51,9 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": None if writer == "" else writer.strip(),
-        "shares_count": 0 if shares_count == "" else shares_count,
-        "comments_count": comments_count,
+        "writer": None if writer == None else writer.strip(),
+        "shares_count": 0 if shares_count == None else int(shares_count),
+        "comments_count": int(comments_count),
         "summary": summary,
         "sources": sources,
         "categories": categories,
@@ -87,4 +85,18 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    """
+    Pega notícias de acordo com a quantidade passada pelo parâmetro
+    """
+    url = "https://www.tecmundo.com.br/novidades"
+    data = []
+    while True:
+        html_content = fetch(url)
+        news_urls = scrape_novidades(html_content)
+        for news_url in news_urls:
+            news = scrape_noticia(fetch(news_url))
+            data.append(news)
+            if len(data) == amount:
+                create_news(data)
+                return data
+        url = scrape_next_page_link(html_content)
