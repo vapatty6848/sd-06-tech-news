@@ -1,6 +1,6 @@
 import requests
 import time
-import database
+import tech_news.database as database
 from parsel import Selector
 
 
@@ -114,4 +114,5 @@ def get_tech_news(amount):
     for link in news_links:
         html_page = fetch(link)
         data = scrape_noticia(html_page)
+        print(data)
         database.insert_or_update(data)
