@@ -15,6 +15,7 @@ def fetch(url):
     else:
         return None
 
+
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
