@@ -36,8 +36,10 @@ def scrape_noticia(html_content):
         ".tec--timestamp__item time::attr(datetime)"
     ).get()
     writer = selector.css(".tec--author__info__link::text").get()
+    if writer is not None:
+        writer = writer.strip()
     shares_count = selector.css(".tec--toolbar__item::text").get()
-    if shares_count != None:
+    if shares_count is not None:
         shares_count = re.sub("[^0-9]", "", shares_count)
     comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
     summary = "".join(
@@ -51,7 +53,7 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": None if writer == None else writer.strip(),
+        "writer": writer,
         "shares_count": 0 if shares_count == None else int(shares_count),
         "comments_count": int(comments_count),
         "summary": summary,

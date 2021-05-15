@@ -1,6 +1,9 @@
 # Requisito 6
 def search_by_title(title):
-    """Seu código deve vir aqui"""
+    """
+    Fará buscas de notícias no banco de dados através do título informado.
+    """
+    search_news(title.lower())
 
 
 # Requisito 7
