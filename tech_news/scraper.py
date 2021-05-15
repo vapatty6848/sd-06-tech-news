@@ -54,15 +54,20 @@ def scrape_noticia(html_content):
 # Requisito 3
 def scrape_novidades(html_content):
     selector = Selector(html_content)
-    if selector == "":
-        return []
     url_lists = selector.css("h3.tec--card__title a::attr(href)").getall()
+    if url_lists == "":
+        return []
     return url_lists
 
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    next_page_url = selector.css(
+        ".tec--list > a::attr(href)").get()
+    if not next_page_url:
+        return None
+    return next_page_url
 
 
 # Requisito 5
