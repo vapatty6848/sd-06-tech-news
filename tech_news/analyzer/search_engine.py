@@ -29,7 +29,11 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    """Busca as notícias do banco de dados por fonte."""
+    query = {"sources": {"$regex": re.compile(source, re.IGNORECASE)}}
+    result = search_news(query)
+    news_found = [(news["title"], news["url"]) for news in result]
+    return news_found
 
 
 # Requisito 9
