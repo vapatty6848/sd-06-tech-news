@@ -29,14 +29,14 @@ from operator import itemgetter
 def top_5_news():
     """Lista as cinco notícias mais populares;
         o critério é a soma dos compartilhamentos e comentários"""
-    news_collection = search_news({})
+    news_raw = search_news({})
     news_list = [
         {
             'title': result['title'],
             'url': result['url'],
             'pop_rating': result['shares_count'] + result['comments_count']
         }
-        for result in news_collection
+        for result in news_raw
     ]
     sort_news = sorted(
         news_list,
@@ -51,3 +51,14 @@ def top_5_news():
 def top_5_categories():
     """Lista as cinco categorias mais populares;
         o critério é a soma dos compartilhamentos e comentários"""
+    news_raw = search_news({})
+
+    categories_count = {}
+    for news in news_raw:
+        for category in news['categories']:
+            categories_count.setdefault(category, 0)
+            categories_count[category] += 1
+
+    categories_sort = sorted(categories_count)
+    top_5_categories = categories_sort[:5]
+    return top_5_categories
