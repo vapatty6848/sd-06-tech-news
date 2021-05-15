@@ -25,16 +25,27 @@ def validate_option(input):
 def analyzer_menu():
     """Menu do programa"""
 
-    menu_options = """
-        Selecione uma das opções a seguir:
-        0 - Popular banco
-        1 - Buscar notícias por título;
-        2 - Buscar notícias por data;
-        3 - Buscar notícias por fonte;
-        4 - Buscar notícias por categoria;
-        5 - Listar top 5 notícias;
-        6 - Listar top 5 categorias;
-        7 - Sair."""
+    # menu_options = """
+    #     Selecione uma das opções a seguir:
+    #      0 - Popular banco;
+    #      1 - Buscar notícias por título;
+    #      2 - Buscar notícias por data;
+    #      3 - Buscar notícias por fonte;
+    #      4 - Buscar notícias por categoria;
+    #      5 - Listar top 5 notícias;
+    #      6 - Listar top 5 categorias;
+    #      7 - Sair.
+    #     """
+
+    menu_options = "Selecione uma das opções a seguir:\n"\
+        " 0 - Popular banco;\n"\
+        " 1 - Buscar notícias por título;\n"\
+        " 2 - Buscar notícias por data;\n"\
+        " 3 - Buscar notícias por fonte;\n"\
+        " 4 - Buscar notícias por categoria;\n"\
+        " 5 - Listar top 5 notícias;\n"\
+        " 6 - Listar top 5 categorias;\n"\
+        " 7 - Sair."\
 
     menu_input = input(menu_options)
     option = validate_option(menu_input)
