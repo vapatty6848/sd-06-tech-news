@@ -6,9 +6,10 @@ def search_by_title(title):
     """
     Fará buscas de notícias no banco de dados através do título informado.
     """
-    query = {"title": title.lower()}
+    query = {"title": {"$regex": title}}
     result = search_news(query)
-    return [] if len(result) == 0 else [(result.title, result.url)]
+    news_found = [(news["title"], news["url"]) for news in result]
+    return news_found
 
 
 # Requisito 7
