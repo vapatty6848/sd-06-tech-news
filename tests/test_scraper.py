@@ -101,17 +101,17 @@ def mocked_fetch(url):
 
 
 # Req.5
-# @pytest.mark.parametrize("amount", [20, 30, 40])
-# def test_get_tech_news(amount, mocker):
-#     # Arrange
-#     db.news.drop()
-#     mocker.patch("tech_news.scraper.fetch", new=mocked_fetch)
-#     mocked_create_news = mocker.patch("tech_news.scraper.create_news")
+@pytest.mark.parametrize("amount", [20, 30, 40])
+def test_get_tech_news(amount, mocker):
+    # Arrange
+    db.news.drop()
+    mocker.patch("tech_news.scraper.fetch", new=mocked_fetch)
+    mocked_create_news = mocker.patch("tech_news.scraper.create_news")
 
-#     # Act
-#     result = get_tech_news(amount)
-#     mocked_create_news.assert_called_once_with(result)
+    # Act
+    result = get_tech_news(amount)
+    mocked_create_news.assert_called_once_with(result)
 
-#     # Assert
-#     # A função retorna a quantidade correta de notícias
-#     assert result == all_news[:amount]
+    # Assert
+    # A função retorna a quantidade correta de notícias
+    assert result == all_news[:amount]

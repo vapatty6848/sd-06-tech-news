@@ -35,15 +35,13 @@ def scrape_noticia(html_content):
     ).getall()
     sources = [
         source.strip()
-        for source
-        in selector.css("div.z--mb-16.z--px-16 > div > a::text")
-        .getall()
+        for source in selector.css(
+            "div.z--mb-16.z--px-16 > div > a::text"
+        ).getall()
     ]
     categories = [
         category.strip()
-        for category
-        in selector.css("#js-categories > a::text")
-        .getall()
+        for category in selector.css("#js-categories > a::text").getall()
     ]
 
     return {
@@ -51,17 +49,20 @@ def scrape_noticia(html_content):
         "title": title,
         "timestamp": timestamp,
         "writer": writer.strip(),
-        "shares_count": int(shares_count.split(' ')[1]),
-        "comments_count": int(comments_count.split(' ')[1]),
-        "summary": ''.join(summary),
+        "shares_count": int(shares_count.split(" ")[1]),
+        "comments_count": int(comments_count.split(" ")[1]),
+        "summary": "".join(summary),
         "sources": sources,
-        "categories": categories
+        "categories": categories,
     }
 
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url_list = selector.css("h3.tec--card__title > a::attr(href)").getall()
+
+    return url_list
 
 
 # Requisito 4
@@ -73,7 +74,9 @@ def scrape_next_page_link(html_content):
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
+
 if __name__ == "__main__":
-    url = "https://www.tecmundo.com.br/cultura-geek/217311-enola-holmes-2-netflix-confirma-sequencia-retorno-atores.htm"
+    url = "https://www.tecmundo.com.br/novidades"
     content = fetch(url)
-    print(scrape_noticia(content))
+    result = scrape_novidades(content)
+    print(result)
