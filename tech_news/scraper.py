@@ -1,21 +1,24 @@
 import requests
 import time
-import tech_news.database as database
+from tech_news.database import create_news
 from parsel import Selector
 
 
 # Requisito 1
 def fetch(url):
-    time.sleep(1)
     try:
+        time.sleep(1)
         response = requests.get(url, timeout=3)
-    except requests.ReadTimeout:
+        response.raise_for_status()
+        return response.text
+    except requests.ReadTimeout as error:
+        print(f"Server not responding, timeout reached: {error}")
         return None
-
-    if response.status_code != 200:
+    except requests.exceptions.ConnectionError as error:
+        print(f"Request error: {error}")
         return None
-
-    return response.text
+    except Exception:
+        return None
 
 
 # Requisito 2
@@ -25,16 +28,14 @@ def scrape_noticia(html_content):
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("time::attr(datetime)").get()
     selector.xpath('//figure[@class="tec--author__avatar"]').remove()
-    writer = selector.css("a[href*=autor]::text").get().strip()
-    shares = selector.css(".tec--toolbar__item::text").re_first(r"^[^A-Z]*")
-    shares_count = int(shares) if shares is not None else 0
-    comments_count = int(
-        selector.css("#js-comments-btn::attr(data-count)").get()
-    )
+    writer = selector.css(".tec--author__info__link::text").get()
+    writer = writer.strip() if writer is not None else None
+    shares_info = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
+    shares_count = int(shares_info) if shares_info is not None else 0
+    comments_info = selector.css("#js-comments-btn::text").re_first(r"\d+")
+    comments_count = int(comments_info) if comments_info is not None else 0
     summary = "".join(
-        selector.css(
-            "div.tec--article__body > p:nth-child(1) *::text"
-        ).getall()
+        selector.css("div.tec--article__body p:nth-child(1) *::text").getall()
     )
     sources = [
         source.strip()
@@ -82,37 +83,29 @@ def get_remaining_links(amount, current):
     return amount - current
 
 
-def access_new_page_from(html_content):
-    next_page_url = scrape_next_page_link(html_content)
-    next_html_page = fetch(next_page_url)
-    more_links = scrape_novidades(next_html_page)
-    return (next_html_page, more_links)
+def check_enough_news(amount, news_length):
+    return news_length == amount
+
+
+def save_news_to_mongoDB(news):
+    create_news(news)
 
 
 def get_tech_news(amount):
-    news_links = []
     initial_url = "https://www.tecmundo.com.br/novidades"
-    current_html_page = fetch(initial_url)
-    current_links = scrape_novidades(current_html_page)
-    news_links.extend(current_links)
-    remaining_links = get_remaining_links(amount, len(news_links))
+    current_url = initial_url
+    news = []
+    while True:
+        current_news_list_html = fetch(current_url)
+        current_links = scrape_novidades(current_news_list_html)
 
-    while remaining_links > 0:
-        remaining_links = get_remaining_links(amount, len(news_links))
-        new_html_page, more_links = access_new_page_from(current_html_page)
-        current_html_page = new_html_page
-        news_links.extend(more_links)
-        remaining_links = get_remaining_links(amount, len(news_links))
-
-    remaining_links = get_remaining_links(amount, len(news_links))
-
-    if remaining_links < 0:
-        links_to_remove_count = abs(remaining_links)
-        del news_links[-links_to_remove_count:]
-
-    print(news_links)
-    for link in news_links:
-        html_page = fetch(link)
-        data = scrape_noticia(html_page)
-        print(data)
-        database.insert_or_update(data)
+        for link in current_links:
+            single_news_html = fetch(link)
+            single_news = scrape_noticia(single_news_html)
+            print(single_news)
+            news.append(single_news)
+            enough_news = check_enough_news(amount, len(news))
+            if enough_news is True:
+                save_news_to_mongoDB(news)
+                return news
+        current_url = scrape_next_page_link(current_news_list_html)
