@@ -28,36 +28,39 @@ def scrape_noticia(html_content):
         ".tec--timestamp__item"
     ).xpath(
         "./time/@datetime"
-    ).get().strip()
-    WRITER = selector.css(".z--font-bold a::text").get().strip()
-    SHARES = selector.css(
+    ).get()
+    WRITER_MALFORMED = selector.css(
+        "#js-author-bar .z--font-bold a::text"
+    ).get()
+    WRITER = WRITER_MALFORMED.strip() if WRITER_MALFORMED else None
+    SHARES_MALFORMED = selector.css(
         ".tec--toolbar__item::text"
-    ).get().split(' ')[1].strip()
-    SHARES_COUNT = int(SHARES)
-    COMMENTS = selector.css(
+    ).re_first(r"\d+")
+    SHARES_COUNT = int(SHARES_MALFORMED) if SHARES_MALFORMED else 0
+    COMMENTS_MALFORMED = selector.css(
         "#js-comments-btn::attr(data-count)"
     ).get()
-    COMMENTS_COUNT = int(COMMENTS)
-    SUMMARY_UNFORMATTED = selector.css(
-        ".tec--article__body > p:nth-child(1) *::text"
+    COMMENTS_COUNT = int(COMMENTS_MALFORMED) if COMMENTS_MALFORMED else 0
+    SUMMARY_MALFORMED = selector.css(
+        ".tec--article__body p:nth-child(1) *::text"
     ).getall()
-    SUMMARY = ''.join(SUMMARY_UNFORMATTED)
+    SUMMARY = ''.join(SUMMARY_MALFORMED)
     GET_SOURCES = selector.css(".z--mb-16 .tec--badge::text").getall()
     SOURCES = [source.strip() for source in GET_SOURCES]
     GET_CATEGORIES = selector.css("#js-categories > a *::text").getall()
     CATEGORIES = [category.strip() for category in GET_CATEGORIES]
-    result_dict = {
+    result = {
         'url': URL,
         'title': TITLE,
         'timestamp': TIMESTAMP,
         'writer': WRITER,
-        'shares_count': SHARES_COUNT,
+        'shares_count': SHARES_COUNT if SHARES_COUNT else 0,
         'comments_count': COMMENTS_COUNT,
         'summary': SUMMARY,
         'sources': SOURCES,
         'categories': CATEGORIES
     }
-    return result_dict
+    return result
 
 
 # Requisito 3
