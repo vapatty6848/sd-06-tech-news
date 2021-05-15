@@ -1,6 +1,6 @@
-from tech_news.database import get_collection
 from tech_news.analyzer.search_engine import format_results, search_news
 from operator import itemgetter
+# from tech_news.database import get_collection
 
 
 # Requisito 10 usando MongoDB
@@ -48,37 +48,37 @@ def top_5_news():
 
 
 # Requisito 11 usando Python
-# def top_5_categories():
-#     """Lista as cinco categorias mais populares;
-#         o critério é a soma dos compartilhamentos e comentários"""
-#     news_raw = search_news({})
-
-#     categories_count = {}
-#     for news in news_raw:
-#         for category in news['categories']:
-#             categories_count.setdefault(category, 0)
-#             categories_count[category] += 1
-
-#     categories_sort = sorted(categories_count)
-#     top_5_categories = categories_sort[:5]
-#     return top_5_categories
-
-
-# Requisito 11 usando MongoDB
 def top_5_categories():
     """Lista as cinco categorias mais populares;
         o critério é a soma dos compartilhamentos e comentários"""
-    news_collection = get_collection()
-    db_result = list(news_collection.aggregate([
-        {'$unwind': '$categories'},
-        {
-            '$group': {
-                '_id': '$categories',
-                'count': {'$sum': 1}
-            }
-        },
-        {'$sort': {'count': -1, '_id': 1}},
-        {'$limit': 5}
-    ]))
-    top_5_categories = [category['_id'] for category in db_result]
+    news_raw = search_news({})
+
+    categories_count = {}
+    for news in news_raw:
+        for category in news['categories']:
+            categories_count.setdefault(category, 0)
+            categories_count[category] += 1
+
+    categories_sort = sorted(categories_count)
+    top_5_categories = categories_sort[:5]
     return top_5_categories
+
+
+# Requisito 11 usando MongoDB
+# def top_5_categories():
+#     """Lista as cinco categorias mais populares;
+#         o critério é a soma dos compartilhamentos e comentários"""
+#     news_collection = get_collection()
+#     db_result = list(news_collection.aggregate([
+#         {'$unwind': '$categories'},
+#         {
+#             '$group': {
+#                 '_id': '$categories',
+#                 'count': {'$sum': 1}
+#             }
+#         },
+#         {'$sort': {'count': -1, '_id': 1}},
+#         {'$limit': 5}
+#     ]))
+#     top_5_categories = [category['_id'] for category in db_result]
+#     return top_5_categories
