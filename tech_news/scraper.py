@@ -44,6 +44,8 @@ def scrape_noticia(html_content):
     else:
         shares_count = 0
     comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
+    if comments_count is not None:
+        comments_count = int(comments_count)
     summary = "".join(
         selector.css("div.tec--article__body p:nth-child(1) *::text").getall()
     )
@@ -57,7 +59,7 @@ def scrape_noticia(html_content):
         "timestamp": timestamp,
         "writer": writer,
         "shares_count": shares_count,
-        "comments_count": int(comments_count),
+        "comments_count": comments_count,
         "summary": summary,
         "sources": sources,
         "categories": categories,
