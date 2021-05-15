@@ -1,4 +1,5 @@
 from tech_news.database import find_news
+from tech_news.analyzer.search_engine import search_by_category
 
 
 # Requisito 10
@@ -22,4 +23,13 @@ def top_5_news():
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
+    """Lista as cinco categorias com maior ocorrência no banco de dados."""
+    news_list = find_news()
+    categories_list = set()
+
+    for news in news_list:
+        for category in news["categories"]:
+            categories_list.add(category)
+
+    top_five_categories_asc = sorted(categories_list)[:5]
+    return top_five_categories_asc
