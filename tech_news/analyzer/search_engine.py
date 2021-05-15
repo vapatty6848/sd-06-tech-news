@@ -1,9 +1,12 @@
+from tech_news.database import search_news
+
+
 # Requisito 6
 def search_by_title(title):
     """
     Fará buscas de notícias no banco de dados através do título informado.
     """
-    search_news(title.lower())
+    search_news(f"title: {title.lower()}")
 
 
 # Requisito 7
