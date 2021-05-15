@@ -1,6 +1,23 @@
+from parsel import Selector
+import requests
+import re
+import time
+
+
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    # Rate limit respected by waiting 1 second between successive requests
+    time.sleep(1)
+    try:
+        r = requests.get(url, timeout=3)
+        r.raise_for_status() # Raises exception if status != 200
+        page = r.text
+    except (requests.HTTPError, requests.ReadTimeout) as e:
+        # As seen on Stackoverflow: https://tinyurl.com/yb4pnwa6
+        # Returns None if exceptions are raised
+        print(e)
+        return None
+    return page
 
 
 # Requisito 2
