@@ -13,7 +13,7 @@ def fetch(url):
         response = requests.get(url, timeout=3)
         response.raise_for_status()
 
-    except (ReadTimeout, HTTPError):
+    except Exception:
         return None
 
     if response.status_code == 200:
