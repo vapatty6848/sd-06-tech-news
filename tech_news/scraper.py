@@ -1,7 +1,25 @@
+import requests
+import time
+
+
 # Requisito 1
 def fetch(url):
-    """Inicio do projeto"""
-    """Seu código deve vir aqui"""
+    try:
+        time.sleep(1)
+
+        response = requests.get(url, timeout=3)
+        response.raise_for_status()
+
+        return response.text
+    except requests.exceptions.ConnectionError as error:
+        print(f"Connection error : {error}.")
+        return None
+    except requests.exceptions.ReadTimeout as error:
+        print(f"No response from server: {error}.")
+        return None
+    except Exception:
+        print("Internal error")
+        return None
 
 
 # Requisito 2
