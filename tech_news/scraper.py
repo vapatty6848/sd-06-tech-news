@@ -25,7 +25,7 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Função para fazer o scrape, e obter os dados recebidos na requisição"""
+    """Função para fazer o scrape de noticias"""
     selector = parsel.Selector(html_content)
 
     url = selector.css("head link[rel=canonical]::attr(href)").get()
@@ -62,7 +62,11 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    """Função para fazer o scrape de novidades"""
+    selector = parsel.Selector(text=html_content)
+    novidades = selector.css("h3.tec--card__title a::attr(href)").getall()
+
+    return novidades if novidades else []
 
 
 # Requisito 4
