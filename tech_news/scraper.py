@@ -121,4 +121,4 @@ def get_tech_recursive(amount, news_list=None, next_page=""):
 
 
 def get_tech_news(amount):
-    return get_tech_recursive(amount)
+    return get_tech_recursive(int(amount))
