@@ -71,7 +71,11 @@ def scrape_novidades(html_content):
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    """Method to return the next page link"""
+
+    selector = parsel.Selector(html_content)
+    next_link = selector.css("a.tec--btn.tec--btn--lg::attr(href)").get()
+    return next_link
 
 
 # Requisito 5
