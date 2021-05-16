@@ -26,14 +26,16 @@ def scrape_noticia(html_content):
     seletor = Selector(html_content)
 
     writer_by = seletor.css('.tec--author__info__link::text').get()
-    if writer_by is None:
-        writer_by = seletor.css(
-            '.tec--timestamp__item.z--font-bold>a::text'
-        ).get()
-        if writer_by is not None:
-            writer_by = writer_by.strip()
-    else:
+    if writer_by is not None:
         writer_by = writer_by.strip()
+    # if writer_by is None:
+    #     writer_by = seletor.css(
+    #         '.tec--timestamp__item.z--font-bold>a::text'
+    #     ).get()
+    #     if writer_by is not None:
+    #         writer_by = writer_by.strip()
+    # else:
+    #     writer_by = writer_by.strip()
 
     shares_count_info = seletor.css(
             '.tec--toolbar__item::text'
