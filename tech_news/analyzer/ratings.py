@@ -32,9 +32,9 @@ def top_5_categories():
     category_top_five = collections.Counter(all_categories).most_common(5)
     # limpar o cache de counter
     # um map, que retorna uma lista. um elemento para cada vez que o for rodar.
-    data_category_top_five = [varia[0] for varia in category_top_five]
-    data_category_top_five_with_sorted = sorted(data_category_top_five)
-    return data_category_top_five_with_sorted
+    dt_cat_top_fv_with_sorted = sorted(category_top_five)
+    data_category_top_five = [varia[0] for varia in dt_cat_top_fv_with_sorted]
+    return data_category_top_five
 
 # # como usar Count e most_comon
 # array2 = collections.Counter(['a', 'b', 'c', 'a', 'b', 'b']).most_common(2)
