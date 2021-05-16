@@ -1,8 +1,6 @@
 import requests
 import time
 from tech_news.database import create_news
-from requests.exceptions import ReadTimeout
-from requests.models import HTTPError
 from parsel import Selector
 
 
