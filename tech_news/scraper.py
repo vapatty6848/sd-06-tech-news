@@ -1,11 +1,12 @@
-import requests
 import time
+import requests
 from requests.exceptions import HTTPError, ReadTimeout
+import parsel
 
 
 # Requisito 1
 def fetch(url):
-    """faz a requisição HTTP"""
+    """Função para fazer a requisição HTTP"""
     time.sleep(1)
     try:
         response = requests.get(url, timeout=3)
@@ -24,7 +25,39 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    """Função para fazer o scrape, e obter os dados recebidos na requisição"""
+    selector = parsel.Selector(html_content)
+
+    url = selector.css("head link[rel=canonical]::attr(href)").get()
+    title = selector.css("h1::text").get()
+    timeStamp = selector.css(
+        ".tec--timestamp__item"
+    ).xpath("./time/@datetime").get().strip()
+
+    writer = selector.css(".z--font-bold a::text").get().strip()
+    sharesCount = selector.css(
+        ".tec--toolbar__item::text"
+    ).get().split(' ')[1].strip()
+
+    commentsCount = selector.css("#js-comments-btn::attr(data-count)").get()
+    summary = selector.css(
+        ".tec--article__body > p:nth-child(1) *::text"
+    ).getall()
+
+    sources = selector.css(".z--mb-16 .tec--badge::text").getall()
+    categories = selector.css("#js-categories > a *::text").getall()
+
+    return {
+        'url': url,
+        'title': title,
+        'timestamp': timeStamp,
+        'writer': writer,
+        'shares_count': int(sharesCount),
+        'comments_count': int(commentsCount),
+        'summary': ''.join(summary),
+        'sources': [source.strip() for source in sources],
+        'categories': [category.strip() for category in categories]
+    }
 
 
 # Requisito 3
