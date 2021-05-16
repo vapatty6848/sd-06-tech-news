@@ -1,8 +1,11 @@
+import requests
+import time
+from parsel import Selector
+
+
 # Requisito 1
 def fetch(url):
     """Seu código deve vir aqui"""
-    import requests
-    import time
 
     time.sleep(1)
     try:
@@ -19,6 +22,46 @@ def fetch(url):
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+
+    url = selector.css("head > link:nth-child(26)::attr(href)").get()
+    title = selector.css("#js-article-title::text").get()
+    time_stamp = selector.css("#js-article-date::attr(datetime)").get()
+    writer = selector.css(
+        "#js-author-bar > div > p.z--m-none.z--truncate.z--font-bold > a::text"
+    ).get()
+    writer_name = writer.strip() if writer else None
+    count = selector.css(
+        "#js-author-bar > nav > div:nth-child(1)::text"
+    ).get()
+    shares_count = int(count.split()[0]) if count else 0
+    comments_count = int(
+        selector.css("#js-comments-btn::attr(data-count)").get()
+    )
+    summary = selector.css(
+        "#js-main div.tec--article__body p:nth-child(1) *::text"
+    ).getall()
+    summary_all = ''.join(summary)
+    sources = selector.css(
+        "#js-main div.z--mb-16.z--px-16 > div > a::text"
+    ).getall()
+    sources_list = [source.strip() for source in sources]
+    categories = selector.css("#js-categories > a::text").getall()
+    categories_list = [category.strip() for category in categories]
+
+    new_data = {
+        "url": url,
+        "title": title,
+        "timestamp": time_stamp,
+        "writer": writer_name,
+        "shares_count": shares_count,
+        "comments_count": comments_count,
+        "summary": summary_all,
+        "sources": sources_list,
+        "categories": categories_list
+    }
+
+    return new_data
 
 
 # Requisito 3
