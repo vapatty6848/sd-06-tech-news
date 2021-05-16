@@ -4,6 +4,7 @@ import time
 
 # Requisito 1
 def fetch(url):
+    """faz a requisição HTTP"""
     try:
         time.sleep(1)
         response = requests.get(url, timeout=3)
