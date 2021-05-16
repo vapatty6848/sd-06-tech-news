@@ -62,7 +62,7 @@ def scrape_noticia(html_content):
             '.tec--article__body p:first-child *::text'
         ).getall()),
         "sources": [i.strip() for i in seletor.css(
-            '[rel="noopener nofollow"]::text'
+            '.z--mb-16 .tec--badge::text'
         ).getall()],
         "categories": [i.strip() for i in seletor.css(
             '#js-categories a::text'
@@ -97,7 +97,6 @@ def get_tech_news(amount):
     url = "https://www.tecmundo.com.br/novidades"
     news_page = fetch(url)
     News_list = scrape_novidades(news_page)
-    print(news_page)
 
     while len(news_to_save) < amount:
         for news in News_list:
@@ -114,10 +113,9 @@ def get_tech_news(amount):
     return news_to_save
 
 
-if __name__ == "__main__":
-    print(get_tech_news(3))
+# if __name__ == "__main__":
+#     print(get_tech_news(2))
     # htmlgg = fetch(
-    #   'https://www.tecmundo.com.br/redes-sociais/217386-encontrar-grupos-telegram.htm
-    # ')
-    # print(htmlgg)
+    #   'https://www.tecmundo.com.br/minha-serie/217236-the-office-8-cenas-marcantes-serie-aqueceram-nossos-coracoes.htm'
+    # )
     # print(scrape_noticia(htmlgg))
