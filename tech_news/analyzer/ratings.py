@@ -3,7 +3,8 @@ from tech_news.database import find_news
 
 # Requisito 10
 def top_5_news():
-    """Seu código deve vir aqui"""
+    """Method to get top 5 news"""
+
     news_list = find_news()
     popularity_list = []
     for news in news_list:
@@ -22,10 +23,19 @@ def top_5_news():
     result = [
         (item["title"], item["url"]) for item in popularity_list
     ]
-    top_five = result[0:5]
+    top_five = result[:5]
     return top_five
 
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
+    """Method to get top 5 categories"""
+
+    news_list = find_news()
+    categories_list = set()
+
+    for news in news_list:
+        for category in news['categories']:
+            categories_list.add(category)
+    top_five = sorted(categories_list)[:5]
+    return top_five
