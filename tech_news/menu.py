@@ -1,7 +1,12 @@
 import sys
-from tech_news import scraper
-from tech_news.analyzer import search_engine
-from tech_news.analyzer import ratings
+from tech_news.scraper import get_tech_news
+from tech_news.analyzer.search_engine import (
+    search_by_title,
+    search_by_date,
+    search_by_source,
+    search_by_category,
+)
+from tech_news.analyzer.ratings import top_5_news, top_5_categories
 
 
 def execute(user_input):
@@ -14,14 +19,15 @@ def execute(user_input):
     ]
 
     menu = {
-        0: scraper.get_tech_news,
-        1: search_engine.search_by_title,
-        2: search_engine.search_by_date,
-        3: search_engine.search_by_source,
-        4: search_engine.search_by_category,
-        5: ratings.top_5_news,
-        6: ratings.top_5_categories,
+        0: get_tech_news,
+        1: search_by_title,
+        2: search_by_date,
+        3: search_by_source,
+        4: search_by_category,
+        5: top_5_news,
+        6: top_5_categories,
     }
+
     try:
         if user_input < len(options):
             chosen = input(options[user_input])
@@ -34,33 +40,29 @@ def execute(user_input):
         else:
             print(menu[user_input]())
 
-    except Exception as e:
-        sys.stderr.write(str(e))
-        sys.exit()
+    except Exception:
+        return sys.stderr.write("Opção inválida\n")
 
 
 def analyzer_menu():
     try:
         user_input = int(
             input(
-                "Selecione uma das opções a seguir:\n"
-                "0 - Popular o banco com notícias;\n"
-                "1 - Buscar notícias por título;\n"
-                "2 - Buscar notícias por data;\n"
-                "3 - Buscar notícias por fonte;\n"
-                "4 - Buscar notícias por categoria;\n"
-                "5 - Listar top 5 notícias;\n"
-                "6 - Listar top 5 categorias;\n"
-                "7 - Sair.\n"
+                "Selecione uma das opções a seguir:\n "
+                "0 - Popular o banco com notícias;\n "
+                "1 - Buscar notícias por título;\n "
+                "2 - Buscar notícias por data;\n "
+                "3 - Buscar notícias por fonte;\n "
+                "4 - Buscar notícias por categoria;\n "
+                "5 - Listar top 5 notícias;\n "
+                "6 - Listar top 5 categorias;\n "
+                "7 - Sair."
             )
         )
     except ValueError:
-        sys.stderr.write("Opção inválida")
-        sys.exit()
+        return sys.stderr.write("Opção inválida")
 
-    if user_input == 7:
-        sys.stderr.write("Encerrando script")
-        sys.exit()
-
+    if user_input is None or user_input == 7:
+        return print("Encerrando script")
     else:
         execute(user_input)
