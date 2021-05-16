@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 from tech_news.database import find_news
+import collections
 
 
 # Requisito 10
@@ -27,3 +29,16 @@ def top_5_categories():
         for category in news["categories"]:
             all_categories.append(category)
     # preciso agora selecionar as catego mais repetidas da list all_categories
+    category_top_five = collections.Counter(all_categories).most_common(5)
+    # limpar o cache de counter
+    # um map, que retorna uma lista. um elemento para cada vez que o for rodar.
+    data_category_top_five = [varia[0] for varia in category_top_five]
+    data_category_top_five_with_sorted = sorted(data_category_top_five)
+    return data_category_top_five_with_sorted
+
+# # como usar Count e most_comon
+# array2 = collections.Counter(['a', 'b', 'c', 'a', 'b', 'b']).most_common(2)
+# # sorted usado para ordem alfabetica
+# array = sorted(array2)
+# array_filter = [status[0] for status in array]
+# print(array_filter)

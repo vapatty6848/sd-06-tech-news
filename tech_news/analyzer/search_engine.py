@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from tech_news.database import search_news
 
 
@@ -28,3 +29,4 @@ def search_by_category(category):
     """Seu código deve vir aqui"""
     post_by_cat = search_news({"categories": {"$regex": category}})
     return post_by_cat
+
