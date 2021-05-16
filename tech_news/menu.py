@@ -4,6 +4,41 @@ from tech_news.analyzer import search_engine
 from tech_news.analyzer import ratings
 
 
+def execute(user_input):
+    options = [
+        "Digite quantas notícias serão buscadas:",
+        "Digite o título:",
+        "Digite a data no formato aaaa-mm-dd:",
+        "Digite a fonte:",
+        "Digite a categoria:",
+    ]
+
+    menu = {
+        0: scraper.get_tech_news,
+        1: search_engine.search_by_title,
+        2: search_engine.search_by_date,
+        3: search_engine.search_by_source,
+        4: search_engine.search_by_category,
+        5: ratings.top_5_news,
+        6: ratings.top_5_categories,
+    }
+    try:
+        if user_input < len(options):
+            chosen = input(options[user_input])
+
+            if chosen != 0:
+                print(menu[user_input](chosen))
+            else:
+                menu[user_input](chosen)
+
+        else:
+            print(menu[user_input]())
+
+    except Exception as e:
+        sys.stderr.write(str(e))
+        sys.exit()
+
+
 def analyzer_menu():
     try:
         user_input = int(
@@ -28,35 +63,4 @@ def analyzer_menu():
         sys.exit()
 
     else:
-        options = [
-            "Digite quantas notícias serão buscadas:",
-            "Digite o título:",
-            "Digite a data no formato aaaa-mm-dd:",
-            "Digite a fonte:",
-            "Digite a categoria:",
-        ]
-
-        menu = {
-            0: scraper.get_tech_news,
-            1: search_engine.search_by_title,
-            2: search_engine.search_by_date,
-            3: search_engine.search_by_source,
-            4: search_engine.search_by_category,
-            5: ratings.top_5_news,
-            6: ratings.top_5_categories,
-        }
-        try:
-            if user_input < len(options):
-                chosen = input(options[user_input])
-
-                if chosen != 0:
-                    print(menu[user_input](chosen))
-                else:
-                    menu[user_input](chosen)
-
-            else:
-                print(menu[user_input]())
-
-        except Exception as e:
-            sys.stderr.write(str(e))
-            sys.exit()
+        execute(user_input)
