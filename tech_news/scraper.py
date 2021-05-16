@@ -1,6 +1,20 @@
+import requests
+import time
+
+
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    """função responsável por fazer a requisição HTTP para obter o HTML"""
+    try:
+        time.sleep(1)
+        response = requests.get(url, timeout=3)
+        response.raise_for_status()
+        #  https://docs.python-requests.org/en/master/user/quickstart/
+        return response.text
+
+    except (requests.exceptions.HTTPError, requests.ReadTimeout) as error:
+        print(error)
+        return None
 
 
 # Requisito 2
