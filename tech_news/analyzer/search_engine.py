@@ -31,12 +31,11 @@ def search_by_title(title):
 
 def search_by_date(date):
     try:
-        bool(datetime.strptime(date, "%Y-%m-%d"))
+        datetime.strptime(date, "%Y-%m-%d")
+        result = search_news_param(date, "timestamp")
+        return [] if len(result[0]) == 0 else result
     except ValueError:
         raise ValueError("Data inválida")
-
-    result = search_news_param(date, "timestamp")
-    return [] if len(result[0]) == 0 else result
 
 
 def search_by_source(source):
