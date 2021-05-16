@@ -1,5 +1,6 @@
 import requests
 import time
+from tech_news.database import create_news
 from requests.exceptions import ReadTimeout
 from requests.models import HTTPError
 from parsel import Selector
@@ -29,14 +30,15 @@ def scrape_noticia(html_content):
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
     writer = selector.css(".tec--author__info__link::text").get()
     shares_count = selector.css(".tec--toolbar__item::text").get()
-    comments_count = selector.css("#js-comments-btn::text").getall()[1]
+    # comments_count = selector.css("#js-comments-btn::text").getall()[1]
+    comments_count = selector.css(".tec--toolbar__item *::text").getall()
     summary = selector.css(
-        "div.tec--article__body > p:nth-child(1) *::text"
+        "div.tec--article__body > p:first-child *::text"
     ).getall()
     sources = [
         source.strip()
         for source in selector.css(
-            "div.z--mb-16.z--px-16 > div > a::text"
+            "div.z--mb-16 > div > a::text"
         ).getall()
     ]
     categories = [
@@ -44,13 +46,26 @@ def scrape_noticia(html_content):
         for category in selector.css("#js-categories > a::text").getall()
     ]
 
+    if shares_count is not None:
+        shares_count = int(shares_count.split()[0])
+    else:
+        shares_count = 0
+
+    if len(comments_count) == 3:
+        comments_count = int(comments_count[2].split()[0])
+    else:
+        comments_count = int(comments_count[1].split()[0])
+
+    if writer is not None:
+        writer = writer.strip()
+
     return {
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer.strip(),
-        "shares_count": int(shares_count.split(" ")[1]),
-        "comments_count": int(comments_count.split(" ")[1]),
+        "writer": writer,
+        "shares_count": shares_count,
+        "comments_count": comments_count,
         "summary": "".join(summary),
         "sources": sources,
         "categories": categories,
@@ -59,24 +74,42 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    selector = Selector(text=html_content)
-    url_list = selector.css("h3.tec--card__title > a::attr(href)").getall()
-
-    return url_list
+    return (
+        Selector(text=html_content)
+        .css("h3.tec--card__title > a::attr(href)")
+        .getall()
+    )
 
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    return Selector(text=html_content).css("a.tec--btn::attr(href)").get()
 
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    news_to_save = []
+    url = "https://www.tecmundo.com.br/novidades"
+
+    while len(news_to_save) < amount:
+        news_page = fetch(url)
+        News_list = scrape_novidades(news_page)
+
+        for news in News_list:
+            news_html = fetch(news)
+            news_to_save.append(scrape_noticia(news_html))
+            if len(news_to_save) == amount:
+                break
+
+        url = scrape_next_page_link(news_page)
+
+    create_news(news_to_save)
+
+    return news_to_save
 
 
 if __name__ == "__main__":
-    url = "https://www.tecmundo.com.br/novidades"
+    url = ""
     content = fetch(url)
-    result = scrape_novidades(content)
+    result = scrape_next_page_link(content)
     print(result)
