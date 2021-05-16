@@ -1,25 +1,25 @@
 import requests
 import time
+from requests.exceptions import HTTPError, ReadTimeout
 
 
 # Requisito 1
 def fetch(url):
     """faz a requisição HTTP"""
+    time.sleep(1)
     try:
-        time.sleep(1)
         response = requests.get(url, timeout=3)
-        response.raise_for_status()
+    except ReadTimeout as error:
+        print(f"Timeout Error: {error}.")
+        return None
 
-        return response.text
-    except requests.exceptions.ConnectionError as error:
-        print(f"Connection error : {error}.")
+    try:
+        response.raise_for_status()
+    except HTTPError as error:
+        print(f"HTTP Error: {error}.")
         return None
-    except requests.exceptions.ReadTimeout as error:
-        print(f"No response from server: {error}.")
-        return None
-    except Exception:
-        print("Internal error")
-        return None
+
+    return response.text
 
 
 # Requisito 2
