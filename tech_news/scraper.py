@@ -1,6 +1,12 @@
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    url = "https://www.tecmundo.com.br/novidades"
+    try:
+        response = requests.get(url, timeout=1)
+    except requests.ReadTimeout:
+        response = requests.get(url, timeout=2)
+    finally:
+        print (response.status_code)
 
 
 # Requisito 2
