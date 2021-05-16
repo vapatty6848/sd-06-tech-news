@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import Timeout
 import time
 import parsel
 
@@ -6,28 +7,22 @@ import parsel
 # Requisito 1
 def fetch(url):
     """Method to access a url and bring the data"""
+    time.sleep(1)
     try:
-        time.sleep(1)
         response = requests.get(url, timeout=3)
         if response.status_code == 200:
             return response.text
         else:
             return None
-    except requests.exceptions.ConnectionError as error:
-        print(f"Request error: {error}.")
-        return None
-    except requests.exceptions.ReadTimeout as error:
-        print(f"No response from server: {error}.")
-        return None
-    except Exception:
+    except Timeout:
         return None
 
 
 # Requisito 2
 def scrape_noticia(html_content):
     """Retrives news of the url return"""
-    selector = parsel.Selector(html_content)
 
+    selector = parsel.Selector(html_content)
     url = selector.css("head link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get()
     writer = selector.css(".tec--author__info__link::text").get()
@@ -65,7 +60,13 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    """Method to return the page list of news"""
+
+    selector = parsel.Selector(html_content)
+    url_list = selector.css(
+        "div.tec--card__info h3 a::attr(href)"
+    ).getall()
+    return url_list
 
 
 # Requisito 4
