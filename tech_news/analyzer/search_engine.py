@@ -25,8 +25,8 @@ def search_by_date(date):
         raise ValueError("Data inválida")
 
     query = {"timestamp": {"$regex": date}}
-    query_result = search_news(query)
-    result = [(news["title"], news["url"]) for news in query_result]
+    data_news = search_news(query)
+    result = [(news["title"], news["url"]) for news in data_news]
     return result
 
 
