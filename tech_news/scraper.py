@@ -1,6 +1,25 @@
+import requests
+import time
+
+
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    """Método para acessar uma url e trazer os dados"""
+    try:
+        time.sleep(1)
+        response = requests.get(url, timeout=3)
+        if response.status_code == 200:
+            return response.text
+        else:
+            return None
+    except requests.exceptions.ConnectionError as error:
+        print(f"Request error: {error}.")
+        return None
+    except requests.exceptions.ReadTimeout as error:
+        print(f"No response from server: {error}.")
+        return None
+    except Exception:
+        return None
 
 
 # Requisito 2
