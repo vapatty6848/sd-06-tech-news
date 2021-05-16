@@ -64,7 +64,12 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    return selector.css(
+        ".tec--list .tec--card__title__link::attr(href)"
+    ).getall()
+    # urls = selector.css("a.tec--card__title__link::attr(href)").getall()
+    # return urls
 
 
 # Requisito 4
@@ -76,6 +81,10 @@ def scrape_next_page_link(html_content):
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
+
+# html_content = fetch("https://www.tecmundo.com.br/novidades")
+
+# print(scrape_novidades(html_content))
 # html_content = fetch(
 #     "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
 # )
