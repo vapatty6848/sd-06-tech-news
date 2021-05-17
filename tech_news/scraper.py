@@ -94,4 +94,4 @@ def get_tech_news(amount):
 if __name__ == "__main__":
     # URL = "https://www.tecmundo.com.br/novidades"
     # response = fetch(URL)
-    get_tech_news(24)
+    get_tech_news(3)
