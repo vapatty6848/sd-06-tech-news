@@ -34,6 +34,7 @@ def search_by_source(source):
     else:
         return []
 
+
 # Requisito 9
 def search_by_category(category):
     """Seu código deve vir aqui"""
