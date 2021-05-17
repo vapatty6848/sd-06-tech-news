@@ -1,6 +1,7 @@
 import requests
 import time
 from parsel import Selector
+from requests.models import Response
 # Requisito 1
 
 
@@ -12,14 +13,13 @@ def fetch(url):
         if response.status_code != 200:
             return None
         return response.text
-    except:
+    except Response.status_code:
         return None
 
 
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
-    url = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
     msg = []
     texto = ''
     selector = Selector(text=html_content)
@@ -48,7 +48,6 @@ def scrape_noticia(html_content):
     categories = selector.xpath('//div[@id="js-categories"]/a/text()').getall()
 
     ob = {
-            "url": url,
             "title": title,
             "timestamp": f'{data} {hour[1]}',
             "writer": writer,
