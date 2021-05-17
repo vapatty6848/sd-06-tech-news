@@ -27,13 +27,15 @@ def search_by_date(date):
     search_query = {"timestamp": {"$regex": f"^{date}", "$options": "m"}}
     found_news = search_news(search_query)
     formatted_news = format_news(found_news)
-    print(formatted_news)
     return formatted_news
 
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    search_query = {"sources": {"$regex": source, "$options": "i"}}
+    found_news = search_news(search_query)
+    formatted_news = format_news(found_news)
+    return formatted_news
 
 
 # Requisito 9
