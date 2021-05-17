@@ -44,4 +44,3 @@ def search_by_category(category):
             return [(new["title"], new["url"])]
     else:
         return []
-
