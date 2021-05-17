@@ -115,4 +115,3 @@ def test_get_tech_news(amount, mocker):
     # Assert
     # A função retorna a quantidade correta de notícias
     assert result == all_news[:amount]
-    
