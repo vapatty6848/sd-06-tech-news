@@ -2,34 +2,36 @@ import requests
 import time
 from parsel import Selector
 
+
 # Requisito 1
 def fetch(url):
-    timesleep(1)
     try:
+        time.sleep(1)
         response = requests.get(url, timeout=3)
         return response.text
-    except request.ReadTimeout:
+    except requests.ReadTimeout:
         response = requests.get(url, timeout=3)
         return None
-    return response.text if response.status_code == 200 else None 
+    return response.text if response.status_code == 200 else None
+
 
 # Requisito 2
 def scrape_noticia(html_content):
     response = requests.get(html_content)
     selector = Selector(text=response.text)
     all_urls = selector.css("link::attr(href)").getall()
-    url = all_urls[-2] #url
-    title = selector.css(".tec--article__header__title::text").get() #title
-    timestamp = selector.css(".tec--timestamp__item time ::attr(datetime)").get() #timestamp
-    writer = selector.css(".tec--author__info__link::text").get() #writer
+    url = all_urls[-2]
+    title = selector.css(".tec--article__header__title::text").get()
+    timestamp = selector.css(".tec--timestamp__item time ::attr(datetime)").get()
+    writer = selector.css(".tec--author__info__link::text").get()
     shares = selector.css(".tec--toolbar__item::text").get()
-    shares_count = shares[0:3] #shares_count
-    comments = selector.css(".tec--btn::attr(data-count)").get() #comments_count
+    shares_count = shares[0:3]
+    comments = selector.css(".tec--btn::attr(data-count)").get()
     not_clean_summary = selector.css("div.tec--article__body > p:nth-child(1) *::text").getall()
-    summary = "".join(not_clean_summary) #summary
+    summary = "".join(not_clean_summary)
     all_sources = selector.css(".tec--badge::text").getall()
-    sources = all_sources[0:1] #sources
-    categories = all_sources[1:5] #categories
+    sources = all_sources[0:1]
+    categories = all_sources[1:5]
     return {
         "url": url,
         "title": title,
@@ -41,6 +43,7 @@ def scrape_noticia(html_content):
         "sources": list(sources),
         "categories": list(categories),
     }
+
 
 # Requisito 3
 def scrape_novidades(html_content):
