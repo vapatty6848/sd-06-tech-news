@@ -6,7 +6,7 @@ def search_by_title(title):
     requested_news = []
     query_result = search_news({"title": {"$regex": title, "$options": "i"}})
     for result in query_result:
-        news_info = [(result["title"], result["url"])]
+        news_info = (result["title"], result["url"])
         requested_news.append(news_info)
     return requested_news
 
