@@ -28,4 +28,4 @@ def search_by_category(category):
     """Seu código deve vir aqui"""
 
 
-print(search_by_title("que"))
+# print(search_by_title("que"))
