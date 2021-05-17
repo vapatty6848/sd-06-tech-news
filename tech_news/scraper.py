@@ -35,7 +35,7 @@ def scrape_noticia(html_content):
     ).re_first(r"\d+")
     shares_new = int(shares_count) if shares_count else 0
     comments_count = selector.css("#js-comments-btn::text").re_first(r"\d+")
-    comments_count_new = int(comments) if comments else None
+    comments_count_new = int(comments_count) if comments_count else None
     summary = selector.css(
         ".tec--article__body > p:nth-child(1) *::text"
     ).getall()
@@ -88,5 +88,4 @@ def get_tech_news(amount):
                 create_news(data)
                 return data
         url = scrape_next_page_link(html_content)
-
 
