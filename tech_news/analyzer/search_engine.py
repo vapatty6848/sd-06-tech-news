@@ -34,7 +34,9 @@ def search_by_source(source):
 # Requisito 9
 def search_by_category(category):
     try:
-        news = search_news({"categories": {"$regex": category, "$options": "i"}})
+        news = search_news(
+            {"categories": {"$regex": category, "$options": "i"}}
+            )
         return [(item["title"], item["url"]) for item in news]
     except ValueError:
         raise ValueError('')

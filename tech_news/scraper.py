@@ -85,9 +85,6 @@ def get_tech_news(amount):
             next_news = scrape_noticia(news_next_page)
             news_inserted.append(next_news)
             if len(news_inserted) == amount:
-                try:
-                    create_news(news_inserted)
-                    return news_inserted
-                except ValueError:
-                    raise ValueError('Database Error')
+                create_news(news_inserted)
+                return news_inserted
         url = scrape_next_page_link(response)
