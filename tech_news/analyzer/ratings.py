@@ -1,4 +1,4 @@
-from tech_news.database import db, find_news
+from tech_news.database import db
 
 
 pipeline_news = [
