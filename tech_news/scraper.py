@@ -36,9 +36,8 @@ def scrape_noticia(html_content):
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).get()
     shares_count = int(count.split()[0]) if count else 0
-    comments_count = int(
-        selector.css("#js-comments-btn::attr(data-count)").get()
-    )
+    comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
+    comments = int(comments_count) if comments_count else None
     summary = selector.css(
         "#js-main div.tec--article__body p:nth-child(1) *::text"
     ).getall()
@@ -56,7 +55,7 @@ def scrape_noticia(html_content):
         "timestamp": time_stamp,
         "writer": writer_name,
         "shares_count": shares_count,
-        "comments_count": comments_count,
+        "comments_count": comments,
         "summary": summary_all,
         "sources": sources_list,
         "categories": categories_list
@@ -98,7 +97,7 @@ def get_tech_news(amount):
             page_new_content = fetch(url_new)
             data_new = scrape_noticia(page_new_content)
             news.append(data_new)
-            url = scrape_next_page_link(page_new_content)
             if len(news) == amount:
                 create_news(news)
+        url = scrape_next_page_link(page_new_content)
     return news
