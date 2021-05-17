@@ -17,30 +17,28 @@ INPUTS = [
     {"option": 0, "user_input": "Digite quantas notícias serão buscadas: "},
     {"option": 1, "user_input": "Digite o título: "},
     {"option": 2, "user_input": "Digite a data no formato aaaa-mm-dd: "},
-    {"option": 3, "user_input": "Digite a fonte"},
-    {"option": 4, "user_input": "Digite a categoria:"},
+    {"option": 3, "user_input": "Digite a fonte: "},
+    {"option": 4, "user_input": "Digite a categoria: "},
 ]
 
 
 def menu_options():
-    user_input = int(input("Selecione uma das opções a seguir: "))
-    for option in OPTIONS:
-        print(option["value"])
+    user_options = "".join([f"\n{option['value']}" for option in OPTIONS])
+    user_input = int(
+        input(f"Selecione uma das opções a seguir: {user_options}\n")
+    )
     return user_input
 
 
 def analyzer_menu():
-    user_option = menu_options
-    print(user_option)
-    for i in INPUTS:
-        user_option == INPUTS["option"]
-        print(user_option)
-        """ i = user_option
-        if user_option == INPUTS[i]["option"]:
-            message = INPUTS["user_input"]
-            int(input(message)) """
-    # except Exception:
-        # print(sys.stderr, "Opção inválida")
+    user_choice = menu_options()
+    try:
+        for i in INPUTS:
+            user_action = INPUTS[user_choice]["user_input"]
+            int(input(user_action))
+            break
+    except Exception:
+        print(sys.stderr, "Opção inválida")
 
 
 if __name__ == "__main__":
