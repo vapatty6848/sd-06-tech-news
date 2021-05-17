@@ -1,0 +1,14 @@
+[
+  {
+    _id: ObjectId("60a01223674a0e58b8ca81c1"),
+    url: 'https://www.tecmundo.com.br/vamos.htm',
+    title: 'Vamoscomtudo',
+    timestamp: '2020-11-23T11:00:01',
+    writer: 'Leonardo',
+    shares_count: 1,
+    comments_count: 1,
+    summary: 'Sumario 2',
+    sources: [ 'ResetEra' ],
+    categories: [ 'PC', 'Console' ]
+  }
+]
