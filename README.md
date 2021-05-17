@@ -82,9 +82,9 @@ As notícias podem ser obtidas através da raspagem das [últimas notícias do _
 
 1. Clone o repositório
 
-- `git clone https://github.com/tryber/sd-06-tech-news-update.git`.
+- `git clone https://github.com/tryber/sd-06-tech-news.git`.
 - Entre na pasta do repositório que você acabou de clonar:
-  - `sd-06-tech-news-update`
+  - `sd-06-tech-news`
 
 2. Crie o ambiente virtual para o projeto
 
@@ -123,13 +123,13 @@ As notícias podem ser obtidas através da raspagem das [últimas notícias do _
 
 7. Crie um novo `Pull Request` _(PR)_
 
-- Vá até a página de _Pull Requests_ do [repositório no _GitHub_](https://github.com/tryber/sd-06-tech-news-update/pulls)
+- Vá até a página de _Pull Requests_ do [repositório no _GitHub_](https://github.com/tryber/sd-06-tech-news/pulls)
 - Clique no botão verde _"New pull request"_
 - Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
 - Clique no botão verde _"Create pull request"_
 - Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
 - **Não se preocupe em preencher mais nada por enquanto!**
-- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-06-tech-news-update/pulls) e confira que o seu _Pull Request_ está criado
+- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-06-tech-news/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
@@ -310,8 +310,8 @@ Agora que temos a página HTML, é hora de fazer o scrape! Vamos utilizar as fer
   - `url` - link para acesso da notícia. Ex: "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
   - `title` - título da notícia. Ex: "Musk: Tesla está muito perto de carros totalmente autônomos"
   - `timestamp` - data e hora da notícia. Ex: "2020-07-09T11:00:00"
-  - `writer` - autor da notícia. Ex: "Nilton Kleina"
-  - `shares_count` - número de compartilhamento da notícia. Ex: `61`
+  - `writer` - nome da pessoa autora da notícia. Ex: "Nilton Kleina". Se a informação não for encontrada, salve este atributo como `None`
+  - `shares_count` - número de compartilhamento da notícia. Ex: `61`. Se a informação não for encontrada, salve este atributo como `0` (zero)
   - `comments_count` - número de comentários que a notícia recebeu. Ex: `26`
   - `summary` - o primeiro parágrafo da notícia. Ex:"O CEO da Tesla, Elon Musk, garantiu que a montadora está muito perto de atingir o chamado nível 5 de autonomia de sistemas de piloto automático de carros. A informação foi confirmada em uma mensagem enviada pelo executivo aos participantes da Conferência Anual de Inteligência Artificial (WAIC, na sigla em inglês). O evento aconteceu em Xangai, na China, onde a montadora comemora resultados positivos de mercado."
   - `sources` - lista contendo fontes da notícia. Ex: ["Venture Beat", "Source 2"]
@@ -362,7 +362,11 @@ Agora que temos a página HTML, é hora de fazer o scrape! Vamos utilizar as fer
   ```
   Repare que no exemplo dentro da tag _p_ encontram-se duas outras tags. Esse é um caso onde a tag _p_ é um ancestral e as tags _a_ e _em_ são as descendentes. Para obter todo o texto do exemplo, utiliza-se `*::text` no seletor.
 
-✍️ Teste manual: abra um terminal Python importando esta função através do comando `python3 -i tech_news/scraper.py` e invoque a função utilizando diferentes parâmetros. Exemplo: `scrape(fetcher=fetch_content, pages=2)`.
+✍️ Teste manual: abra um terminal Python importando estas funções através do comando `python3 -i tech_news/scraper.py` e as invoque utilizando diferentes parâmetros. Exemplo: 
+```python
+>>> html = fetch(url_da_noticia)
+>>> scrape_noticia(html)
+```
 
 **🤖 O que será verificado pelo avaliador:**
 - Será verificado se a função retorna o conteúdo correto e no formato correto, dada uma página de notícia exemplo.
@@ -517,7 +521,6 @@ local: `tech_news/analyzer/ratings.py`
 
 Esta função irá listar as cinco notícias mais populares; nosso critério de popularidade será a soma dos compartilhamentos e comentários.
 
-- A função deve receber como parâmetro o nome da categoria completo.
 - A função deve buscar as notícias do banco de dados e calcular a sua "popularidade" somando seu número de compartilhamentos e comentários.
 - A função deve ordenar as notícias por ordem de popularidade.
 - Em caso de empate, o desempate deve ser por ordem alfabética de título.
@@ -533,7 +536,7 @@ Esta função irá listar as cinco notícias mais populares; nosso critério de 
 
 - Será validado que é possível buscar as cinco top notícias e retornar vazio caso não tenha nenhuma notícia
 
-- Caso houver menos de 5 categorias, serão retornadas quantas houverem
+- Caso houver menos de 5 notícias, serão retornadas quantas houverem
 
 
 ### 11 - Crie a função `top_5_categories`
