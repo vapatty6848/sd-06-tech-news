@@ -5,7 +5,7 @@ from parsel import Selector
 from tech_news.database import create_news
 
 
-# Requisito 1
+# Faz uma requisição para uma página de notícias e retorna um html
 def fetch(url):
     time.sleep(1)
     try:
@@ -16,7 +16,7 @@ def fetch(url):
     return response.text if response.status_code == 200 else None
 
 
-# Requisito 2
+# Recebe um html e retorna informações de uma notícia
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
     get_url = selector.css("head link[rel=canonical]::attr(href)").get()
@@ -55,7 +55,7 @@ def scrape_noticia(html_content):
     return dic_news
 
 
-# Requisito 3
+# Recebe u
 def scrape_novidades(html_content):
     if html_content == "":
         return []
@@ -94,4 +94,4 @@ def get_tech_news(amount):
 if __name__ == "__main__":
     # URL = "https://www.tecmundo.com.br/novidades"
     # response = fetch(URL)
-    get_tech_news(3)
+    get_tech_news(15)
