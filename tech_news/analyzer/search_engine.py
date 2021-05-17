@@ -40,4 +40,7 @@ def search_by_source(source):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    search_query = {"categories": {"$regex": category, "$options": "i"}}
+    found_news = search_news(search_query)
+    formatted_news = format_news(found_news)
+    return formatted_news
