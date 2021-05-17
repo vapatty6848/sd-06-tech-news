@@ -23,15 +23,15 @@ def search_by_date(date):
 # Requisito 8
 def search_by_source(source):
     """Seu código deve vir aqui"""
-    post_by_source = search_news({"source": {"$regex": source, "$options": "i"}})
-    post_result = [(post["source"], post["url"]) for post in post_by_source]
+    p_source = search_news({"source": {"$regex": source, "$options": "i"}})
+    post_result = [(post["source"], post["url"]) for post in p_source]
     return post_result
 
 
 # Requisito 9
 def search_by_category(category):
     """Seu código deve vir aqui"""
-    post_by_cat = search_news({"categories": {"$regex": category, "$options": "i"}})
-    post_result = [(post["categories"], post["url"]) for post in post_by_cat]
+    p_cat = search_news({"categories": {"$regex": category, "$options": "i"}})
+    post_result = [(post["categories"], post["url"]) for post in p_cat]
     return post_result
 
