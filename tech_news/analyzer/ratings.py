@@ -14,7 +14,7 @@ def top_5_news():
     ]
     ordered_list = sorted(popularity_list, reverse=True)
     result = [
-        (ordered_news[1], ordered_news[2]) for ordered_news in ordered_list[:5]
+        (ordere_news[1], ordere_news[2]) for ordere_news in ordered_list[:5]
     ]
     return result
 
