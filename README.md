@@ -571,7 +571,7 @@ Esta função é o menu do nosso programa. Através dele poderemos operar as fun
 - O texto exibido pelo menu deve ser exatamente:
 ```
 Selecione uma das opções a seguir:
-0 - Popular banco
+0 - Popular banco com notícias;
 1 - Buscar notícias por título;
 2 - Buscar notícias por data;
 3 - Buscar notícias por fonte;
