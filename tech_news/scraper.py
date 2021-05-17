@@ -55,7 +55,7 @@ def scrape_noticia(html_content):
     return dic_news
 
 
-# Recebe u
+# Recebe um html e retorna uma lista com as novidades da página
 def scrape_novidades(html_content):
     if html_content == "":
         return []
@@ -65,7 +65,7 @@ def scrape_novidades(html_content):
         return news
 
 
-# Requisito 4
+# Recebe um html e retorna uma lista com a url da pŕoxima página
 def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
     next_url = selector.css(
@@ -74,7 +74,7 @@ def scrape_next_page_link(html_content):
     return next_url
 
 
-# Requisito 5
+# Armazena no mongo uma quantidade de notícias fornecidas pelo user
 def get_tech_news(amount):
     url = "https://www.tecmundo.com.br/novidades"
     news_inserted = []
@@ -92,6 +92,4 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    # URL = "https://www.tecmundo.com.br/novidades"
-    # response = fetch(URL)
     get_tech_news(15)

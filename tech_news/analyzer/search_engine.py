@@ -2,14 +2,14 @@ from tech_news.database import search_news
 from datetime import datetime
 
 
-# Requisito 6
+# Busca as notícias pelo título
 def search_by_title(title):
     news_found = search_news({"title": {"$regex": title, "$options": "i"}})
     output = [(new["title"], new["url"]) for new in news_found]
     return output
 
 
-# Requisito 7
+# Busca as notícias pela data. Formato: YYYY-mm-dd
 def search_by_date(date):
     try:
         datetime.strptime(date, "%Y-%m-%d")
@@ -21,7 +21,7 @@ def search_by_date(date):
     return output
 
 
-# Requisito 8
+# Busca as notícias pela fonte
 def search_by_source(source):
     news_found = search_news({"sources": {
         "$regex": source,
@@ -31,7 +31,7 @@ def search_by_source(source):
     return output
 
 
-# Requisito 9
+# Busca as notícias por categoria
 def search_by_category(category):
     news_found = search_news({"categories": {
         "$regex": category,

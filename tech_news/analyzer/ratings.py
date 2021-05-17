@@ -23,14 +23,14 @@ pipeline_categories = [
 ]
 
 
-# Requisito 10
+# Lista as top 5 notícias mais populares
 def top_5_news():
     news_output = db.news.aggregate(pipeline_news)
     output = [(new["title"], new["url"]) for new in news_output]
     return output
 
 
-# Requisito 11
+# Lista as top 5 categorias mais populares
 def top_5_categories():
     categories_output = db.news.aggregate(pipeline_categories)
     top_five_categories = [
