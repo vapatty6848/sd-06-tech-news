@@ -34,6 +34,7 @@ def top_5_categories():
     dt_cat_top_fv_with_sorted = sorted(category_top_five)
     # um map, que retorna uma lista. um elemento para cada vez que o for rodar.
     data_category_top_five = [varia[0] for varia in dt_cat_top_fv_with_sorted]
+    # array[start:stop:pulando]
     list_result = data_category_top_five[:5]
     return list_result
 
