@@ -7,7 +7,7 @@ def search_by_title(title):
     """Seu código deve vir aqui"""
     post_by_title = search_news({"title": {"$regex": title}})
     # map para tirar e formatar o titulo e url do array
-    post_result = [[(post["title"], post["url"])] for post in post_by_title]
+    post_result = [(post["title"], post["url"]) for post in post_by_title]
     return post_result
 
 
