@@ -5,7 +5,9 @@ from tech_news.database import search_news
 # Requisito 6
 def search_by_title(title):
     """Seu código deve vir aqui"""
-    post_by_title = search_news({"title": {"$regex": title}})
+    regex_title = f"/^{title}$/i"
+    print(regex_title)
+    post_by_title = search_news({"title": regex_title})
     # map para tirar e formatar o titulo e url do array
     post_result = [(post["title"], post["url"]) for post in post_by_title]
     return post_result
