@@ -25,16 +25,17 @@ def scrape_noticia(html_content):
     url = selector.css("head link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = (
-        selector.css("#js-author-bar > div > p > a::text").get().strip()
-    )
+    writer = selector.css(
+        "#js-author-bar > div > p.z--m-none.z--truncate.z--font-bold "
+        "> a::text"
+    ).get()
+    writer_new = writer.strip() if writer else None
     shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
     shares_new = int(shares_count) if shares_count else 0
-    comments_count = int(
-        selector.css("#js-comments-btn::text").re_first(r"\d+")
-    )
+    comments_count = selector.css("#js-comments-btn::text").re_first(r"\d+")
+    comments_count_new = int(comments) if comments else None
     summary = selector.css(
         ".tec--article__body > p:nth-child(1) *::text"
     ).getall()
@@ -47,9 +48,9 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer,
+        "writer": writer_new,
         "shares_count": shares_new,
-        "comments_count": comments_count,
+        "comments_count": comments_count_new,
         "summary": summary_new,
         "sources": sources_new,
         "categories": categories_new,
@@ -69,7 +70,7 @@ def scrape_novidades(html_content):
 # Requisito 4
 def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
-    url = selector.css('.tec--list > a::attr(href)').get() or None
+    url = selector.css('.tec--list > a::attr(href)').get()
     return url
 
 
