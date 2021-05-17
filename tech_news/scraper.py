@@ -91,11 +91,3 @@ def get_tech_news(amount):
         cont_news += 1
     create_news(page_news)
     return page_news
-
-
-if __name__ == "__main__":
-    # URL = "https://www.tecmundo.com.br/novidades"
-    # response = fetch(URL)
-    # tech_news = scrape_noticia(response)
-    get_fifty_news = get_tech_news(21)
-    print(get_fifty_news)
