@@ -33,7 +33,7 @@ def top_5_categories():
     for news in news_list:
         for category in news["categories"]:
             categories.append(category)
-    most_common_categories = Counter(categories).most_common(5)
+    most_common_categories = Counter(categories).most_common()
     top_five_sorted = sorted(most_common_categories)
     top_five = [category[0] for category in top_five_sorted]
-    return top_five
+    return top_five[:5]
