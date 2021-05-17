@@ -88,4 +88,3 @@ def get_tech_news(amount):
                 create_news(data)
                 return data
         url = scrape_next_page_link(html_content)
-
