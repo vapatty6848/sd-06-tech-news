@@ -34,4 +34,3 @@ def search_by_category(category):
     p_cat = search_news({"categories": {"$regex": category, "$options": "i"}})
     post_result = [(post["categories"], post["url"]) for post in p_cat]
     return post_result
-
