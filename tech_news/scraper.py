@@ -29,7 +29,7 @@ def scrape_noticia(html_content):
     timestamp = selector.css(
         "div.tec--timestamp__item time::attr(datetime)"
     ).get()
-    writer = remove_spaces(selector.css("div.tec--author__info a::text").get())
+    writer = selector.css("div.tec--author__info a::text").get().strip()
     shares_count = int(
         selector.css("div.tec--toolbar__item ::text").get()[1:3]
     )
@@ -56,9 +56,16 @@ def scrape_noticia(html_content):
         "sources": sources,
         "categories": categories,
     }
+    # print(scraped_infos)
     return scraped_infos
 
 
+# scrape_noticia(
+#     fetch(
+#         "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities"
+#         + "/155000-musk-tesla-carros-totalmente-autonomos.htm"
+#     )
+# )
 # Requisito 3
 def scrape_novidades(html_content):
     selector = Selector(text=html_content)
