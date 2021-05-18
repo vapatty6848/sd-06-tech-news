@@ -1,5 +1,5 @@
 from tech_news.database import search_news
-from dateutil.parser import parse, ParserError
+from datetime import date
 from tech_news.analyzer.helpers import formatNews
 import re
 
@@ -24,19 +24,21 @@ def search_by_title(title):
 
 
 # Requisito 7
-def search_by_date(date):
+def search_by_date(wanted_date):
     try:
-        parse(date)
         acceptedFormat = r"^\d{4}(-\d{2}){2}"
-        correctFormat = re.match(acceptedFormat, date)
+        correctFormat = re.match(acceptedFormat, wanted_date)
 
         if not (correctFormat):
-            raise ParserError("X")
+            raise ValueError("X")
 
-    except ParserError:
+        date_parts = list(map(int, wanted_date.split('-')))
+        date(*date_parts)
+
+    except ValueError:
         raise ValueError("Data inválida")
 
-    query = {"timestamp": {"$regex": date}}
+    query = {"timestamp": {"$regex": wanted_date}}
 
     news = searchAndFormat(query)
 
