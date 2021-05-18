@@ -26,22 +26,24 @@ def scrape_noticia(html_content):
     writer = selector.css(".z--m-none a::text").get()
     shares_count = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
     shares_count = int(shares_count) if shares_count else 0
-    comments_count = int(selector.css("#js-comments-btn::text").re_first(r"\d+"))
+    comments_count = int(
+        selector.css("#js-comments-btn::text").re_first(r"\d+")
+    )
     summary = "".join(
         selector.css(".tec--article__body p:nth-child(1) *::text").getall()
     )
     sources = selector.css(".z--mb-16 div a::text").getall()
     categories = selector.css("#js-categories a::text").getall()
     notice_infos = {
-      "url": url,
-      "title": title,
-      "timestamp": timestamp,
-      "writer": writer,
-      "shares_count": shares_count,
-      "comments_count": comments_count,
-      "summary": summary,
-      "sources": sources,
-      "categories": categories
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "shares_count": shares_count,
+        "comments_count": comments_count,
+        "summary": summary,
+        "sources": sources,
+        "categories": categories,
     }
 
     return notice_infos
