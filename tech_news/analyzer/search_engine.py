@@ -42,7 +42,10 @@ def search_by_source(source):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
-
-
-# print(search_by_source("ResetEra"))
+    query = {
+        "categories": {
+            "$regex": re.compile(category, re.IGNORECASE)
+        }
+    }
+    response = search_news(query)
+    return [(item["title"], item["url"]) for item in response]
