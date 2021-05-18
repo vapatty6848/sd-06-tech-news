@@ -26,18 +26,15 @@ def scrape_noticia(html_content):
     url = selector.css("head link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = selector.css(".tec--author__info__link::text").get()
+    writer = selector.css(".tec--author__info *::text").get()
     shares_count = selector.css(".tec--toolbar__item::text").get()
-    # comments_count = selector.css("#js-comments-btn::text").getall()[1]
     comments_count = selector.css(".tec--toolbar__item *::text").getall()
     summary = selector.css(
         "div.tec--article__body > p:first-child *::text"
     ).getall()
     sources = [
         source.strip()
-        for source in selector.css(
-            "div.z--mb-16 > div > a::text"
-        ).getall()
+        for source in selector.css("div.z--mb-16 > div > a::text").getall()
     ]
     categories = [
         category.strip()
@@ -54,8 +51,12 @@ def scrape_noticia(html_content):
     else:
         comments_count = int(comments_count[1].split()[0])
 
-    if writer is not None:
-        writer = writer.strip()
+    if not writer:
+        writer = selector.css(
+            "div.tec--timestamp__item.z--font-bold > a::text"
+        ).get()
+
+    writer = writer.strip() if writer else None
 
     return {
         "url": url,
@@ -108,6 +109,6 @@ def get_tech_news(amount):
 
 if __name__ == "__main__":
     url = ""
-    content = fetch(url)
-    result = scrape_next_page_link(content)
-    print(result)
+    # content = fetch(url)
+    # result = scrape_next_page_link(content)
+    # print(result)
