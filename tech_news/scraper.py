@@ -1,4 +1,5 @@
 import requests
+from parsel import Selector
 from time import sleep
 
 
@@ -10,7 +11,7 @@ def fetch(url):
     except requests.ReadTimeout:
         return None
     else:
-        if(response.status_code == 200):
+        if response.status_code == 200:
             print(response.text)
         else:
             return None
@@ -18,7 +19,32 @@ def fetch(url):
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url = selector.css("link[rel=canonical]::attr(href)").get()
+    title = selector.css("#js-article-title::text").get()
+    timestamp = selector.css("time::attr(datetime)").get()
+    writer = selector.css(".z--m-none a::text").get()
+    shares_count = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
+    shares_count = int(shares_count) if shares_count else 0
+    comments_count = selector.css("#js-comments-btn::text").re_first(r"\d+")
+    summary = "".join(
+        selector.css(".tec--article__body p:nth-child(1) *::text").getall()
+    )
+    sources = selector.css(".z--mb-16 div a::text").getall()
+    categories = selector.css("#js-categories a::text").getall()
+    notice_infos = {
+      "url": url,
+      "title": title,
+      "timestamp": timestamp,
+      "writer": writer,
+      "shares_count": shares_count,
+      "comments_count": comments_count,
+      "summary": summary,
+      "sources": sources,
+      "categories": categories
+    }
+
+    return notice_infos
 
 
 # Requisito 3
