@@ -1,7 +1,6 @@
 import requests
 import time
 from parsel import Selector
-from requests.models import Response
 # Requisito 1
 
 
@@ -13,49 +12,52 @@ def fetch(url):
         if response.status_code != 200:
             return None
         return response.text
-    except Response.status_code:
+    except requests.ReadTimeout:
         return None
 
 
 # Requisito 2
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
-    msg = []
+    strip_source = []
+    strip_categories = []
     texto = ''
     selector = Selector(text=html_content)
     title = selector.css('h1::text').get()
-    hour = selector.css('time::text').getall()
-    data = selector.css('time * ::text').get()
-    writer = selector.xpath('//div[@id="js-author-bar"]/div/p/a/text()').get()
+    data = selector.css('time::attr(datetime)').get()
+    writer = selector.xpath(
+        '//div[@id="js-author-bar"]/div/p/a/text()').get().strip()
     shares_count = int(selector.xpath(
         '//nav[@class="tec--toolbar"]/div/text()').get().split()[0])
     comments_count = int(selector.xpath(
         '//button[@id="js-comments-btn"]/text()').getall()[1].split()[0])
-    summary = selector.xpath(
-        '//div[@class="tec--article__body z--px-16 p402_premium"]')
 
-    for p in summary.xpath('.//p/text()'):
-        msg.append(p.get())
-    for text in range(4):
-        if text == 1:
-            texto += msg[text].replace(",", "Tesla, Elon Musk")
-        elif text == 3:
-            texto += msg[3].replace(
-                ".", "comemora resultados positivos de mercado.")
-        else:
-            texto += msg[text]
+    summary = selector.xpath(
+        '//div[@class="tec--article__body z--px-16 p402_premium"]/p').css(
+            '::text').getall()
+    for sum in range(7):
+        texto += summary[sum]
+
     source = selector.xpath('//a[@class="tec--badge"]/text()').getall()
+    for each in source:
+        strip_source.append(each.strip())
     categories = selector.xpath('//div[@id="js-categories"]/a/text()').getall()
+    for each in categories:
+        strip_categories.append(each.strip())
+
+    url = selector.xpath(
+        '//link[contains(@rel, "canonical")]').css('::attr(href)').get()
 
     ob = {
+            "url": url,
             "title": title,
-            "timestamp": f'{data} {hour[1]}',
+            "timestamp": data,
             "writer": writer,
             "shares_count": shares_count,
             "comments_count": comments_count,
             "summary": texto,
-            "sources": source,
-            "categories": categories
+            "sources": strip_source,
+            "categories": strip_categories
         }
     return (ob)
 # Requisito 3
