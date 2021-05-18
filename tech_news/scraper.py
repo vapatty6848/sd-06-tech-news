@@ -17,21 +17,37 @@ def fetch(url):
 
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
+    url = selector.css('[rel="canonical"]::attr(href)').get()
     title = selector.css(".tec--article__header__title::text").get()
-    url = selector.css('[rel="canonical"]::attr(href)').get(),
-    timestamp = selector.css("#js-article-date::attr(datetime)")
-    shares_count = int(
-        selector.css(".tec--toolbar__item::text").get().split()[0]) or 0
-    comments_count = int(
-        selector.css(".tec--toolbar__item *::text").get().split()[0])
-    summary = selector.css(".tec--article__body p").get()
-    sources = selector.css(".z--mb-16 div .tec--badge::text").getall()
-    categories = selector.css("#js-categories a::text").getall()
+    timestamp = selector.css("#js-article-date::attr(datetime)").get()
+    writer = selector.css(".tec--author__info__link::text").get()
+    writer = writer.strip() if writer else None
+    shares_count = selector.css(".tec--toolbar__item::text").get()
+    if shares_count:
+        shares_count = int(shares_count.split()[0])
+    else:
+        shares_count = 0
+    comments_count = selector.css(".tec--toolbar__item *::text").get()
+    if len(comments_count) > 1:
+        comments_count = int(comments_count.split()[0])
+    else:
+        comments_count = 0
+    summary = "".join(
+        selector.css(".tec--article__body p:nth-child(1) *::text").getall())
+    sources_list = selector.css(".z--mb-16 div .tec--badge::text").getall()
+    sources = []
+    for e in sources_list:
+        sources.append(e.strip())
+    categories_list = selector.css("#js-categories a::text").getall()
+    categories = []
+    for c in categories_list:
+        categories.append(c.strip())
 
     return {
         "url": url,
         "title": title,
         "timestamp": timestamp,
+        "writer": writer,
         "shares_count": shares_count,
         "comments_count": comments_count,
         "summary": summary,
