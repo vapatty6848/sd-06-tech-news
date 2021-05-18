@@ -95,8 +95,6 @@ def add_popularity_to_all_news(news):
 def get_all_news_with_popularity():
     all_news = find_news()
 
-    print("NEWSSS", all_news)
-
     with_popularity = add_popularity_to_all_news(all_news)
 
     return with_popularity
