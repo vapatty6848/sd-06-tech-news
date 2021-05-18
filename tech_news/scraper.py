@@ -23,7 +23,7 @@ def scrape_noticia(html_content):
     url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("time::attr(datetime)").get()
-    writer = selector.css(".z--m-none a::text").get()
+    writer = selector.css(".z--m-none a::text").get().strip()
     shares_count = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
     shares_count = int(shares_count) if shares_count else 0
     comments_count = int(
@@ -33,7 +33,13 @@ def scrape_noticia(html_content):
         selector.css(".tec--article__body p:nth-child(1) *::text").getall()
     )
     sources = selector.css(".z--mb-16 div a::text").getall()
+    sources_strip = []
+    for source in sources:
+        sources_strip.append(source.strip())
     categories = selector.css("#js-categories a::text").getall()
+    categories_strip = []
+    for categorie in categories:
+        categories_strip.append(categorie.strip())
     notice_infos = {
         "url": url,
         "title": title,
@@ -42,8 +48,8 @@ def scrape_noticia(html_content):
         "shares_count": shares_count,
         "comments_count": comments_count,
         "summary": summary,
-        "sources": sources,
-        "categories": categories,
+        "sources": sources_strip,
+        "categories": categories_strip,
     }
 
     return notice_infos
