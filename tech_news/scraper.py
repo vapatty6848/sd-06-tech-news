@@ -29,7 +29,7 @@ def scrape_noticia(html_content):
     timestamp = selector.css(
         "div.tec--timestamp__item time::attr(datetime)"
     ).get()
-    writer = selector.css("div.tec--author__info a::text").get()
+    writer = remove_spaces(selector.css("div.tec--author__info a::text").get())
     shares_count = int(
         selector.css("div.tec--toolbar__item ::text").get()[1:3]
     )
