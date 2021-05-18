@@ -24,13 +24,19 @@ def scrape_noticia(html_content):
         selector.css(".tec--toolbar__item::text").get().split()[0]) or 0
     comments_count = int(
         selector.css(".tec--toolbar__item *::text").get().split()[0])
+    summary = selector.css(".tec--article__body p").get()
+    sources = selector.css(".z--mb-16 div .tec--badge::text").getall()
+    categories = selector.css("#js-categories a::text").getall()
 
     return {
         "url": url,
         "title": title,
         "timestamp": timestamp,
         "shares_count": shares_count,
-        "comments_count": comments_count
+        "comments_count": comments_count,
+        "summary": summary,
+        "sources": sources,
+        "categories": categories,
     }
 
 
