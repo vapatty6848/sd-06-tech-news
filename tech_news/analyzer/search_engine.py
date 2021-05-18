@@ -31,7 +31,13 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    query = {
+        "sources": {
+            "$regex": re.compile(source, re.IGNORECASE)
+        }
+    }
+    response = search_news(query)
+    return [(item["title"], item["url"]) for item in response]
 
 
 # Requisito 9
@@ -39,5 +45,4 @@ def search_by_category(category):
     """Seu código deve vir aqui"""
 
 
-# print(search_by_date("2020-11-23"))
-# print(search_by_date("21-12-1980"))
+# print(search_by_source("ResetEra"))
