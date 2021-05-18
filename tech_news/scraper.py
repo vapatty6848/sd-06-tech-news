@@ -2,6 +2,8 @@ import requests
 from parsel import Selector
 from time import sleep
 
+from requests.models import Response
+
 
 # Requisito 1
 def fetch(url):
@@ -57,7 +59,14 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    links = selector.css(".tec--list__item h3 a::attr(href)").getall()
+    return links
+
+
+response = requests.get("https://www.tecmundo.com.br/novidades")
+html_content = response.text
+scrape_novidades(html_content)
 
 
 # Requisito 4
