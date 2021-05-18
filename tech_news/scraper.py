@@ -1,7 +1,6 @@
 from parsel import Selector
 import requests
 import time
-from datetime import datetime
 from tech_news.database import create_news
 
 
@@ -102,4 +101,4 @@ def get_tech_news(amount):
     return news
 
 
-get_tech_news(2)
+# get_tech_news(2)

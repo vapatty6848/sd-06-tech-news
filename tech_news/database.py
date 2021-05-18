@@ -35,5 +35,9 @@ def search_news(query):
     return list(db.news.find(query))
 
 
+def search_news_aggregation(query):
+    return list(db.news.aggregate(query))
+
+
 def get_collection():
     return db.news
