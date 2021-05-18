@@ -6,31 +6,34 @@ from datetime import datetime
 # Requisito 6
 def search_by_title(title):
     """Seu código deve vir aqui"""
-    regx = re.compile(title, re.IGNORECASE)
-    result_news = search_news({'title': regx})
+    regxTitle = re.compile(title, re.IGNORECASE)
+    result_news = search_news({"title": regxTitle})
     return [(new["title"], new["url"]) for new in result_news]
-
-# class ValueError(Exception):
-#     pass
 
 
 # Requisito 7
 def search_by_date(date):
     """Seu código deve vir aqui"""
     try:
-        datetime.strptime(date, '%Y-%m-%d')
+        datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
         raise ValueError("Data inválida")
-    ola = re.compile(f"^{date}")
-    result_news = search_news({'timestamp': ola})
+    regxDate = re.compile(f"^{date}")
+    result_news = search_news({"timestamp": regxDate})
     return [(new["title"], new["url"]) for new in result_news]
-# search_by_date("2021-05-17")
+
 
 # Requisito 8
 def search_by_source(source):
     """Seu código deve vir aqui"""
+    regxSource = re.compile(f"^{source}$", re.IGNORECASE)
+    result_news = search_news({"sources": regxSource})
+    return [(new["title"], new["url"]) for new in result_news]
 
 
 # Requisito 9
 def search_by_category(category):
     """Seu código deve vir aqui"""
+    regxCategory = re.compile(f"^{category}$", re.IGNORECASE)
+    result_news = search_news({"categories": regxCategory})
+    return [(new["title"], new["url"]) for new in result_news]
