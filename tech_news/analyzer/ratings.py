@@ -23,7 +23,9 @@ def top_5_news():
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
-
-
-# print(top_5_news())
+    news = find_news()
+    categories = set()
+    for act_news in news:
+        for category in act_news["categories"]:
+            categories.add(category)
+    return sorted(categories)[:5]
