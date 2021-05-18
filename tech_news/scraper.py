@@ -76,7 +76,7 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    url = fetch("https://www.tecmundo.com.br/novidades")
+    url = "https://www.tecmundo.com.br/novidades"
 
     array_of_news = []
 
@@ -88,8 +88,10 @@ def get_tech_news(amount):
             detailed_news = fetch(news)
             complete_news = scrape_noticia(detailed_news)
             array_of_news.append(complete_news)
+            if len(array_of_news) == amount:
+                create_news(array_of_news)
+                return array_of_news
 
         url = scrape_next_page_link(html_content)
 
-    create_news(array_of_news)
     return array_of_news
