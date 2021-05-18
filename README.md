@@ -429,13 +429,13 @@ Agora que temos meios de popular nosso banco de dados com notícias, podemos com
 
 - A função deve receber uma string com um título de notícia
 - A função deve buscar as notícias do banco de dados por título
-- A função deve retornar uma lista de lista de tuplas com as notícias encontradas nesta busca. 
+- A função deve retornar uma lista de tuplas com as notícias encontradas nesta busca. 
 Exemplo: 
 ```python
 [
-  [("Título1_aqui", "url1_aqui")],
-  [("Título2_aqui", "url2_aqui")],
-  [("Título3_aqui", "url3_aqui")],
+  ("Título1_aqui", "url1_aqui"),
+  ("Título2_aqui", "url2_aqui"),
+  ("Título3_aqui", "url3_aqui"),
 ]
 ```
 - A busca deve ser _case insensitive_
