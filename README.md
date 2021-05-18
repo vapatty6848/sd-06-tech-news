@@ -82,9 +82,9 @@ As notícias podem ser obtidas através da raspagem das [últimas notícias do _
 
 1. Clone o repositório
 
-- `git clone https://github.com/tryber/sd-06-tech-news-update.git`.
+- `git clone https://github.com/tryber/sd-06-tech-news.git`.
 - Entre na pasta do repositório que você acabou de clonar:
-  - `sd-06-tech-news-update`
+  - `sd-06-tech-news`
 
 2. Crie o ambiente virtual para o projeto
 
@@ -123,13 +123,13 @@ As notícias podem ser obtidas através da raspagem das [últimas notícias do _
 
 7. Crie um novo `Pull Request` _(PR)_
 
-- Vá até a página de _Pull Requests_ do [repositório no _GitHub_](https://github.com/tryber/sd-06-tech-news-update/pulls)
+- Vá até a página de _Pull Requests_ do [repositório no _GitHub_](https://github.com/tryber/sd-06-tech-news/pulls)
 - Clique no botão verde _"New pull request"_
 - Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
 - Clique no botão verde _"Create pull request"_
 - Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
 - **Não se preocupe em preencher mais nada por enquanto!**
-- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-06-tech-news-update/pulls) e confira que o seu _Pull Request_ está criado
+- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-06-tech-news/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
@@ -362,7 +362,11 @@ Agora que temos a página HTML, é hora de fazer o scrape! Vamos utilizar as fer
   ```
   Repare que no exemplo dentro da tag _p_ encontram-se duas outras tags. Esse é um caso onde a tag _p_ é um ancestral e as tags _a_ e _em_ são as descendentes. Para obter todo o texto do exemplo, utiliza-se `*::text` no seletor.
 
-✍️ Teste manual: abra um terminal Python importando esta função através do comando `python3 -i tech_news/scraper.py` e invoque a função utilizando diferentes parâmetros. Exemplo: `scrape(fetcher=fetch_content, pages=2)`.
+✍️ Teste manual: abra um terminal Python importando estas funções através do comando `python3 -i tech_news/scraper.py` e as invoque utilizando diferentes parâmetros. Exemplo: 
+```python
+>>> html = fetch(url_da_noticia)
+>>> scrape_noticia(html)
+```
 
 **🤖 O que será verificado pelo avaliador:**
 - Será verificado se a função retorna o conteúdo correto e no formato correto, dada uma página de notícia exemplo.
@@ -425,13 +429,13 @@ Agora que temos meios de popular nosso banco de dados com notícias, podemos com
 
 - A função deve receber uma string com um título de notícia
 - A função deve buscar as notícias do banco de dados por título
-- A função deve retornar uma lista de lista de tuplas com as notícias encontradas nesta busca. 
+- A função deve retornar uma lista de tuplas com as notícias encontradas nesta busca. 
 Exemplo: 
 ```python
 [
-  [("Título1_aqui", "url1_aqui")],
-  [("Título2_aqui", "url2_aqui")],
-  [("Título3_aqui", "url3_aqui")],
+  ("Título1_aqui", "url1_aqui"),
+  ("Título2_aqui", "url2_aqui"),
+  ("Título3_aqui", "url3_aqui"),
 ]
 ```
 - A busca deve ser _case insensitive_
@@ -567,7 +571,7 @@ Esta função é o menu do nosso programa. Através dele poderemos operar as fun
 - O texto exibido pelo menu deve ser exatamente:
 ```
 Selecione uma das opções a seguir:
-0 - Popular banco
+0 - Popular o banco com notícias;
 1 - Buscar notícias por título;
 2 - Buscar notícias por data;
 3 - Buscar notícias por fonte;
