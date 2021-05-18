@@ -68,6 +68,8 @@ def handle_parameter(input, choice):
 def validate_option(choice):
     if choice not in range(8):
         raise ValueError("Opção inválida")
+    if choice == 7:
+        raise KeyboardInterrupt()
 
 
 def analyzer_menu():
@@ -84,11 +86,9 @@ def analyzer_menu():
         parameter = handle_parameter(input(user_action), user_choice)
         output = MENU[user_choice]["action"](parameter)
         return print(output)
-    elif user_choice != 7:
+    else:
         output = MENU[user_choice]["action"]()
         print(output)
-    else:
-        end_script()
 
 
 if __name__ == "__main__":
