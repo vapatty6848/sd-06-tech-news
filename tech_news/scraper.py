@@ -12,7 +12,7 @@ def fetch(url):
         return None
     else:
         if response.status_code == 200:
-            print(response.text)
+            return response.text
         else:
             return None
 
