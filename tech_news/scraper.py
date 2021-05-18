@@ -38,7 +38,7 @@ def scrape_noticia(html_content):
     sources = [source.strip() for source in get_sources]
     get_categories = selector.css("#js-categories > a *::text").getall()
     categories = [category.strip() for category in get_categories]
-    News = {
+    news = {
         "url": url,
         "title": title,
         "timestamp": timestamp,
@@ -50,7 +50,7 @@ def scrape_noticia(html_content):
         "categories": categories,
     }
 
-    return News
+    return news
 
 
 # Requisito 3
