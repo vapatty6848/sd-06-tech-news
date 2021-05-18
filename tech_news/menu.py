@@ -19,6 +19,7 @@ MENU = {
         'input': 'Digite quantas notícias serão buscadas: ',
         'action': get_tech_news,
         'has_params': True,
+        'params_to_int': True,
         },
     1: {
         'menu': '1 - Buscar notícias por título;\n',
@@ -71,12 +72,14 @@ def initiate_menu():
 
 
 def handle_parameter(input, choice):
-    return int(input) if choice == 0 else input
+    if 'params_to_int' in choice:
+        return ''.join(char for char in input if char.isdigit())
+    return input
 
 
 def validate_option(choice):
     if choice not in range(8):
-        raise ValueError("Opção inválida")
+        raise ValueError('Opção inválida')
 
 
 def analyzer_menu():
@@ -86,7 +89,7 @@ def analyzer_menu():
 
         if MENU[user_choice]['has_params']:
             user_action = MENU[user_choice]['input']
-            parameter = handle_parameter(input(user_action), user_choice)
+            parameter = handle_parameter(input(user_action), MENU[user_choice])
             output = MENU[user_choice]["action"](parameter)
             return print(output)
         else:
