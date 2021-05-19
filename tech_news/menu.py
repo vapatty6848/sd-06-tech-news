@@ -10,7 +10,7 @@ from tech_news.analyzer.ratings import top_5_news, top_5_categories
 
 
 def end_script():
-    return 'Encerrando script'
+    return print('Encerrando script')
 
 
 MENU = {
@@ -65,15 +65,15 @@ MENU = {
 
 def initiate_menu():
     # user_menu = ''.join([f' {MENU[key]["menu"]}\n' for key in MENU])
-    print("Selecione uma das opções a seguir:")
-    print(" 0 - Popular o banco com notícias;")
-    print(" 1 - Buscar notícias por título;")
-    print(" 2 - Buscar notícias por data;")
-    print(" 3 - Buscar notícias por fonte;")
-    print(" 4 - Buscar notícias por categoria;")
-    print(" 5 - Listar top 5 notícias;")
-    print(" 6 - Listar top 5 categorias;")
-    print(" 7 - Sair.")
+    print('Selecione uma das opções a seguir:')
+    print(' 0 - Popular o banco com notícias;')
+    print(' 1 - Buscar notícias por título;')
+    print(' 2 - Buscar notícias por data;')
+    print(' 3 - Buscar notícias por fonte;')
+    print(' 4 - Buscar notícias por categoria;')
+    print(' 5 - Listar top 5 notícias;')
+    print(' 6 - Listar top 5 categorias;')
+    print(' 7 - Sair.')
     user_input = input()
     try:
         get_number_input = ''.join(
@@ -103,10 +103,10 @@ def analyzer_menu():
                 MENU[user_choice]['has_params']):
             user_action = MENU[user_choice]['input']
             parameter = handle_parameter(input(user_action), MENU[user_choice])
-            output = MENU[user_choice]["action"](parameter)
+            output = MENU[user_choice]['action'](parameter)
             return print(output)
         else:
-            output = MENU[user_choice]["action"]()
+            output = MENU[user_choice]['action']()
             print(output)
 
     except ValueError:
@@ -115,5 +115,5 @@ def analyzer_menu():
         return end_script()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     analyzer_menu()
