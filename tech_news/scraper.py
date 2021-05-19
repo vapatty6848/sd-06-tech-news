@@ -31,8 +31,7 @@ def scrape_noticia(html_content):
         "div.tec--timestamp__item time::attr(datetime)"
     ).get()
     writer = selector.css("div.tec--author__info a::text").get()
-    if writer is not None:
-        writer = writer.strip()
+    fixed_writer = writer.strip() if writer else None
     shares_count = selector.css("div.tec--toolbar__item::text").get()
     fixed_shares_count = int(shares_count.split()[0]) if shares_count else 0
     comments_count = selector.css("#js-comments-btn ::attr(data-count)").get()
@@ -50,7 +49,7 @@ def scrape_noticia(html_content):
         "url": url,
         "title": title,
         "timestamp": timestamp,
-        "writer": writer,
+        "writer": fixed_writer,
         "shares_count": fixed_shares_count,
         "comments_count": fixed_comments_count,
         "summary": fixed_summary,
@@ -81,9 +80,8 @@ def scrape_novidades(html_content):
 # Requisito 4
 def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
-    next_page = selector.css("a.tec--btn ::attr(href)").getall()
-    next_page_fixed = "".join(next_page)
-    return next_page_fixed
+    next_page = selector.css("a.tec--btn ::attr(href)").get()
+    return next_page
 
 
 # print(scrape_next_page_link(fetch("https://www.tecmundo.com.br/novidades")))
