@@ -25,7 +25,7 @@ def fetch(url):
     return response.text
 
 
-# response = fetch("https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm")
+response = fetch("https://www.tecmundo.com.br/dispositivos-moveis/215327-pixel-5a-tera-lancamento-limitado-devido-escassez-chips.htm")
 # print(response)
 
 
@@ -35,7 +35,8 @@ def scrape_noticia(html_content):
 
     element = {
         # "url": selector.css(".tec--card__title__link::attr(href)")[0].get(),
-        "url": new_selector.css("link::attr(href)")[18].getall(),
+        "url": new_selector.css("link::attr(href)")[20].getall()[0],
+        # VER ISSO AQUI
     }
     # new_selector.css("link::attr(href)")
 
@@ -62,7 +63,7 @@ def scrape_noticia(html_content):
     element['comments_count'] = int(comments_count)
 
     summary = new_selector.css(
-        ".tec--article__body.z--px-16.p402_premium > p:first-child::text").getall()
+        ".tec--article__body.z--px-16.p402_premium > p:first-child *::text").getall()
     separator = ""
     summary = separator.join(summary)
     element['summary'] = summary
@@ -79,7 +80,7 @@ def scrape_noticia(html_content):
         categories[i] = categories[i].strip()
     element['categories'] = categories
 
-    return str(element)
+    return element
 
 
 pp = pprint.PrettyPrinter(indent=4)
