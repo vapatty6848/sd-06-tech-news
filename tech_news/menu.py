@@ -64,9 +64,17 @@ MENU = {
 
 
 def initiate_menu():
-    user_menu = ''.join([f' {MENU[key]["menu"]}\n' for key in MENU])
-    user_input = input(
-        f'Selecione uma das opções a seguir:\n{user_menu}')
+    # user_menu = ''.join([f' {MENU[key]["menu"]}\n' for key in MENU])
+    print("Selecione uma das opções a seguir:")
+    print(" 0 - Popular o banco com notícias;")
+    print(" 1 - Buscar notícias por título;")
+    print(" 2 - Buscar notícias por data;")
+    print(" 3 - Buscar notícias por fonte;")
+    print(" 4 - Buscar notícias por categoria;")
+    print(" 5 - Listar top 5 notícias;")
+    print(" 6 - Listar top 5 categorias;")
+    print(" 7 - Sair.")
+    user_input = input()
     get_number_input = ''.join(char for char in user_input if char.isdigit())
     return int(get_number_input)
 
@@ -98,10 +106,12 @@ def analyzer_menu():
             print(output)
 
     except ValueError:
-        return print('Opção inválida', file=sys.stderr)
+        return sys.stderr.write('Opção inválida\n')
     except KeyboardInterrupt:
         print()
         return end_script()
+    except Exception as err:
+        return sys.stderr.write(err)
 
 
 if __name__ == "__main__":
