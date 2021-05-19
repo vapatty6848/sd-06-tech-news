@@ -1,6 +1,5 @@
 import time
 import requests
-from requests.exceptions import ReadTimeout
 
 from requests.exceptions import ReadTimeout
 from parsel import Selector
