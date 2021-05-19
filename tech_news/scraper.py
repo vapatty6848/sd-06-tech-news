@@ -100,12 +100,14 @@ def scrape_novidades(html_content):
     return url_list
 
 
-scrape_novidades("https://www.tecmundo.com.br/novidades")
-
-
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    next_page_link = selector.css(
+        ".tec--btn.tec--btn--lg.tec--btn--primary.z--mx-auto.z--mt-48::attr(href)"
+    ).get()
+
+    return next_page_link if not None else None
 
 
 # Requisito 5
