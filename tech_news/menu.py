@@ -75,8 +75,12 @@ def initiate_menu():
     print(" 6 - Listar top 5 categorias;")
     print(" 7 - Sair.")
     user_input = input()
-    get_number_input = ''.join(char for char in user_input if char.isdigit())
-    return int(get_number_input)
+    try:
+        get_number_input = ''.join(
+            char for char in user_input if char.isdigit())
+        return int(get_number_input)
+    except Exception:
+        raise ValueError()
 
 
 def handle_parameter(input, choice):
@@ -87,7 +91,7 @@ def handle_parameter(input, choice):
 
 def validate_option(choice):
     if choice not in range(8):
-        raise ValueError('Opção inválida')
+        raise ValueError()
 
 
 def analyzer_menu():
