@@ -22,7 +22,8 @@ def fetch(url):
 def scrape_noticia(html_content):
     selector = Selector(html_content)
 
-    url = selector.css("#js-main h3 a::attr(href)").get()
+    # url = selector.css("#js-main h3 a::attr(href)").get()
+    url = selector.css("head > link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get().strip()
     timestamp = selector.css("#js-article-date ::attr(datetime)").get().strip()
     check_writer = selector.css(".tec--author p a::text").get().strip()
