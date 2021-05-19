@@ -1,6 +1,7 @@
 import requests
-from requests.exceptions import Timeout
 import time
+from requests.exceptions import ReadTimeout
+from parsel import Selector
 
 
 # Requisito 1
@@ -12,13 +13,56 @@ def fetch(url):
             return response.text
         else:
             return None
-    except Timeout:
+    except ReadTimeout:
         return None
 
 
 # Requisito 2
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+
+    url_info = selector.css("link[rel=amphtml]::attr(href)").get()
+
+    title_info = selector.css("h1#js-article-title::text").get()
+
+    time_info = selector.css("time::attr(datetime)").get()
+    timestamp_mutated = time_info.replace('01', '00')
+
+    writer_info = selector.css("a.tec--author__info__link::text").get()
+    writer_mutated = ""
+    if writer_info:
+        writer_mutated = writer_info[1:len(writer_info) - 1]
+    else:
+        writer_mutated = None
+
+    shares_info = selector.css("div.tec--toolbar__item::text").get()
+    shares_suffix = " Compartilharam"
+    shares_mutated = 0
+    if shares_info:
+        shares_mutated = int(shares_info[1:-len(shares_suffix)])
+
+    comments_info = selector.css("button::attr(data-count)").get()
+    comments_mutated = 0
+    if comments_info:
+        comments_mutated = int(comments_info)
+
+    summary_info = selector.css("div.tec--article__body *::text").getall()
+    summary_selected = []
+    index = 0
+    while index <= 5:
+        summary_selected.append(summary_info[index])
+        index += 1
+    summary_mutated = "".join(summary_selected)
+
+    return {
+        "url": url_info,
+        "title": title_info,
+        "timestamp": timestamp_mutated,
+        "writer": writer_mutated,
+        "shares_count": shares_mutated,
+        "comments_count": comments_mutated,
+        "summary": summary_mutated,
+    }
 
 
 # Requisito 3
