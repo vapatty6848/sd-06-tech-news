@@ -29,6 +29,17 @@ def scrape_noticia(html_content):
     de uma notícia extraídas a partir do seu HTML"""
 
     selector = Selector(html_content)
+    WRITER = (
+        selector.css("#js-author-bar .z--font-bold a::text").get().strip()
+        if selector.css("#js-author-bar .z--font-bold a::text").get()
+        else None
+    )
+
+    SHARES_COUNT = (
+        int(selector.css(".tec--toolbar__item::text").re_first(r"\d+"))
+        if selector.css(".tec--toolbar__item::text").re_first(r"\d+")
+        else 0
+    )
 
     return {
         "url": selector.css("head link[rel=canonical]::attr(href)").get(),
@@ -36,18 +47,10 @@ def scrape_noticia(html_content):
         "timestamp": selector.css(
             ".tec--timestamp__item time::attr(datetime)"
         ).get(),
-        "writer": selector.css(".tec--author__info__link::text").get().strip(),
-        "shares_count": int(
-            selector.css(".tec--toolbar__item *::text")[0]
-            .get()
-            .strip()
-            .split()[0]
-        ),
+        "writer": WRITER,
+        "shares_count": SHARES_COUNT,
         "comments_count": int(
-            selector.css(".tec--toolbar__item *::text")[2]
-            .get()
-            .strip()
-            .split()[0]
+            selector.css("#js-comments-btn::attr(data-count)").get()
         ),
         "summary": "".join(
             selector.css(".tec--article__body p:nth-child(1) *::text").getall()
@@ -97,18 +100,16 @@ def get_tech_news(amount):
     quantidade solicitada por parâmetro"""
     next_page_url = "https://www.tecmundo.com.br/novidades"
     result = []
-    response = fetch(next_page_url)
-    news_list = scrape_novidades(response)
-
-    while len(result) <= amount:
+    while next_page_url:
+        response = fetch(next_page_url)
+        news_list = scrape_novidades(response)
         for news in news_list:
             response_news = fetch(news)
             new = scrape_noticia(response_news)
             result.append(new)
 
-        next_page_url = scrape_next_page_link(response)
-        response = fetch(next_page_url)
-        news_list = scrape_novidades(response)
+            if amount == len(result):
+                create_news(result)
+                return result
 
-    create_news(result)
-    return result
+        next_page_url = scrape_next_page_link(response)
