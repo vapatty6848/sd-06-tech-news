@@ -1,7 +1,8 @@
-# Requisito 1
+# Imports
 import time
 import requests
 from parsel import Selector
+from tech_news.database import create_news
 
 
 # Remover espaços
@@ -29,13 +30,13 @@ def scrape_noticia(html_content):
     timestamp = selector.css(
         "div.tec--timestamp__item time::attr(datetime)"
     ).get()
-    writer = selector.css("div.tec--author__info a::text").get().strip()
-    shares_count = int(
-        selector.css("div.tec--toolbar__item ::text").get()[1:3]
-    )
-    comments_count = int(
-        selector.css("#js-comments-btn ::attr(data-count)").get()
-    )
+    writer = selector.css("div.tec--author__info a::text").get()
+    if writer is not None:
+        writer = writer.strip()
+    shares_count = selector.css("div.tec--toolbar__item::text").get()
+    fixed_shares_count = int(shares_count.split()[0]) if shares_count else 0
+    comments_count = selector.css("#js-comments-btn ::attr(data-count)").get()
+    fixed_comments_count = int(comments_count) if comments_count else None
     summary = selector.css(
         ".tec--article__body p:first-child *::text"
     ).getall()
@@ -50,8 +51,8 @@ def scrape_noticia(html_content):
         "title": title,
         "timestamp": timestamp,
         "writer": writer,
-        "shares_count": shares_count,
-        "comments_count": comments_count,
+        "shares_count": fixed_shares_count,
+        "comments_count": fixed_comments_count,
         "summary": fixed_summary,
         "sources": sources,
         "categories": categories,
@@ -75,11 +76,36 @@ def scrape_novidades(html_content):
     return novidades
 
 
+# print(scrape_novidades(fetch("https://www.tecmundo.com.br/novidades")))
+
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    next_page = selector.css("a.tec--btn ::attr(href)").getall()
+    next_page_fixed = "".join(next_page)
+    return next_page_fixed
 
+
+# print(scrape_next_page_link(fetch("https://www.tecmundo.com.br/novidades")))
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    url = "https://www.tecmundo.com.br/novidades"
+    database_news = []
+    count = 0
+    while True:
+        request = fetch(url)
+        current_page_news = scrape_novidades(request)
+        for new in current_page_news:
+            next_page_news = fetch(new)
+            next_news = scrape_noticia(next_page_news)
+            database_news.append(next_news)
+            # print(f"\n Noticia {count}: {next_news}")
+            count += 1
+            if len(database_news) == amount:
+                create_news(database_news)
+                return database_news
+        url = scrape_next_page_link(request)
+
+
+# get_tech_news(10)

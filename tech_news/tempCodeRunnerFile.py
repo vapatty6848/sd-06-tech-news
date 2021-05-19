@@ -1,9 +1,4 @@
-from tech_news import scrape_noticia
-from tech_news import fetch
-
-scrape_noticia(
-    fetch(
-        "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities"
-        + "/155000-musk-tesla-carros-totalmente-autonomos.htm"
-    )
-)
+  # for new in current_page_news:
+    #     next_page_news = fetch(new)
+    #     next_news = scrape_noticia(next_page_news)
+    #     print(next_news)
