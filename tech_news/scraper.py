@@ -30,7 +30,7 @@ def scrape_noticia(html_content):
     timestamp = selector.css(
         "div.tec--timestamp__item time::attr(datetime)"
     ).get()
-    writer = selector.css("div.tec--author__info a::text").get()
+    writer = selector.css("main article .tec--author__info__link::text").get()
     fixed_writer = writer.strip() if writer else None
     shares_count = selector.css("div.tec--toolbar__item::text").get()
     fixed_shares_count = int(shares_count.split()[0]) if shares_count else 0
