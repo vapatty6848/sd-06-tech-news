@@ -2,13 +2,18 @@ import time
 import requests
 from requests.exceptions import HTTPError, ReadTimeout
 from parsel import Selector
-
+from tech_news.database import (
+    create_news,
+    # insert_or_update,
+    # find_news,
+    # search_news,
+    # get_collection
+)
 # import pprint
 
 
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
     time.sleep(1)
     responses = []
 
@@ -84,11 +89,6 @@ def scrape_noticia(html_content):
     return element
 
 
-# pp = pprint.PrettyPrinter(indent=4)
-# file = scrape_noticia(response)
-# pp.pprint(file)
-
-
 # Requisito 3
 def scrape_novidades(html_content):
     selector = Selector(html_content)
@@ -104,7 +104,8 @@ def scrape_novidades(html_content):
 def scrape_next_page_link(html_content):
     selector = Selector(html_content)
     next_page_link = selector.css(
-        ".tec--btn.tec--btn--lg.tec--btn--primary.z--mx-auto.z--mt-48::attr(href)"
+        ".tec--btn.tec--btn--lg.tec" +
+        "--btn--primary.z--mx-auto.z--mt-48::attr(href)"
     ).get()
 
     return next_page_link if not None else None
@@ -112,4 +113,36 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    # 1 - Trazer uma lista de urls, no número de amount
+    html_content = fetch("https://www.tecmundo.com.br/novidades")
+    url_list = scrape_novidades(html_content)
+
+    if amount > 20 and amount <= 40:
+        page2 = scrape_next_page_link(html_content)
+        html_content2 = fetch(page2)
+        url_list2 = scrape_novidades(html_content2)
+        url_list = url_list + url_list2
+
+    url_list_final = []
+    for url in range(amount):
+        url_list_final.append(url_list[url])
+
+    # Pegar informações de cada notícia e jogar em uma lista (de dicts)
+    url_infos = []
+
+    for url in url_list_final:
+        link_html = fetch(url)
+        news = scrape_noticia(link_html)
+        url_infos.append(news)
+        create_news(news)
+
+    return url_infos
+
+    # print(len(url_infos))
+
+
+# print(get_tech_news(1))
+# pp = pprint.PrettyPrinter(indent=4)
+# list = get_tech_news(1)
+# for each in list:
+#     pp.pprint(each)
