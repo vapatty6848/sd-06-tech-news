@@ -19,24 +19,26 @@ def scrape_noticia(html_content):
     url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get()
     timestamp = selector.css(".tec--timestamp__item time ::attr(datetime)").get()
-    writer = selector.css(".tec--author__info__link::text").get()
+    get_writer = selector.css(".tec--author__info__link::text").get()
+    writer = get_writer.strip()
     shares = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
-    shares_count = int(shares) if shares else 0
     comments = selector.css(".tec--btn::attr(data-count)").get()
     uncl_summary = selector.css("div.tec--article__body > p:nth-child(1) *::text").getall()
     summary = "".join(uncl_summary)
     sources = selector.css(".z--mb-16 .tec--badge::text").getall()
+    all_sources = [source.strip() for source in sources]
     categories = selector.css("#js-categories > a *::text").getall()
+    all_categories = [category.strip() for category in categories]
     return {
         "url": url,
         "title": title,
         "timestamp": timestamp,
         "writer": writer,
-        "shares_count": shares_count,
-        "comments_count": comments,
+        "shares_count": int(shares),
+        "comments_count": int(comments),
         "summary": summary,
-        "sources": sources,
-        "categories": categories,
+        "sources": all_sources,
+        "categories": all_categories,
     }
 
 
