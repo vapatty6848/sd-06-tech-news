@@ -107,10 +107,8 @@ def analyzer_menu():
 
     except ValueError:
         return sys.stderr.write('Opção inválida\n')
-    except KeyboardInterrupt:
-        print()
-        return end_script()
     except Exception as err:
+        end_script()
         return sys.stderr.write(err)
 
 
