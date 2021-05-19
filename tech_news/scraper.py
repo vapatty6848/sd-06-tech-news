@@ -10,11 +10,10 @@ def fetch(url):
         response = requests.get(url, timeout=3)
     except requests.ReadTimeout:
         return None
-    finally:
-        if response.status_code == 200:
-            return response.text
-        else:
-            return None
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
 
 
 # Requisito 2
