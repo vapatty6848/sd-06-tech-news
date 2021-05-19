@@ -23,6 +23,24 @@ def stripWhiteSpaces(stringArray):
     return list(map(lambda x: x.strip(), stringArray))
 
 
+def get_writter(selector):
+    possible_writer_1 = selector.css(
+        ".tec--author p > a.tec--author__info__link::text"
+    ).get()
+
+    possible_writer_2 = selector.css(
+        ".tec--article .tec--timestamp__item > a::text"
+    ).get()
+
+    possible_writer_3 = selector.css(
+        ".tec--article .tec--author__info > p:first-of-type::text"
+    ).get()
+
+    writer = possible_writer_1 or possible_writer_2 or possible_writer_3
+
+    return writer
+
+
 # Requisito 2
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
@@ -30,9 +48,7 @@ def scrape_noticia(html_content):
     title = selector.css("h1#js-article-title::text").get()
     timestamp = selector.css("time#js-article-date::attr(datetime)").get()
 
-    writer = selector.css(
-        ".tec--author p > a.tec--author__info__link::text"
-    ).get()
+    writer = get_writter(selector)
 
     shares_count = (
         selector.css(".tec--author nav > div:first-of-type::text").re_first(
