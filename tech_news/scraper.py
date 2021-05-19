@@ -2,6 +2,7 @@ import time
 import requests
 from requests.exceptions import HTTPError, ReadTimeout
 from parsel import Selector
+
 # import pprint
 
 
@@ -90,7 +91,16 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    url_list = selector.css(
+        ".tec--main .tec--card__title a::attr(href)"
+    ).getall()
+    url_list = url_list if url_list is not None else []
+
+    return url_list
+
+
+scrape_novidades("https://www.tecmundo.com.br/novidades")
 
 
 # Requisito 4
