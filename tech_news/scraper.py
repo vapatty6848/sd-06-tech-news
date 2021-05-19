@@ -2,14 +2,15 @@ import time
 import requests
 from requests.exceptions import ReadTimeout
 
+
 # Requisito 1 start
 # Esta função será responsável por fazer a requisição HTTP ao site Tecmundo e obter o conteúdo HTML
 def fetch(url):
     time.sleep(1)
     try:
-      response = requests.get(url, timeout=3)
+        response = requests.get(url, timeout=3)
     except ReadTimeout:
-      return None
+        return None
 
     return response.text if response.status_code == 200 else None
 
