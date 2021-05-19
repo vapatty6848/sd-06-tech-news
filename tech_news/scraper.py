@@ -18,12 +18,16 @@ def scrape_noticia(html_content):
     selector = Selector(text=html_content)
     url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get()
-    timestamp = selector.css(".tec--timestamp__item time ::attr(datetime)").get()
+    timestamp = selector.css(
+        ".tec--timestamp__item time ::attr(datetime)"
+    ).get()
     get_writer = selector.css(".tec--author__info__link::text").get()
     writer = get_writer.strip()
     shares = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
     comments = selector.css(".tec--btn::attr(data-count)").get()
-    uncl_summary = selector.css("div.tec--article__body > p:nth-child(1) *::text").getall()
+    uncl_summary = selector.css(
+        "div.tec--article__body > p:nth-child(1) *::text"
+    ).getall()
     summary = "".join(uncl_summary)
     sources = selector.css(".z--mb-16 .tec--badge::text").getall()
     all_sources = [source.strip() for source in sources]
