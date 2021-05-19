@@ -1,6 +1,16 @@
+from tech_news.database import db
+
+# from pymongo import MongoClient
+
+
 # Requisito 6
 def search_by_title(title):
-    """Seu código deve vir aqui"""
+    # client = MongoClient("mongodb://localhost:27017/")
+    # db = client.library
+    list_notices = []
+    for new in db.books.find({"title": {"$regex": title}}):
+        list_notices.append([(new["title"], new["_id"])])
+    return list_notices
 
 
 # Requisito 7
