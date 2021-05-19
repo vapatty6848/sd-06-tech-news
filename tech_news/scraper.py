@@ -1,9 +1,12 @@
+import requests
+import time
+from requests.exceptions import HTTPError, ReadTimeout
+from parsel import Selector
+
+
 # Requisito 1
 def fetch(url):
     """Carrega e retorna os dados da URL de parâmetro"""
-    import requests
-    import time
-    from requests.exceptions import HTTPError, ReadTimeout
 
     time.sleep(1)
     try:
@@ -23,7 +26,6 @@ def fetch(url):
 def scrape_noticia(html_content):
     """Preenche um dicinário a partir das informações
     de uma notícia extraídas a partir do seu HTML"""
-    from parsel import Selector
 
     selector = Selector(html_content)
 
@@ -64,7 +66,15 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    """Retorna URLs das páginas de notícias"""
+    if html_content == "":
+        return []
+    else:
+        selector = Selector(html_content)
+        list_urls = selector.css(
+            "div.tec--card__info h3 a::attr(href)"
+        ).getall()
+    return list_urls
 
 
 # Requisito 4
