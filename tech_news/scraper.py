@@ -79,7 +79,15 @@ def scrape_novidades(html_content):
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    """Retorna Link da próxima página"""
+    selector = Selector(html_content)
+    url_next_page = selector.xpath(
+        "//*[@id='js-main']/div/div/div[1]/div[2]/a/@href"
+    ).get()
+    if url_next_page == "":
+        return None
+    else:
+        return url_next_page
 
 
 # Requisito 5
