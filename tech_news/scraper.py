@@ -22,7 +22,6 @@ def fetch(url):
 def scrape_noticia(html_content):
     selector = Selector(html_content)
 
-    # url = selector.css("#js-main h3 a::attr(href)").get()
     url = selector.css("head > link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get().strip()
     timestamp = selector.css("#js-article-date ::attr(datetime)").get().strip()
@@ -74,8 +73,13 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
 
+    list_urls = selector.css(
+        ".tec--list--lg .tec--card__info h3 a::attr(href)"
+    ).getall()
+
+    return list_urls
 
 # Requisito 4
 def scrape_next_page_link(html_content):
