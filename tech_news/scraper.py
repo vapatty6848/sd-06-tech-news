@@ -81,6 +81,7 @@ def scrape_novidades(html_content):
 
     return list_urls
 
+
 # Requisito 4
 def scrape_next_page_link(html_content):
     """Seu código deve vir aqui"""
