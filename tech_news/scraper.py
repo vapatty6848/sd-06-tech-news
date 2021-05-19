@@ -121,7 +121,7 @@ def get_tech_news(amount):
         page2 = scrape_next_page_link(html_content)
         html_content2 = fetch(page2)
         url_list2 = scrape_novidades(html_content2)
-        url_list = url_list + url_list2
+        url_list = url_list + list(set(url_list2) - set(url_list))
 
     url_list_final = []
     for url in range(amount):
@@ -134,8 +134,8 @@ def get_tech_news(amount):
         link_html = fetch(url)
         news = scrape_noticia(link_html)
         url_infos.append(news)
-        create_news(news)
 
+    create_news(url_infos)
     return url_infos
 
     # print(len(url_infos))
