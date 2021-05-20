@@ -25,8 +25,10 @@ def scrape_noticia(html_content):
     get_url = selector.css("head link[rel=canonical]::attr(href)").get()
     get_title = selector.css("#js-article-title::text").get()
     get_timestamp = selector.css("#js-article-date::attr(datetime)").get()
-    writer = selector.css("#js-author-bar > div > p > a::text").get()
-    get_writer = writer.strip() if writer else None
+    writer = selector.css(
+        "#js-author-bar > div > p.z--m-none.z--truncate.z--font-bold "
+        "> a::text"
+    ).get()    get_writer = writer.strip() if writer else None
     get_shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
@@ -34,7 +36,7 @@ def scrape_noticia(html_content):
     comments = selector.css("#js-comments-btn::text").re_first(r"\d+")
     get_comments_count = int(comments) if comments else None
     summary = selector.css(
-        ".tec--article__body > p:nth-child(1) *::text"
+        ".tec--article__body p:nth-child(1) *::text"
     ).getall()
     get_summary = "".join(summary)
     get_sources = selector.css(".z--mb-16 .tec--badge::text").getall()
@@ -94,4 +96,4 @@ def get_tech_news(amount):
 if __name__ == "__main__":
     # URL = "https://www.tecmundo.com.br/novidades"
     # response = fetch(URL)
-    get_tech_news(24)
+    get_tech_news(3)
