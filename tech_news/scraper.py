@@ -82,5 +82,6 @@ def get_tech_news(amount):
             news.append(new_data)
             if len(news) == amount:
                 create_news(news)
+                return news
         base_url = scrape_next_page_link(new_content)
     return news
