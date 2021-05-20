@@ -4,16 +4,15 @@ import time
 from parsel import Selector
 
 # Requisito 1
+
+
 def fetch(url):
     """Seu código deve vir aqui"""
     time.sleep(1)
     try:
         response = requests.get(url, timeout=3)
-    except ReadTimeout:
-        return None
-    try:
         response.raise_for_status()
-    except HTTPError:
+    except (ReadTimeout, HTTPError):
         return None
 
     if response.status_code == 200:
@@ -41,7 +40,8 @@ def scrape_noticia(html_content):
         "summary": "".join(
             selector.css(
                 "#js-main > div.z--container > article "
-                + "> div.tec--article__body-grid > div.tec--article__body.z--px-16.p402_premium "
+                + "> div.tec--article__body-grid >"
+                + " div.tec--article__body.z--px-16.p402_premium "
                 + " > p:nth-child(1) *::text"
             ).getall(),
         ),
@@ -71,6 +71,7 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    url = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
+    url = "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/"
+    +"155000-musk-tesla-carros-totalmente-autonomos.htm"
     html_content = fetch(url)
     print(scrape_noticia(html_content))
