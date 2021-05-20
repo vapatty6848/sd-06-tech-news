@@ -307,7 +307,7 @@ Agora que temos a página HTML, é hora de fazer o scrape! Vamos utilizar as fer
 
 - A função deve receber como parâmetro o conteúdo HTML da página de uma notícia da Tecmundo
 - A função deve, no conteúdo recebido, buscar as informações das notícias para preencher um dicionário com os seguintes atributos:
-  - `url` - link para acesso da notícia. Ex: "https://www.tecmundo.com.br/mobilidade-urbana-smart-cities/155000-musk-tesla-carros-totalmente-autonomos.htm"
+  - `url` - link para acesso da notícia. Ex: "https://www.tecmundo.com.br/mobilidade-urbana-smart-citie155000-musk-tesla-carros-totalmente-autonomos.htm"
   - `title` - título da notícia. Ex: "Musk: Tesla está muito perto de carros totalmente autônomos"
   - `timestamp` - data e hora da notícia. Ex: "2020-07-09T11:00:00"
   - `writer` - nome da pessoa autora da notícia. Ex: "Nilton Kleina". Se a informação não for encontrada, salve este atributo como `None`
