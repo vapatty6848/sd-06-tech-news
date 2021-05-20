@@ -18,7 +18,7 @@ def search_by_date(date):
     try:
         datetime.datetime.strptime(date, "%Y-%m-%d")
         news = search_news({"timestamp": {"$regex": date}})
-        result = [(item["title"], item["url"]) for item in news]
+        result = [(new["title"], new["url"]) for new in news]
     except ValueError:
         raise ValueError("Data inválida")
 
@@ -28,6 +28,13 @@ def search_by_date(date):
 # Requisito 8
 def search_by_source(source):
     """Seu código deve vir aqui"""
+    news = search_news({"sources": {
+        "$regex": source,
+        "$options": "i"
+    }})
+    result = [(new["title"], new["url"]) for new in news]
+
+    return result
 
 
 # Requisito 9
