@@ -27,7 +27,7 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    """Função para fazer buscas por source"""
     news = search_news({"sources": {
         "$regex": source,
         "$options": "i"
@@ -39,4 +39,11 @@ def search_by_source(source):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    """Função para fazer buscas por category"""
+    news = search_news({"categories": {
+        "$regex": category,
+        "$options": "i"
+    }})
+    result = [(new["title"], new["url"]) for new in news]
+
+    return result
