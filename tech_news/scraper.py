@@ -2,11 +2,15 @@ import time
 import requests
 from parsel import Selector
 from tech_news.database import create_news
+from requests.exceptions import ReadTimeout
 
 
 def fetch(url):
     time.sleep(1)
-    response = requests.get(url, timeout=3)
+    try:
+        response = requests.get(url, timeout=3)
+    except ReadTimeout:
+        return None
 
     return response.text if response.status_code == 200 else None
 
