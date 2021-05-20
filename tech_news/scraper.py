@@ -2,6 +2,7 @@ import time
 import requests
 from requests.exceptions import HTTPError, ReadTimeout
 import parsel
+from tech_news.database import create_news
 
 
 # Requisito 1
@@ -32,16 +33,16 @@ def scrape_noticia(html_content):
     title = selector.css("h1::text").get()
     timeStamp = selector.css(
         ".tec--timestamp__item"
-    ).xpath("./time/@datetime").get().strip()
+    ).xpath("./time/@datetime").get()
 
-    writer = selector.css(".z--font-bold a::text").get().strip()
+    writer = selector.css("#js-author-bar .z--font-bold a::text").get()
     sharesCount = selector.css(
         ".tec--toolbar__item::text"
-    ).get().split(' ')[1].strip()
+    ).re_first(r"\d+")
 
     commentsCount = selector.css("#js-comments-btn::attr(data-count)").get()
     summary = selector.css(
-        ".tec--article__body > p:nth-child(1) *::text"
+        ".tec--article__body p:nth-child(1) *::text"
     ).getall()
 
     sources = selector.css(".z--mb-16 .tec--badge::text").getall()
@@ -51,9 +52,9 @@ def scrape_noticia(html_content):
         'url': url,
         'title': title,
         'timestamp': timeStamp,
-        'writer': writer,
-        'shares_count': int(sharesCount),
-        'comments_count': int(commentsCount),
+        'writer': writer.strip() if writer else None,
+        'shares_count': int(sharesCount) if sharesCount else 0,
+        'comments_count': int(commentsCount) if commentsCount else 0,
         'summary': ''.join(summary),
         'sources': [source.strip() for source in sources],
         'categories': [category.strip() for category in categories]
@@ -63,21 +64,43 @@ def scrape_noticia(html_content):
 # Requisito 3
 def scrape_novidades(html_content):
     """Função para fazer o scrape de novidades"""
-    selector = parsel.Selector(text=html_content)
-    novidades = selector.css("h3.tec--card__title a::attr(href)").getall()
+    if html_content == "":
+        return []
+    else:
+        selector = parsel.Selector(html_content)
+        novidades = selector.css(
+            "div.tec--card__info h3 a::attr(href)"
+        ).getall()
 
-    return novidades if novidades else []
+        return novidades
 
 
 # Requisito 4
 def scrape_next_page_link(html_content):
     """Função para fazer o scrape do link da proxima página"""
-    selector = parsel.Selector(text=html_content)
-    link = selector.css('.tec--list > a::attr(href)').get() or None
+    selector = parsel.Selector(html_content)
+    link = selector.xpath(
+        "//*[@id='js-main']/div/div/div[1]/div[2]/a/@href"
+    ).get() or None
 
     return link
 
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    """Função para fazer obter todas as noticias"""
+    url = "https://www.tecmundo.com.br/novidades"
+    result = []
+    while url:
+        urlResponse = fetch(url)
+        news = scrape_novidades(urlResponse)
+        for new in news:
+            newResponse = fetch(new)
+            newResult = scrape_noticia(newResponse)
+            result.append(newResult)
+
+            if amount == len(result):
+                create_news(result)
+                return result
+
+        url = scrape_next_page_link(urlResponse)
