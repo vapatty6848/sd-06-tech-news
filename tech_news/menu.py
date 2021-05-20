@@ -45,7 +45,7 @@ ACTIONS = [
 
 
 def menu_options():
-    user_options = "".join([f"\n {option['value']}" for option in OPTIONS])
+    user_options = "".join([f"\n {option}" for option in OPTIONS])
     user_input = input(f"Selecione uma das opções a seguir:{user_options}")
     return int(user_input)
 
@@ -67,13 +67,13 @@ def analyzer_menu():
         return print("Opção inválida", file=sys.stderr)
 
     if user_choice not in (5, 6, 7):
-        user_action = INPUTS[user_choice]["user_input"]
+        user_action = INPUTS[user_choice]
         parameter = input(user_action)
         function_parameter = check_parameter(parameter, user_choice)
-        output = ACTIONS[user_choice]["action"](function_parameter)
+        output = ACTIONS[user_choice](function_parameter)
         return print(output)
     else:
-        output = ACTIONS[user_choice]["action"]()
+        output = ACTIONS[user_choice]()
         print(output)
 
 
