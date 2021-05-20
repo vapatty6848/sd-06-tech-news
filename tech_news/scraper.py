@@ -24,23 +24,30 @@ def scrape_noticia(html_content):
     url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css("#js-article-title::text").get()
     timestamp = selector.css("time::attr(datetime)").get()
-    writer = selector.css(".z--m-none a::text").get().strip()
+    writer = selector.css(".z--m-none .tec--author__info__link::text").get()
+    if writer:
+        writer = writer.strip()
     shares_count = selector.css(".tec--toolbar__item::text").re_first(r"\d+")
-    shares_count = int(shares_count) if shares_count else 0
-    comments_count = int(
-        selector.css("#js-comments-btn::text").re_first(r"\d+")
-    )
+    if shares_count:
+        shares_count = int(shares_count)
+    else:
+        shares_count = 0
+    comments_count = selector.css("#js-comments-btn::text").re_first(r"\d+")
+    if comments_count:
+        comments_count = int(comments_count)
     summary = "".join(
         selector.css(".tec--article__body p:nth-child(1) *::text").getall()
     )
     sources = selector.css(".z--mb-16 div a::text").getall()
     sources_strip = []
-    for source in sources:
-        sources_strip.append(source.strip())
+    if len(sources):
+        for source in sources:
+            sources_strip.append(source.strip())
     categories = selector.css("#js-categories a::text").getall()
     categories_strip = []
-    for categorie in categories:
-        categories_strip.append(categorie.strip())
+    if len(categories):
+        for categorie in categories:
+            categories_strip.append(categorie.strip())
     notice_infos = {
         "url": url,
         "title": title,
@@ -52,7 +59,6 @@ def scrape_noticia(html_content):
         "sources": sources_strip,
         "categories": categories_strip,
     }
-
     return notice_infos
 
 
@@ -73,12 +79,12 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     notices_links_amount = []
-    html_content_news = fetch("https://www.tecmundo.com.br/novidades")
-    while len(notices_links_amount) <= amount:
+    next_page_link = "https://www.tecmundo.com.br/novidades"
+    while len(notices_links_amount) < amount:
+        html_content_news = fetch(next_page_link)
         notices_links = scrape_novidades(html_content_news)
         notices_links_amount.extend(notices_links)
         next_page_link = scrape_next_page_link(html_content_news)
-        html_content_news = fetch(next_page_link)
     notices_links_amount = notices_links_amount[:amount]
     notices = []
     for notice_link in notices_links_amount:
@@ -87,5 +93,4 @@ def get_tech_news(amount):
         notices.append(notice)
 
     create_news(notices)
-    print(notices)
     return notices
