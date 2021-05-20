@@ -28,7 +28,8 @@ def scrape_noticia(html_content):
     writer = selector.css(
         "#js-author-bar > div > p.z--m-none.z--truncate.z--font-bold "
         "> a::text"
-    ).get()    get_writer = writer.strip() if writer else None
+    ).get()
+    get_writer = writer.strip() if writer else None
     get_shares_count = selector.css(
         "#js-author-bar > nav > div:nth-child(1)::text"
     ).re_first(r"\d+")
