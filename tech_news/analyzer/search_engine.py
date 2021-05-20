@@ -9,9 +9,13 @@ def search_by_title(title):
 
 
 def search_by_date(date):
-    datetime.strptime(date, "%Y-%m-%d")
-    news_found = search_news({"timestamp": {"$regex": date}})
-    output = [(new["title"], new["url"]) for new in news_found]
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        news_found = search_news({"timestamp": {"$regex": date}})
+        output = [(new["title"], new["url"]) for new in news_found]
+    except ValueError:
+        raise ValueError("Data inválida")
+
     return output
 
 
