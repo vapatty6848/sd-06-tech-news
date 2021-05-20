@@ -3,6 +3,8 @@ import time
 
 # "https://www.tecmundo.com.br/novidades"
 # Requisito 1
+
+
 def fetch(url):
     try:
         time.sleep(1)
