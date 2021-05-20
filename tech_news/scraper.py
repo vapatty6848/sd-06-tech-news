@@ -13,7 +13,6 @@ def fetch(url):
             return response.text
         else:
             return None
-        response.raise_for_status()
     except (requests.ReadTimeout, requests.HTTPError):
         return None
 
@@ -76,18 +75,23 @@ def scrape_next_page_link(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
+    url = "https://www.tecmundo.com.br/novidades"
 
-    NEW_QTD = 20
-    cont_news = 0
     page_news = []
-    response = fetch("https://www.tecmundo.com.br/novidades")
-    while(cont_news <= round(amount/NEW_QTD)):
+    while True:
+        response = fetch(url)
         list_news = scrape_novidades(response)
-        for new in list_news:
-            if len(page_news) < amount:
-                page_news.append(new)
-            else:
-                break
-        cont_news += 1
-    create_news(page_news)
-    return page_news
+        for news in list_news:
+            next_page = fetch(news)
+            next_news = scrape_noticia(next_page)
+            page_news.append(next_news)
+            if len(list_news) == amount:
+                create_news(page_news)
+                return page_news
+
+# source .venv/bin/activate
+
+
+if __name__ == '__main__':
+    news = get_tech_news(21)
+    print(news)
