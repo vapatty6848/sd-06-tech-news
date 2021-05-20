@@ -1,6 +1,7 @@
 import requests
 import time
 from parsel import Selector
+import re
 from tech_news.database import create_news
 
 
@@ -18,32 +19,29 @@ def fetch(url):
 
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
-    url = selector.css('[rel="canonical"]::attr(href)').get()
+    url = selector.css("link[rel=canonical]::attr(href)").get()
     title = selector.css(".tec--article__header__title::text").get()
-    timestamp = selector.css("#js-article-date::attr(datetime)").get()
+    timestamp = selector.css(
+        ".tec--timestamp__item time::attr(datetime)"
+    ).get()
     writer = selector.css(".tec--author__info__link::text").get()
-    writer = writer.strip() if writer else None
+    if writer is not None:
+        writer = writer.strip()
     shares_count = selector.css(".tec--toolbar__item::text").get()
-    if shares_count:
-        shares_count = int(shares_count.split()[0])
+    if shares_count is not None:
+        shares_count = int(re.sub("[^0-9]", "", shares_count))
     else:
         shares_count = 0
-    comments_count = selector.css(".tec--toolbar__item *::text").get()
-    if len(comments_count) > 1:
-        comments_count = int(comments_count.split()[0])
-    else:
-        comments_count = 0
-    summary = "".join(
-        selector.css(".tec--article__body p:nth-child(1) *::text").getall())
-    sources_list = selector.css(".z--mb-16 div .tec--badge::text").getall()
-    sources = []
-    for e in sources_list:
-        sources.append(e.strip())
-    categories_list = selector.css("#js-categories a::text").getall()
-    categories = []
-    for c in categories_list:
-        categories.append(c.strip())
-
+    comments_count = selector.css("#js-comments-btn::attr(data-count)").get()
+    if comments_count is not None:
+        comments_count = int(comments_count)
+    summary_content = "".join(
+      selector.css("div.tec--article__body p:nth-child(1) *::text").getall()
+    )
+    sources = selector.css("div.z--mb-16 a.tec--badge::text").getall()
+    sources = [source.strip() for source in sources]
+    categories = selector.css("div#js-categories a::text").getall()
+    categories = [categorie.strip() for categorie in categories]
     return {
         "url": url,
         "title": title,
@@ -51,7 +49,7 @@ def scrape_noticia(html_content):
         "writer": writer,
         "shares_count": shares_count,
         "comments_count": comments_count,
-        "summary": summary,
+        "summary": summary_content,
         "sources": sources,
         "categories": categories,
     }
@@ -72,17 +70,14 @@ def scrape_next_page_link(html_content):
 
 def get_tech_news(amount):
     url = "https://www.tecmundo.com.br/novidades"
-    news = []
-    while len(news) < amount:
+    news_list = []
+    while True:
         html_content = fetch(url)
-        url_news = scrape_novidades(html_content)
-        for new in url_news:
-            new_content = fetch(new)
-            new_data = scrape_noticia(new_content)
-            news.append(new_data)
-            if len(news) == amount:
-                create_news(news)
-                return news
-        url = scrape_next_page_link(new_content)
-
-    return news
+        news_urls = scrape_novidades(html_content)
+        for news_url in news_urls:
+            news = scrape_noticia(fetch(news_url))
+            news_list.append(news)
+            if len(news_list) == amount:
+                create_news(news_list)
+                return news_list
+        url = scrape_next_page_link(html_content)
