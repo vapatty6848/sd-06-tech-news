@@ -3,10 +3,8 @@ from tech_news.database import search_news
 
 # Requisito 6
 def search_by_title(title):
-    get_news_by_title = search_news(
-        {"title": {"$regex": title, "$options": "-i"}}
-    )
-    news = [(new["title"], new["url"]) for new in get_news_by_title]
+    get_news = search_news({"title": {"$regex": title, "$options": "-i"}})
+    news = [(new["title"], new["url"]) for new in get_news]
     return news
 
 
@@ -17,12 +15,18 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_source(source):
-    """Seu código deve vir aqui"""
+    get_news = search_news({"sources": {"$regex": source, "$options": "-i"}})
+    news = [(new["title"], new["url"]) for new in get_news]
+    return news
 
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    get_news = search_news(
+        {"categories": {"$regex": category, "$options": "-i"}}
+    )
+    news = [(new["title"], new["url"]) for new in get_news]
+    return news
 
 
 if __name__ == "__main__":
