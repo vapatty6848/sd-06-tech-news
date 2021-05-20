@@ -84,7 +84,17 @@ def scrape_novidades(html_content):
 
 # Requisito 4
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    # URL_BASE = "https://www.tecmundo.com.br/novidades"
+    url_page = "?page2"
+
+    while url_page:
+        url_page = selector.css(".tec--btn::attr(href)").get()
+        return url_page
+
+        selector = Selector(fetch(url_page))
+
+    return None
 
 
 # Requisito 5
