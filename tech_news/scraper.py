@@ -87,6 +87,7 @@ def scrape_next_page_link(html_content):
     ).get()
     return next_page_selector
 
+
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
