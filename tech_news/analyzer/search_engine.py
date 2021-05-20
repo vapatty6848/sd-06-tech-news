@@ -20,7 +20,7 @@ def search_by_date(date):
 def search_by_source(source):
     """Seu código deve vir aqui"""
     q_result = search_news({"sources": {"$regex": source, "$options": "i"}})
-    result = [(item['title'], item['sources']) for item in q_result]
+    result = [(item['title'], item['url']) for item in q_result]
 
     return result
 
@@ -30,6 +30,6 @@ def search_by_category(category):
     """Seu código deve vir aqui"""
     q_res = search_news({"categories": {"$regex": category, "$options": "i"}})
     print(q_res)
-    result = [(item['title'], item['categories']) for item in q_res]
+    result = [(item['title'], item['url']) for item in q_res]
 
     return result
