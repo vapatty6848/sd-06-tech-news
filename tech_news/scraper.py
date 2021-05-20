@@ -124,6 +124,6 @@ def get_tech_news(amount):
     return news
 
 
-# if __name__ == "__main__":
-#     # scrape_next_page_link(fetch("https://www.tecmundo.com.br/novidades"))
-#     get_tech_news(10)
+if __name__ == "__main__":
+
+    get_tech_news(10)
