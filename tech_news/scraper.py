@@ -3,7 +3,6 @@ import requests
 from requests.exceptions import Timeout
 import time
 from parsel import Selector
-import re
 
 
 # Requisito 1
