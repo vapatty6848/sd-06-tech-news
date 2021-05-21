@@ -10,7 +10,7 @@ def fetch(url):
     try:
         time.sleep(1)
         response = requests.get(url, timeout=3)
-    except requests.ReadTimeout:
+    except Exception:
         return None
     else:
         if response.status_code == 200:
@@ -57,7 +57,11 @@ def scrape_noticia(html_content):
 
 # Requisito 3
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    if not html_content:
+        return []
+    selector = Selector(text=html_content)
+    url_list = selector.css(".tec--card__info > h3 > a::attr(href)").getall()
+    return url_list
 
 
 # Requisito 4
