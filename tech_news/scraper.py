@@ -1,6 +1,7 @@
 import requests
 import time
 from parsel import Selector
+from requests.exceptions import Timeout
 from tech_news.database import create_news
 
 
@@ -13,7 +14,7 @@ def fetch(url):
             return response.text
         else:
             return None
-    except (requests.ReadTimeout, requests.HTTPError):
+    except Timeout:
         return None
 
 
@@ -76,22 +77,24 @@ def scrape_next_page_link(html_content):
 # Requisito 5
 def get_tech_news(amount):
     url = "https://www.tecmundo.com.br/novidades"
-
     page_news = []
     while True:
         response = fetch(url)
+        # scrap da pag novidades
         list_news = scrape_novidades(response)
         for news in list_news:
+            # scrap de cada noticia da pag novidades
             next_page = fetch(news)
             next_news = scrape_noticia(next_page)
+            # adiciona a prox noticia na lista page_news
             page_news.append(next_news)
             if len(list_news) == amount:
                 create_news(page_news)
                 return page_news
-
-# source .venv/bin/activate
+        # se precisar ir para prox pag de novidades,
+        # recebe a url da prox pagina
+        url = scrape_next_page_link(response)
 
 
 if __name__ == '__main__':
     news = get_tech_news(21)
-    print(news)
