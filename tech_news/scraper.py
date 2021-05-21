@@ -21,12 +21,11 @@ def fetch(url):
 def scrape_noticia(html_content):
     selector = Selector(text=html_content)
 
-    url_info = selector.css("link[rel=amphtml]::attr(href)").get()
+    url_info = selector.css("link[rel=canonical]::attr(href)").get()
 
     title_info = selector.css("h1#js-article-title::text").get()
 
     time_info = selector.css("time::attr(datetime)").get()
-    timestamp_mutated = time_info.replace('01', '00')
 
     writer_info = selector.css("a.tec--author__info__link::text").get()
     writer_mutated = ""
@@ -46,22 +45,37 @@ def scrape_noticia(html_content):
     if comments_info:
         comments_mutated = int(comments_info)
 
-    summary_info = selector.css("div.tec--article__body *::text").getall()
-    summary_selected = []
+    summary_info = selector.css("div.tec--article__body > p:nth-child(1) *::text").getall()
+    summary_mutated = "".join(summary_info)
+
+    sources_info = selector.css("div.z--mb-16 div *::text").getall()
+    sources_mutated = []
     index = 0
-    while index <= 5:
-        summary_selected.append(summary_info[index])
+    while index < len(sources_info):
+        indexed_source = sources_info[index]
+        indexed_source_mutated = indexed_source[1:len(indexed_source) - 1]
+        if len(indexed_source_mutated) > 1:
+            sources_mutated.append(indexed_source_mutated)
         index += 1
-    summary_mutated = "".join(summary_selected)
+
+    categories_info = selector.css("a.tec--badge--primary *::text").getall()
+    categories_mutated = []
+    index = 0
+    while index < len(categories_info):
+        indexed_category = categories_info[index]
+        categories_mutated.append(indexed_category[1:len(indexed_category) - 1])
+        index += 1
 
     return {
         "url": url_info,
         "title": title_info,
-        "timestamp": timestamp_mutated,
+        "timestamp": time_info,
         "writer": writer_mutated,
         "shares_count": shares_mutated,
         "comments_count": comments_mutated,
         "summary": summary_mutated,
+        "sources": sources_mutated,
+        "categories": categories_mutated,
     }
 
 
