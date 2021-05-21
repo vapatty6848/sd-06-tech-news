@@ -17,16 +17,24 @@ def fetch(url):
         return None
 
 
-# Requisito 2
-def scrape_noticia(html_content):
+def get_url(content):
+    selector = Selector(text=content)
+    return selector.css("link[rel=canonical]::attr(href)").get()
+
+
+def get_shares_info(html_content):
     selector = Selector(text=html_content)
+    shares_info = selector.css("div.tec--toolbar__item::text").get()
+    shares_suffix = " Compartilharam"
+    shares_mutated = 0
+    if shares_info:
+        shares_mutated = int(shares_info[1:-len(shares_suffix)])
 
-    url_info = selector.css("link[rel=canonical]::attr(href)").get()
+    return shares_mutated
 
-    title_info = selector.css("h1#js-article-title::text").get()
 
-    time_info = selector.css("time::attr(datetime)").get()
-
+def get_writer_info(html_content):
+    selector = Selector(text=html_content)
     writer_info = selector.css("a.tec--author__info__link::text").get()
     writer_mutated = ""
     if writer_info:
@@ -34,18 +42,31 @@ def scrape_noticia(html_content):
     else:
         writer_mutated = None
 
-    shares_info = selector.css("div.tec--toolbar__item::text").get()
-    shares_suffix = " Compartilharam"
-    shares_mutated = 0
-    if shares_info:
-        shares_mutated = int(shares_info[1:-len(shares_suffix)])
+    return writer_mutated
+
+
+# Requisito 2
+def scrape_noticia(html_content):
+    selector = Selector(text=html_content)
+
+    url_info = get_url(html_content)
+
+    title_info = selector.css("h1#js-article-title::text").get()
+
+    time_info = selector.css("time::attr(datetime)").get()
+
+    writer_info = get_writer_info(html_content)
+
+    shares_info = get_shares_info(html_content)
 
     comments_info = selector.css("button::attr(data-count)").get()
     comments_mutated = 0
     if comments_info:
         comments_mutated = int(comments_info)
 
-    summary_info = selector.css("div.tec--article__body > p:nth-child(1) *::text").getall()
+    summary_info = selector.css(
+        "div.tec--article__body > p:nth-child(1) *::text"
+    ).getall()
     summary_mutated = "".join(summary_info)
 
     sources_info = selector.css("div.z--mb-16 div *::text").getall()
@@ -63,15 +84,17 @@ def scrape_noticia(html_content):
     index = 0
     while index < len(categories_info):
         indexed_category = categories_info[index]
-        categories_mutated.append(indexed_category[1:len(indexed_category) - 1])
+        categories_mutated.append(
+            indexed_category[1:len(indexed_category) - 1]
+        )
         index += 1
 
     return {
         "url": url_info,
         "title": title_info,
         "timestamp": time_info,
-        "writer": writer_mutated,
-        "shares_count": shares_mutated,
+        "writer": writer_info,
+        "shares_count": shares_info,
         "comments_count": comments_mutated,
         "summary": summary_mutated,
         "sources": sources_mutated,
