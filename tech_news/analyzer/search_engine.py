@@ -13,7 +13,15 @@ def search_by_title(title):
 
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        result = search_news({"timestamp": {"$regex": date}})
+        if result:
+            for item in result:
+                return [(item["title"], item["url"])]
+        return []
+    except ValueError:
+        raise ValueError("Data inválida")
 
 
 # Requisito 8
